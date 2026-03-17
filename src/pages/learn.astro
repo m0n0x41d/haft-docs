@@ -2,360 +2,360 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Terminal from '../components/Terminal.astro';
 import Button from '../components/Button.astro';
 ---
 
-<Layout title="Learn the ADI Cycle" description="Understand the Abduction-Deduction-Induction cycle for making better architectural decisions with AI coding tools.">
+<Layout title="Get Started" description="Install quint-code and learn how to use structured reasoning with your AI coding tools.">
   <Header />
 
   <main class="flex-1">
     <!-- Hero -->
     <section class="border-b border-border-subtle py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl font-bold text-text-primary sm:text-5xl">
-          The ADI Cycle
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold sm:text-4xl">
+          Get Started
         </h1>
-        <p class="mt-4 text-xl text-text-secondary">
-          A structured approach to architectural decisions. Understand it in 10 minutes.
+        <p class="mt-4 text-lg text-text-secondary">
+          Install quint-code, pick a mode, make a decision you'll remember.
         </p>
       </div>
     </section>
 
-    <!-- The Problem (Expanded) -->
-    <section class="py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-text-primary">The Problem</h2>
+    <!-- Install -->
+    <section class="border-b border-border-subtle py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold">Installation</h2>
 
-        <div class="mt-6 space-y-4 text-text-secondary">
-          <p>
-            AI coding assistants are remarkably capable. They understand your codebase,
-            generate solutions, and explain complex patterns. But when it comes to
-            <strong class="text-text-primary">architectural decisions</strong>,
-            there's a problem.
+        <div class="mt-8 space-y-6">
+          <div class="border border-border-subtle bg-bg-secondary p-6">
+            <code class="text-base text-accent-blue font-mono">
+              <span class="text-accent-green">$</span> curl -fsSL https://quint.codes/install.sh | bash
+            </code>
+            <p class="mt-4 text-base text-text-secondary">
+              Then initialize in your project:
+            </p>
+            <code class="mt-2 block text-base text-accent-blue font-mono">
+              <span class="text-accent-green">$</span> quint-code init --claude
+            </code>
+            <p class="mt-4 text-text-muted text-sm">
+              Also supports: <code>--cursor</code>, <code>--gemini</code>, <code>--codex</code>, <code>--all</code>
+            </p>
+          </div>
+
+          <p class="text-base text-text-secondary">
+            This creates a <code class="text-accent-blue">.quint/</code> directory in your project — SQLite database,
+            markdown projections, and configuration. Git-tracked by default.
           </p>
 
-          <div class="mt-8 grid gap-6 sm:grid-cols-3">
-            <div class="rounded-lg border border-border-subtle bg-bg-secondary p-5">
-              <h3 class="font-mono text-sm font-semibold text-accent-green">Context Loss</h3>
-              <p class="mt-2 text-sm text-text-muted">
-                The reasoning behind a decision disappears when the chat session ends.
-                Three months later, no one remembers why you chose Saga over Choreography.
-              </p>
-            </div>
-            <div class="rounded-lg border border-border-subtle bg-bg-secondary p-5">
-              <h3 class="font-mono text-sm font-semibold text-accent-blue">Anchoring Bias</h3>
-              <p class="mt-2 text-sm text-text-muted">
-                The first solution that comes up often becomes THE solution.
-                Alternatives aren't systematically explored or compared.
-              </p>
-            </div>
-            <div class="rounded-lg border border-border-subtle bg-bg-secondary p-5">
-              <h3 class="font-mono text-sm font-semibold text-accent-purple">No Audit Trail</h3>
-              <p class="mt-2 text-sm text-text-muted">
-                When assumptions change, there's no way to revisit decisions.
-                You end up re-debating the same questions.
-              </p>
-            </div>
-          </div>
+          <p class="text-base text-text-secondary">
+            Existing project? Run <code class="text-accent-blue">/q-onboard</code> after init — the agent scans your
+            codebase for existing ADRs, architecture docs, and decision patterns worth capturing.
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- The Solution -->
-    <section class="border-t border-border-subtle bg-bg-secondary/50 py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-text-primary">The Solution: ADI Cycle</h2>
-
-        <p class="mt-4 text-text-secondary">
-          The ADI cycle is based on three modes of reasoning from Pragmatic philosophy:
+    <!-- Decision Modes -->
+    <section class="border-b border-border-subtle py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold">Decision modes</h2>
+        <p class="mt-4 text-base text-text-secondary">
+          Pick the depth that matches the decision's weight. The agent auto-selects when you use <code class="text-accent-blue">/q-reason</code>.
         </p>
 
-        <div class="mt-8 space-y-2 font-mono text-sm">
-          <p><span class="text-accent-green">Abduction</span> — Generate plausible hypotheses from observations</p>
-          <p><span class="text-accent-blue">Deduction</span> — Derive logical consequences from hypotheses</p>
-          <p><span class="text-accent-purple">Induction</span> — Test hypotheses against empirical evidence</p>
+        <!-- /q-reason -->
+        <div class="mt-12 border border-border-subtle bg-bg-secondary p-6 sm:p-8">
+          <h3 class="text-lg font-bold text-text-primary">/q-reason — Let the agent decide the depth</h3>
+          <p class="mt-4 text-base text-text-secondary leading-relaxed">
+            Describe your problem. The agent frames it, generates alternatives, compares them fairly,
+            and records the decision — all in one command. It auto-selects tactical, standard, or deep
+            mode based on blast radius and reversibility.
+          </p>
+          <div class="mt-4 font-mono text-sm text-text-muted">
+            <span class="text-accent-green">$</span> /q-reason "How should we handle cross-service transaction failures?"
+          </div>
         </div>
 
-        <p class="mt-6 text-text-secondary">
-          quint-code implements this cycle with 5 phases, plus utility commands:
+        <!-- Full cycle -->
+        <div class="mt-6 border border-border-subtle bg-bg-secondary p-6 sm:p-8">
+          <h3 class="text-lg font-bold text-text-primary">Full cycle — Maximum rigor</h3>
+          <p class="mt-4 text-base text-text-secondary leading-relaxed">
+            For architectural decisions where you want to drive each phase.
+            Define what you'll compare on before you see the options.
+            Each dimension gets a role — constraint, target, or observation.
+            Then compare fairly with parity enforcement.
+          </p>
+          <div class="mt-6 space-y-3">
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">1</span>
+              <code class="shrink-0 w-28 text-accent-blue text-base">/q-frame</code>
+              <span class="text-base text-text-secondary">Define signal, constraints, optimization targets, acceptance criteria</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">2</span>
+              <code class="shrink-0 w-28 text-accent-blue text-base">/q-char</code>
+              <span class="text-base text-text-secondary">Set comparison dimensions with roles — constraint, target, observation</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">3</span>
+              <code class="shrink-0 w-28 text-accent-blue text-base">/q-explore</code>
+              <span class="text-base text-text-secondary">Generate distinct alternatives with weakest link — diversity checked automatically</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">4</span>
+              <code class="shrink-0 w-28 text-accent-blue text-base">/q-compare</code>
+              <span class="text-base text-text-secondary">Fair comparison — parity enforced, dimensions cross-checked, gaps warned</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">5</span>
+              <code class="shrink-0 w-28 text-accent-blue text-base">/q-decide</code>
+              <span class="text-base text-text-secondary">FPF E.9 decision contract — problem frame, decision, rationale, consequences</span>
+            </div>
+          </div>
+          <p class="mt-6 text-sm text-text-muted">
+            The tool warns if you skip steps — but never blocks. Missing characterization? Compare still works, just without safety checks.
+          </p>
+        </div>
+
+        <!-- Quick cycle -->
+        <div class="mt-6 border border-border-subtle bg-bg-secondary p-6 sm:p-8">
+          <h3 class="text-lg font-bold text-text-primary">Quick cycle — Three steps for reversible decisions</h3>
+          <p class="mt-4 text-base text-text-secondary leading-relaxed">
+            Library picks, API design, caching strategy — things with blast radius under 2 weeks.
+            Skip characterization and formal comparison. Frame, explore, decide.
+          </p>
+          <div class="mt-6 space-y-3">
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">1</span>
+              <code class="shrink-0 w-28 text-accent-blue text-base">/q-frame</code>
+              <span class="text-base text-text-secondary">What's broken, what constraints, what does solved look like</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">2</span>
+              <code class="shrink-0 w-28 text-accent-blue text-base">/q-explore</code>
+              <span class="text-base text-text-secondary">2-3 alternatives with tradeoffs</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">3</span>
+              <code class="shrink-0 w-28 text-accent-blue text-base">/q-decide</code>
+              <span class="text-base text-text-secondary">Pick one, record why, set expiry</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Micro-note -->
+        <div class="mt-6 border border-border-subtle bg-bg-secondary p-6 sm:p-8">
+          <h3 class="text-lg font-bold text-text-primary">/q-note — Micro-decisions on the fly</h3>
+          <p class="mt-4 text-base text-text-secondary leading-relaxed">
+            The agent captures micro-decisions automatically when it notices them in conversation.
+            You discover a hidden invariant, pick a library, choose an approach — it's recorded with rationale
+            before you move on. No rationale, no record. Conflicts with active decisions are flagged.
+            Auto-expires in 90 days so your knowledge base doesn't rot.
+          </p>
+          <div class="mt-4 font-mono text-sm text-text-muted">
+            <span class="text-accent-green">$</span> /q-note "Auth token hard limit 4KB — breaks at 12+ roles, must split claims before RBAC expansion"
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Decision Record Format -->
+    <section class="border-b border-border-subtle py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold">The Decision Record</h2>
+        <p class="mt-4 text-base text-text-secondary">
+          Every <code class="text-accent-blue">/q-decide</code> produces a Decision Record following the
+          FPF E.9 four-component structure. It's an engineering contract, not a document.
         </p>
-      </div>
-    </section>
 
-    <!-- Phase 1: Hypothesize -->
-    <section class="border-t border-border-subtle py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-4">
-          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-green/10 font-mono text-lg font-bold text-accent-green">
-            1
-          </div>
-          <h2 class="text-2xl font-bold text-text-primary">Hypothesize</h2>
-          <code class="rounded bg-bg-secondary px-2 py-1 text-sm text-accent-green">/q1-hypothesize</code>
-        </div>
-
-        <div class="mt-6 grid gap-8 lg:grid-cols-2">
-          <div class="space-y-4 text-text-secondary">
-            <p>
-              <strong class="text-text-primary">What:</strong> Generate 3-5 competing hypotheses
-              that could solve the problem. Each should be distinct, not variations of the same idea.
-            </p>
-            <p>
-              <strong class="text-text-primary">Why:</strong> Avoid anchoring on the first
-              solution. Force exploration of the solution space before evaluation.
-            </p>
-            <p>
-              <strong class="text-text-primary">Output:</strong> Hypotheses are saved to
-              <code class="text-accent-green">.quint/knowledge/L0/</code> as unverified observations.
+        <div class="mt-8 space-y-4">
+          <div class="border border-border-subtle bg-bg-secondary p-6">
+            <h3 class="font-mono text-sm font-semibold text-accent-green uppercase tracking-wide">1. Problem Frame</h3>
+            <p class="mt-3 text-base text-text-secondary">
+              Why are we talking about this? Signal, constraints, and acceptance criteria — pulled automatically from the linked ProblemCard. Context first, always.
             </p>
           </div>
-
-          <Terminal title="/q1-hypothesize">
-            <div class="space-y-2 text-xs">
-              <div><span class="text-accent-green">$</span> /q1-hypothesize "State management approach"</div>
-              <div class="text-text-muted">Generating hypotheses...</div>
-              <div class="mt-2"><span class="text-accent-blue">H1:</span> Redux with RTK Query</div>
-              <div><span class="text-accent-blue">H2:</span> Zustand with React Query</div>
-              <div><span class="text-accent-blue">H3:</span> React Context + SWR</div>
-              <div class="mt-2 text-text-muted">Saved to .quint/knowledge/L0/</div>
-            </div>
-          </Terminal>
-        </div>
-      </div>
-    </section>
-
-    <!-- Phase 2: Verify -->
-    <section class="border-t border-border-subtle bg-bg-secondary/50 py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-4">
-          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-blue/10 font-mono text-lg font-bold text-accent-blue">
-            2
-          </div>
-          <h2 class="text-2xl font-bold text-text-primary">Verify</h2>
-          <code class="rounded bg-bg-tertiary px-2 py-1 text-sm text-accent-blue">/q2-verify</code>
-        </div>
-
-        <div class="mt-6 grid gap-8 lg:grid-cols-2">
-          <div class="space-y-4 text-text-secondary">
-            <p>
-              <strong class="text-text-primary">What:</strong> Check each hypothesis for
-              logical consistency. Does it contradict itself? Does it violate known constraints?
-            </p>
-            <p>
-              <strong class="text-text-primary">Why:</strong> Eliminate impossible or
-              contradictory approaches before spending time gathering evidence.
-            </p>
-            <p>
-              <strong class="text-text-primary">Output:</strong> Hypotheses that pass move
-              to <code class="text-accent-blue">.quint/knowledge/L1/</code> (Reasoned level).
+          <div class="border border-border-subtle bg-bg-secondary p-6">
+            <h3 class="font-mono text-sm font-semibold text-accent-blue uppercase tracking-wide">2. Decision (the contract)</h3>
+            <p class="mt-3 text-base text-text-secondary">
+              What was chosen. Invariants (what MUST hold). Pre/post-conditions (checklists). Admissibility (what is NOT acceptable). This is the contract a new engineer reads 6 months later.
             </p>
           </div>
-
-          <Terminal title="/q2-verify">
-            <div class="space-y-2 text-xs">
-              <div><span class="text-accent-green">$</span> /q2-verify</div>
-              <div class="text-text-muted">Checking logical consistency...</div>
-              <div class="mt-2"><span class="text-accent-green">✓</span> H1: No contradictions found</div>
-              <div><span class="text-accent-green">✓</span> H2: No contradictions found</div>
-              <div><span class="text-red-400">×</span> H3: Conflicts with SSR requirement</div>
-              <div class="mt-2 text-text-muted">H1, H2 promoted to L1/</div>
-            </div>
-          </Terminal>
-        </div>
-      </div>
-    </section>
-
-    <!-- Phase 3: Test -->
-    <section class="border-t border-border-subtle py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-4">
-          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-purple/10 font-mono text-lg font-bold text-accent-purple">
-            3
-          </div>
-          <h2 class="text-2xl font-bold text-text-primary">Test / Research</h2>
-          <code class="rounded bg-bg-secondary px-2 py-1 text-sm text-accent-purple">/q3-validate</code>
-        </div>
-
-        <div class="mt-6 grid gap-8 lg:grid-cols-2">
-          <div class="space-y-4 text-text-secondary">
-            <p>
-              <strong class="text-text-primary">What:</strong> Gather empirical evidence.
-              Run internal tests (benchmarks, simulations) or external research (docs, case studies).
-            </p>
-            <p>
-              <strong class="text-text-primary">Why:</strong> Ground decisions in reality.
-              Theory is good, but evidence is better.
-            </p>
-            <p>
-              <strong class="text-text-primary">Output:</strong> Evidence is attached to
-              hypotheses. Verified ones move to <code class="text-accent-purple">.quint/knowledge/L2/</code>.
+          <div class="border border-border-subtle bg-bg-secondary p-6">
+            <h3 class="font-mono text-sm font-semibold text-accent-orange uppercase tracking-wide">3. Rationale</h3>
+            <p class="mt-3 text-base text-text-secondary">
+              Why this, not that. Comparison table of all variants with verdicts. Weakest link identified. Evidence requirements declared. The reasoning is auditable.
             </p>
           </div>
-
-          <Terminal title="/q3-validate">
-            <div class="space-y-2 text-xs">
-              <div><span class="text-accent-green">$</span> /q3-validate H1</div>
-              <div class="text-text-muted">Gathering evidence for H1...</div>
-              <div class="mt-2"><span class="text-accent-blue">→</span> RTK Query bundle size: 12kb</div>
-              <div><span class="text-accent-blue">→</span> Caching: automatic, configurable</div>
-              <div><span class="text-accent-blue">→</span> Team experience: 2/5 familiar</div>
-              <div class="mt-2 text-text-muted">Evidence attached. H1 → L2/</div>
-            </div>
-          </Terminal>
-        </div>
-      </div>
-    </section>
-
-    <!-- Phase 4: Audit -->
-    <section class="border-t border-border-subtle bg-bg-secondary/50 py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-4">
-          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-green/10 font-mono text-lg font-bold text-accent-green">
-            4
-          </div>
-          <h2 class="text-2xl font-bold text-text-primary">Audit</h2>
-          <code class="rounded bg-bg-tertiary px-2 py-1 text-sm text-accent-green">/q4-audit</code>
-        </div>
-
-        <div class="mt-6 grid gap-8 lg:grid-cols-2">
-          <div class="space-y-4 text-text-secondary">
-            <p>
-              <strong class="text-text-primary">What:</strong> Apply the Weakest Link (WLNK)
-              principle. Check for cognitive biases. Look for blind spots.
-            </p>
-            <p>
-              <strong class="text-text-primary">Why:</strong> The system is only as strong
-              as its weakest component. Find it before production does.
-            </p>
-            <p>
-              <strong class="text-text-primary">WLNK:</strong> Assurance level =
-              min(all evidence), never average. One L0 claim drops the whole hypothesis.
+          <div class="border border-border-subtle bg-bg-secondary p-6">
+            <h3 class="font-mono text-sm font-semibold text-red-400 uppercase tracking-wide">4. Consequences</h3>
+            <p class="mt-3 text-base text-text-secondary">
+              Rollback plan with triggers and steps. Refresh triggers — when to re-evaluate. Affected files. Blast radius. Everything needed to undo or revisit.
             </p>
           </div>
-
-          <Terminal title="/q4-audit">
-            <div class="space-y-2 text-xs">
-              <div><span class="text-accent-green">$</span> /q4-audit</div>
-              <div class="text-text-muted">Running WLNK analysis...</div>
-              <div class="mt-2">
-                <span class="text-accent-blue">H1:</span> Overall L1
-                <span class="text-text-muted">(team exp is L0)</span>
-              </div>
-              <div>
-                <span class="text-accent-blue">H2:</span> Overall L2
-              </div>
-              <div class="mt-2 text-text-muted">Bias check: No anchoring detected</div>
-              <div class="text-text-muted">Recommendation: H2 (Zustand + RQ)</div>
-            </div>
-          </Terminal>
-        </div>
-      </div>
-    </section>
-
-    <!-- Phase 5: Decide -->
-    <section class="border-t border-border-subtle py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-4">
-          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-blue/10 font-mono text-lg font-bold text-accent-blue">
-            5
-          </div>
-          <h2 class="text-2xl font-bold text-text-primary">Decide</h2>
-          <code class="rounded bg-bg-secondary px-2 py-1 text-sm text-accent-blue">/q5-decide</code>
         </div>
 
-        <div class="mt-6 grid gap-8 lg:grid-cols-2">
-          <div class="space-y-4 text-text-secondary">
-            <p>
-              <strong class="text-text-primary">What:</strong> Create a Design Rationale
-              Record (DRR) documenting the decision, alternatives considered, evidence,
-              and conditions under which to revisit.
-            </p>
-            <p>
-              <strong class="text-text-primary">Why:</strong> Preserve context for future
-              you (and your team). When assumptions change, you'll know where to look.
-            </p>
-            <p>
-              <strong class="text-text-primary">Output:</strong> A searchable, dated DRR
-              with full rationale in <code class="text-accent-blue">.quint/decisions/</code>.
-            </p>
-          </div>
-
-          <Terminal title="DRR-001.md">
-            <div class="space-y-1 text-xs">
-              <div class="text-text-muted"># Decision: State Management</div>
-              <div class="text-text-muted">Date: 2024-01-15</div>
-              <div class="mt-2"><span class="text-accent-green">Chosen:</span> H2 (Zustand + React Query)</div>
-              <div class="mt-2 text-text-muted">## Rejected</div>
-              <div>- H1: Team lacks Redux experience</div>
-              <div>- H3: SSR incompatible</div>
-              <div class="mt-2 text-text-muted">## Revisit when</div>
-              <div>- Team grows past 10 engineers</div>
-              <div>- Need for time-travel debugging</div>
-            </div>
-          </Terminal>
-        </div>
+        <p class="mt-6 text-sm text-text-muted">
+          Decision Records are stored as git-tracked markdown files in <code>.quint/decisions/</code> and indexed in SQLite for search and lifecycle management.
+        </p>
       </div>
     </section>
 
     <!-- Key Concepts -->
-    <section class="border-t border-border-subtle bg-bg-secondary/50 py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-text-primary">Key Concepts</h2>
+    <section class="border-b border-border-subtle py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold">Key concepts</h2>
 
-        <div class="mt-8 grid gap-6 sm:grid-cols-3">
-          <div class="rounded-lg border border-border-subtle bg-bg-secondary p-6">
-            <h3 class="font-mono text-lg font-semibold text-text-primary">Assurance Levels</h3>
-            <ul class="mt-4 space-y-2 text-sm text-text-secondary">
-              <li><span class="text-text-muted">L0</span> — Observation (unverified)</li>
-              <li><span class="text-accent-blue">L1</span> — Reasoned (logically consistent)</li>
-              <li><span class="text-accent-green">L2</span> — Verified (empirically tested)</li>
-            </ul>
-          </div>
-
-          <div class="rounded-lg border border-border-subtle bg-bg-secondary p-6">
-            <h3 class="font-mono text-lg font-semibold text-text-primary">WLNK</h3>
-            <p class="mt-4 text-sm text-text-secondary">
-              Weakest Link principle: A chain is only as strong as its weakest link.
-              Overall assurance = min(all evidence levels), never average.
+        <div class="mt-8 space-y-4">
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-52 font-mono text-sm font-semibold text-text-primary uppercase tracking-wide">R_eff (WLNK)</h3>
+            <p class="text-base text-text-secondary">
+              Effective Reliability — a computed trust score (0–1) for every decision.
+              Equals the <strong>weakest</strong> piece of evidence, never the average.
+              Factors in congruence level (same context vs different) and freshness decay.
+              One expired benchmark drops the whole score.
             </p>
           </div>
-
-          <div class="rounded-lg border border-border-subtle bg-bg-secondary p-6">
-            <h3 class="font-mono text-lg font-semibold text-text-primary">Transformer Mandate</h3>
-            <p class="mt-4 text-sm text-text-secondary">
-              "AI generates options. You decide." A system cannot transform itself.
-              The AI proposes, the human disposes.
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-52 font-mono text-sm font-semibold text-text-primary uppercase tracking-wide">Evidence Decay</h3>
+            <p class="text-base text-text-secondary">
+              Evidence has expiry dates. A benchmark from 6 months ago scores 0.1 (weak, not absent).
+              Decisions with R_eff below 0.5 auto-surface in stale scans. Below 0.3 — flagged "AT RISK."
+              Graduated epistemic debt: most overdue items shown first.
             </p>
+          </div>
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-52 font-mono text-sm font-semibold text-text-primary uppercase tracking-wide">Indicator Roles</h3>
+            <p class="text-base text-text-secondary">
+              Every comparison dimension gets a role: <strong>constraint</strong> (hard limit — must satisfy),
+              <strong>target</strong> (what you're optimizing), or <strong>observation</strong> (watch but don't optimize — Anti-Goodhart).
+              Missing a constraint in comparison? Strong warning. Missing an observation? Informational.
+            </p>
+          </div>
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-52 font-mono text-sm font-semibold text-text-primary uppercase tracking-wide">Parity</h3>
+            <p class="text-base text-text-secondary">
+              Same inputs, same scope, same budget for all options — or the comparison is junk.
+              The tool cross-checks your comparison against characterization dimensions, warns on
+              asymmetric scoring, and generates a per-dimension parity checklist automatically.
+            </p>
+          </div>
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-52 font-mono text-sm font-semibold text-text-primary uppercase tracking-wide">Diversity Check</h3>
+            <p class="text-base text-text-secondary">
+              When you explore variants, the tool checks if they're genuinely distinct — not three flavors of the same idea.
+              Jaccard similarity above 50% triggers: "do they differ in kind, not degree?"
+            </p>
+          </div>
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-52 font-mono text-sm font-semibold text-text-primary uppercase tracking-wide">Archive Recall</h3>
+            <p class="text-base text-text-secondary">
+              When you frame a problem or explore variants, the tool searches your past decisions and notes.
+              "You decided on caching strategy 3 months ago" — surfaced at the moment it matters,
+              not when you remember to search.
+            </p>
+          </div>
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-52 font-mono text-sm font-semibold text-text-primary uppercase tracking-wide">Problem Lifecycle</h3>
+            <p class="text-base text-text-secondary">
+              Problems move through three states automatically: <strong>Backlog</strong> (framed, no work started),
+              <strong>In Progress</strong> (variants being explored), <strong>Addressed</strong> (decision made).
+              No manual status management — derived from artifact links.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lifecycle Management -->
+    <section class="border-b border-border-subtle py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold">Lifecycle management</h2>
+        <p class="mt-4 text-base text-text-secondary">
+          Decisions aren't static. <code class="text-accent-blue">/q-refresh</code> manages the lifecycle of
+          <strong>all</strong> artifact types — notes, problems, decisions, portfolios.
+        </p>
+
+        <div class="mt-8 space-y-3">
+          <div class="flex items-start gap-4">
+            <code class="shrink-0 w-28 text-accent-blue text-base">/q-refresh</code>
+            <span class="text-base text-text-secondary">Scan for staleness — expired validity, degraded evidence (R_eff &lt; 0.5), AT RISK items.</span>
+          </div>
+          <div class="flex items-start gap-4">
+            <code class="shrink-0 w-28 text-text-muted text-base">waive</code>
+            <span class="text-base text-text-secondary">Still valid? Extend with justification. Default: +90 days.</span>
+          </div>
+          <div class="flex items-start gap-4">
+            <code class="shrink-0 w-28 text-text-muted text-base">reopen</code>
+            <span class="text-base text-text-secondary">Needs re-evaluation? Creates new ProblemCard with lineage from old decision.</span>
+          </div>
+          <div class="flex items-start gap-4">
+            <code class="shrink-0 w-28 text-text-muted text-base">supersede</code>
+            <span class="text-base text-text-secondary">Replaced by a better decision? Link old to new.</span>
+          </div>
+          <div class="flex items-start gap-4">
+            <code class="shrink-0 w-28 text-text-muted text-base">deprecate</code>
+            <span class="text-base text-text-secondary">No longer relevant? Archive it.</span>
+          </div>
+        </div>
+
+        <p class="mt-8 text-base text-text-secondary">
+          The tool prompts a refresh scan if more than 5 days pass without one — ensuring the
+          feedback loop stays closed and stale decisions don't accumulate silently.
+        </p>
+      </div>
+    </section>
+
+    <!-- Utility commands -->
+    <section class="border-b border-border-subtle py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold">Other commands</h2>
+
+        <div class="mt-8 space-y-3">
+          <div class="flex items-start gap-4">
+            <code class="shrink-0 w-28 text-accent-blue text-base">/q-status</code>
+            <span class="text-base text-text-secondary">Dashboard — active decisions, stale items, problem lifecycle (Backlog / In Progress / Addressed), recent notes.</span>
+          </div>
+          <div class="flex items-start gap-4">
+            <code class="shrink-0 w-28 text-accent-blue text-base">/q-search</code>
+            <span class="text-base text-text-secondary">Full-text search across all decisions, problems, and notes.</span>
+          </div>
+          <div class="flex items-start gap-4">
+            <code class="shrink-0 w-28 text-accent-blue text-base">/q-problems</code>
+            <span class="text-base text-text-secondary">List all problems with Goldilocks signals — readiness score and complexity counts.</span>
+          </div>
+          <div class="flex items-start gap-4">
+            <code class="shrink-0 w-28 text-accent-blue text-base">/q-onboard</code>
+            <span class="text-base text-text-secondary">Discover existing project knowledge. Recommended for brownfield projects.</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- When to Use -->
-    <section class="border-t border-border-subtle py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-text-primary">When to Use</h2>
+    <section class="border-b border-border-subtle py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold">When to use</h2>
 
-        <div class="mt-8 grid gap-8 sm:grid-cols-2">
-          <div class="rounded-lg border border-accent-green/20 bg-accent-green/5 p-6">
-            <h3 class="font-mono text-sm font-semibold text-accent-green">Use quint-code for:</h3>
-            <ul class="mt-4 space-y-2 text-sm text-text-secondary">
-              <li>Architectural decisions with long-term impact</li>
-              <li>Team decisions that need documentation</li>
-              <li>Unfamiliar territory (new tech, new patterns)</li>
-              <li>Decisions you'll need to justify later</li>
-              <li>Complex problems with multiple valid approaches</li>
+        <div class="mt-8 grid gap-6 sm:grid-cols-2">
+          <div class="border border-accent-green/20 bg-accent-green/5 p-6">
+            <h3 class="font-mono text-sm font-semibold text-accent-green uppercase tracking-wide">Use quint-code for</h3>
+            <ul class="mt-4 space-y-2 text-base text-text-secondary">
+              <li>Architectural decisions with long-term consequences</li>
+              <li>Unfamiliar territory — new tech, new patterns, new domains</li>
+              <li>Decisions you'll need to explain or revisit later</li>
+              <li>Problems with multiple valid approaches and real tradeoffs</li>
+              <li>Anything you'd regret not documenting in 3 months</li>
             </ul>
           </div>
 
-          <div class="rounded-lg border border-red-400/20 bg-red-400/5 p-6">
-            <h3 class="font-mono text-sm font-semibold text-red-400">Skip quint-code for:</h3>
-            <ul class="mt-4 space-y-2 text-sm text-text-secondary">
-              <li>Quick fixes and bug patches</li>
-              <li>Obvious solutions with no alternatives</li>
-              <li>Easily reversible decisions</li>
+          <div class="border border-red-400/20 bg-red-400/5 p-6">
+            <h3 class="font-mono text-sm font-semibold text-red-400 uppercase tracking-wide">Skip it for</h3>
+            <ul class="mt-4 space-y-2 text-base text-text-secondary">
+              <li>Bug fixes with obvious solutions</li>
+              <li>Trivially reversible choices</li>
               <li>Time-critical emergencies</li>
-              <li>Personal preference choices (tabs vs spaces)</li>
+              <li>Personal preference (tabs vs spaces)</li>
             </ul>
           </div>
         </div>
@@ -363,16 +363,20 @@ import Button from '../components/Button.astro';
     </section>
 
     <!-- CTA -->
-    <section class="border-t border-border-subtle py-16">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-2xl font-bold text-text-primary">Ready to try it?</h2>
-        <p class="mt-4 text-text-secondary">
-          Install quint-code and run your first hypothesis cycle.
+    <section class="py-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold">Ready?</h2>
+        <p class="mt-4 text-base text-text-secondary">
+          Install quint-code and run <code class="text-accent-blue">/q-reason</code> on your next decision.
         </p>
 
-        <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <div class="mt-8 flex flex-wrap gap-4">
           <Button href="/">Back to Home</Button>
-          <Button href="/commands" variant="secondary">Command Reference</Button>
+          <Button
+            href="https://github.com/m0n0x41d/quint-code"
+            variant="secondary"
+            external
+          >GitHub</Button>
         </div>
       </div>
     </section>
