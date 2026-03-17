@@ -3,18 +3,27 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Button from '../components/Button.astro';
-import Card from '../components/Card.astro';
-import Terminal from '../components/Terminal.astro';
+const rouletteWords = [
+  'PROBLEM-OPS ENGINE',
+  'EPISTEMIC DEBT CATCHER',
+  'STRUCTURED REASONER',
+  'PARITY ENFORCER',
+  'EVIDENCE DECAY TRACKER',
+  'WEAKEST LINK FINDER',
+  'DECISION ARCHITECT',
+];
+
+
+
 ---
 
-<Layout title="Structured Reasoning for AI Coding Tools">
+<Layout title="Decision Engineering for AI Coding Tools">
   <Header />
 
   <main class="flex-1">
     <!-- Hero Section -->
     <section class="relative overflow-hidden py-16 sm:py-24 lg:py-32">
       <div class="hero-glow"></div>
-      <div class="bg-grid absolute inset-0"></div>
       <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col items-center text-center">
           <!-- ASCII Logo - Desktop -->
@@ -30,12 +39,14 @@ import Terminal from '../components/Terminal.astro';
           >
             quint-code
           </h1>
-          <!-- SR-only heading -->
           <span class="sr-only">quint-code</span>
 
-          <p class="mt-6 max-w-2xl text-xl text-text-secondary sm:text-2xl">
-            Structured reasoning for AI coding tools
-          </p>
+          <!-- Scramble Roulette -->
+          <div class="mt-6 w-full max-w-2xl" aria-label="ProblemOps for AI coding tools">
+            <div class="scramble-hero" data-words={JSON.stringify(rouletteWords)}>
+              <span class="scramble-text gradient-text">PROBLEM-OPS ENGINE</span>
+            </div>
+          </div>
 
           <p class="mt-4 text-lg text-text-muted">
             Make better decisions. Remember why you made them.
@@ -47,7 +58,7 @@ import Terminal from '../components/Terminal.astro';
               class="group relative overflow-hidden rounded-lg border border-border-subtle bg-bg-secondary"
             >
               <div class="flex items-center justify-center gap-2 sm:gap-4 px-3 sm:px-4 py-3 overflow-x-auto">
-                <code class="text-xs sm:text-sm text-text-secondary font-mono whitespace-nowrap">
+                <code class="text-xs sm:text-base text-text-secondary font-mono whitespace-nowrap">
                   <span class="text-accent-green">$</span>
                   curl -fsSL https://quint.codes/install.sh | bash
                 </code>
@@ -98,236 +109,318 @@ import Terminal from '../components/Terminal.astro';
       </div>
     </section>
 
-    <!-- Problem Section -->
+    <!-- Pain Section -->
     <section class="border-t border-border-subtle py-20">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-3xl text-center">
+        <h2 class="text-2xl font-bold sm:text-3xl">The problem</h2>
+        <div class="mt-8 max-w-2xl">
           <p class="text-lg leading-relaxed text-text-secondary">
-            You're deep in a codebase. You need to make an architectural
-            decision.
-            <br />
-            Event choreography? Saga pattern? Outbox with CDC?
+            You and your AI make important decisions every day.
+            You pick solutions confidently, intuitively, and even explain them clearly.
           </p>
           <p class="mt-4 text-lg text-text-secondary">
-            Your AI assistant gives you an answer. It's coherent.
-            <span class="text-text-primary">But:</span>
+            <span class="text-text-primary font-semibold">But</span> there are many things silently going wrong:
           </p>
         </div>
 
-        <div class="mt-12 grid gap-6 sm:grid-cols-3">
-          <Card title='"Why this approach?"'>
-            <p>
-              You won't remember the reasoning in 3 months. The decision lives
-              in a chat thread you'll never find again.
-            </p>
-          </Card>
-          <Card title='"What alternatives?"'>
-            <p>
-              Were there alternatives, or did you anchor on the first idea? No
-              record of what was considered and rejected.
-            </p>
-          </Card>
-          <Card title='"When does it expire?"'>
-            <p>
-              The tradeoffs shift as the system evolves. No one tracks when
-              assumptions become invalid.
-            </p>
-          </Card>
-        </div>
-      </div>
-    </section>
-
-    <!-- Solution Section: ADI Cycle -->
-    <section class="border-t border-border-subtle bg-bg-secondary/50 py-20">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-3xl text-center">
-          <h2 class="text-3xl font-bold text-text-primary sm:text-4xl">
-            The ADI Cycle
-          </h2>
-          <p class="mt-4 font-mono text-text-muted">
-            Abduction → Deduction → Induction → Audit → Decision
-          </p>
-          <p class="mt-6 text-lg text-text-secondary">
-            AI generates options. You decide. Everything is documented.
-          </p>
-        </div>
-
-        <div class="mt-16 grid gap-4 sm:grid-cols-5">
-          <div
-            class="flex flex-col items-center rounded-lg border border-border-subtle bg-bg-secondary p-6 text-center"
-          >
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-green/10 font-mono text-lg font-bold text-accent-green"
-            >
-              1
-            </div>
-            <h3 class="mt-4 font-semibold text-text-primary">Hypothesize</h3>
-            <p class="mt-2 text-sm text-text-muted">
-              Generate 3-5 competing approaches
+        <div class="mt-12 space-y-4">
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-64 font-mono text-sm font-semibold text-text-primary uppercase tracking-wider">The problem was never framed</h3>
+            <p class="text-base text-text-secondary">
+              You go straight to "use Kafka" before asking what's actually broken.
+              Intuitive decisions feel fast and right — but intuition optimizes for familiarity, not for the problem at hand.
+              Without a frame, you're solving something you never defined.
             </p>
           </div>
-          <div
-            class="flex flex-col items-center rounded-lg border border-border-subtle bg-bg-secondary p-6 text-center"
-          >
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-blue/10 font-mono text-lg font-bold text-accent-blue"
-            >
-              2
-            </div>
-            <h3 class="mt-4 font-semibold text-text-primary">Verify</h3>
-            <p class="mt-2 text-sm text-text-muted">
-              Check logical consistency
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-64 font-mono text-sm font-semibold text-text-primary uppercase tracking-wider">Comparison doesn't happen</h3>
+            <p class="text-base text-text-secondary">
+              You and your AI settle on the first reasonable, intuitive option. No alternatives explored, no tradeoffs weighed.
+              What looks like a "decision" is actually an approximation — the average, the familiar, the first thing that fits.
+              Not the best. Just the first.
             </p>
           </div>
-          <div
-            class="flex flex-col items-center rounded-lg border border-border-subtle bg-bg-secondary p-6 text-center"
-          >
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-purple/10 font-mono text-lg font-bold text-accent-purple"
-            >
-              3
-            </div>
-            <h3 class="mt-4 font-semibold text-text-primary">Test</h3>
-            <p class="mt-2 text-sm text-text-muted">
-              Gather evidence: benchmarks, docs
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-64 font-mono text-sm font-semibold text-text-primary uppercase tracking-wider">"Why did we make that?"</h3>
+            <p class="text-base text-text-secondary">
+              Three months later, nobody remembers. The rationale disappeared into a chat thread you'll never find.
+              Now you're reverse-engineering a decision from code comments and git blame.
             </p>
           </div>
-          <div
-            class="flex flex-col items-center rounded-lg border border-border-subtle bg-bg-secondary p-6 text-center"
-          >
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-green/10 font-mono text-lg font-bold text-accent-green"
-            >
-              4
-            </div>
-            <h3 class="mt-4 font-semibold text-text-primary">Audit</h3>
-            <p class="mt-2 text-sm text-text-muted">
-              WLNK analysis, check blind spots
-            </p>
-          </div>
-          <div
-            class="flex flex-col items-center rounded-lg border border-border-subtle bg-bg-secondary p-6 text-center"
-          >
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-accent-blue/10 font-mono text-lg font-bold text-accent-blue"
-            >
-              5
-            </div>
-            <h3 class="mt-4 font-semibold text-text-primary">Decide</h3>
-            <p class="mt-2 text-sm text-text-muted">
-              Create Design Rationale Record
+          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <h3 class="shrink-0 sm:w-64 font-mono text-sm font-semibold text-text-primary uppercase tracking-wider">"Is this still the right call?"</h3>
+            <p class="text-base text-text-secondary">
+              Traffic tripled. Team doubled. Requirements shifted. But the architecture decision from 8 months ago is frozen in time.
+              Nobody tracks when assumptions go stale.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Before/After Section -->
+    <!-- How It Works — Tabbed -->
     <section class="border-t border-border-subtle py-20">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <h2
-          class="mb-12 text-center text-3xl font-bold text-text-primary sm:text-4xl"
-        >
-          Before & After
-        </h2>
+        <h2 class="text-2xl font-bold sm:text-3xl">How it works</h2>
 
-        <div class="mx-auto max-w-4xl overflow-hidden rounded-xl border border-border-subtle">
-          <div class="grid sm:grid-cols-2">
-            <div class="border-b border-border-subtle bg-bg-secondary p-6 sm:border-b-0 sm:border-r">
-              <h3 class="mb-4 font-mono text-sm font-semibold text-red-400">
-                Without quint-code
-              </h3>
-              <ul class="space-y-4 text-sm text-text-secondary">
-                <li class="flex gap-3">
-                  <span class="text-red-400">×</span>
-                  <span>"Let's use Saga pattern" <em class="text-text-muted">(first idea)</em></span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-red-400">×</span>
-                  <span>"Why did we build it this way?" <em class="text-text-muted">(3 months later)</em></span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-red-400">×</span>
-                  <span>"Is this assumption still valid?"</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-red-400">×</span>
-                  <span>Same debates in different meetings</span>
-                </li>
-              </ul>
-            </div>
-            <div class="bg-bg-secondary p-6">
-              <h3 class="mb-4 font-mono text-sm font-semibold text-accent-green">
-                With quint-code
-              </h3>
-              <ul class="space-y-4 text-sm text-text-secondary">
-                <li class="flex gap-3">
-                  <span class="text-accent-green">✓</span>
-                  <span>3 approaches analyzed, tradeoffs documented</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-accent-green">✓</span>
-                  <span>Check <code class="text-accent-blue">DRR-001.md</code> — full rationale preserved</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-accent-green">✓</span>
-                  <span>Run <code class="text-accent-blue">/q-decay</code> — evidence freshness tracked</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-accent-green">✓</span>
-                  <span>Query knowledge base — past decisions searchable</span>
-                </li>
-              </ul>
+        <!-- Tabs -->
+        <div class="mt-10 flex gap-0 border border-border-subtle w-fit">
+          <button data-tab="auto" class="tab-btn tab-active px-5 py-3 font-mono text-sm uppercase tracking-wider transition-colors">/q-reason</button>
+          <button data-tab="full" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Full cycle</button>
+          <button data-tab="tactical" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Quick cycle</button>
+          <button data-tab="note" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Micro-note</button>
+        </div>
+
+        <!-- Tab content — grid overlay keeps tallest height -->
+        <div class="mt-0 border border-t-0 border-border-subtle bg-bg-secondary p-8 sm:p-10 grid [&>*]:col-start-1 [&>*]:row-start-1">
+
+          <!-- /q-reason -->
+          <div data-content="auto" class="tab-content tab-visible">
+            <div class="max-w-3xl">
+              <p class="text-text-primary font-semibold text-lg">One command. The agent reasons for you.</p>
+              <p class="mt-4 text-base text-text-secondary leading-relaxed">
+                Type <code class="text-accent-blue">/q-reason</code> and describe your problem.
+                The agent follows a structured operating system of thought: frames the problem before solving it,
+                generates genuinely distinct alternatives, compares them fairly on declared dimensions,
+                and records the decision with full rationale, rollback plan, and expiry date.
+              </p>
+              <p class="mt-4 text-base text-text-secondary leading-relaxed">
+                The agent auto-selects the right depth — tactical for quick reversible choices,
+                standard for architectural decisions, deep for irreversible cross-team calls.
+                You stay in the loop for every choice that matters.
+              </p>
+              <div class="mt-6 font-mono text-sm text-text-muted">
+                <span class="text-accent-green">$</span> /q-reason "How should we handle cross-service transaction failures?"
+              </div>
             </div>
           </div>
+
+          <!-- Full cycle -->
+          <div data-content="full" class="tab-content">
+            <div class="max-w-3xl">
+              <p class="text-text-primary font-semibold text-lg">Full control. Five steps, each a slash command.</p>
+              <p class="mt-4 text-base text-text-secondary leading-relaxed">
+                When you want to drive each phase manually — define dimensions before seeing options,
+                enforce parity across variants, attach evidence with congruence levels.
+              </p>
+              <div class="mt-8 space-y-4">
+                <div class="flex items-start gap-4">
+                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">1</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-frame</code>
+                  <span class="text-base text-text-secondary">Define signal, constraints, optimization targets, acceptance criteria</span>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">2</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-char</code>
+                  <span class="text-base text-text-secondary">Set comparison dimensions with roles — constraint, target, observation</span>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">3</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-explore</code>
+                  <span class="text-base text-text-secondary">Generate genuinely distinct alternatives with weakest link per variant</span>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">4</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-compare</code>
+                  <span class="text-base text-text-secondary">Fair comparison — same inputs, same scope, parity enforced</span>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">5</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-decide</code>
+                  <span class="text-base text-text-secondary">Decision contract — invariants, rollback plan, refresh triggers, expiry</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick cycle -->
+          <div data-content="tactical" class="tab-content">
+            <div class="max-w-3xl">
+              <p class="text-text-primary font-semibold text-lg">Reversible decision? Three steps.</p>
+              <p class="mt-4 text-base text-text-secondary leading-relaxed">
+                For choices with blast radius under 2 weeks — library picks, API design, caching strategy.
+                Skip characterization and formal comparison. Frame, explore, decide.
+              </p>
+              <div class="mt-8 space-y-4">
+                <div class="flex items-start gap-4">
+                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">1</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-frame</code>
+                  <span class="text-base text-text-secondary">What's broken, what constraints, what does solved look like</span>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">2</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-explore</code>
+                  <span class="text-base text-text-secondary">2-3 alternatives with tradeoffs</span>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">3</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-decide</code>
+                  <span class="text-base text-text-secondary">Pick one, record why, set expiry</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Micro-note -->
+          <div data-content="note" class="tab-content">
+            <div class="max-w-3xl">
+              <p class="text-text-primary font-semibold text-lg">Capture what matters before it's forgotten.</p>
+              <p class="mt-4 text-base text-text-secondary leading-relaxed">
+                You discover the auth token has a hard 4KB limit that breaks with more than 12 roles.
+                You realize the retry logic silently swallows timeout errors.
+                You pick JSON over Protobuf because the client SDK doesn't support binary yet.
+                These things never make it into docs — but they shape every decision downstream.
+              </p>
+              <p class="mt-4 text-base text-text-secondary leading-relaxed">
+                You don't need to call <code class="text-accent-blue">/q-note</code> yourself — the agent
+                captures micro-decisions automatically when it notices them in conversation.
+                You said "let's go with gRPC" — it's recorded with rationale before you move on.
+                No rationale — no record. Conflicts with active decisions are flagged.
+                Auto-expires in 90 days so your knowledge base doesn't rot.
+              </p>
+              <div class="mt-6 font-mono text-sm text-text-muted">
+                <span class="text-accent-green">$</span> /q-note "Auth token hard limit 4KB — breaks at 12+ roles, must split claims before RBAC expansion"
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Terminal Demo Section -->
-    <section class="border-t border-border-subtle bg-bg-secondary/50 py-20">
+    <!-- FPF Foundation -->
+    <section class="border-t border-border-subtle py-20">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <h2
-          class="mb-12 text-center text-3xl font-bold text-text-primary sm:text-4xl"
-        >
-          See it in action
-        </h2>
+        <div>
+          <h2 class="text-2xl font-bold text-text-primary sm:text-3xl">
+            Built on First Principles Framework
+          </h2>
+          <p class="mt-6 text-base text-text-secondary leading-relaxed">
+            quint-code is built on top of
+            <a
+              href="https://github.com/ailev/FPF"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text-primary underline decoration-accent-orange/50 underline-offset-4 hover:decoration-accent-orange transition-colors"
+            >First Principles Framework</a>
+            by
+            <a
+              href="https://www.linkedin.com/in/ailev/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text-primary underline decoration-accent-orange/50 underline-offset-4 hover:decoration-accent-orange transition-colors"
+            >Anatoly Levenchuk</a>
+            — a rigorous, transdisciplinary architecture for thinking.
+          </p>
+          <a
+            href="https://github.com/ailev/FPF"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-8 inline-flex items-center gap-2 rounded-md border border-border-subtle px-5 py-3 text-sm font-semibold text-text-primary transition-all hover:border-accent-orange/50 hover:bg-bg-secondary"
+          >
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+            </svg>
+            Read the FPF specification
+          </a>
+        </div>
+      </div>
+    </section>
 
-        <div class="mx-auto max-w-3xl">
-          <Terminal>
-            <div class="space-y-4">
-              <div>
-                <span class="text-accent-green">$</span>
-                <span class="text-text-primary">
-                  /q1-hypothesize "How should we handle cross-service transactions?"
-                </span>
-              </div>
-              <div class="text-text-muted">Generating hypotheses...</div>
-              <div class="space-y-3 pl-4 border-l-2 border-border-subtle">
-                <div>
-                  <span class="text-accent-blue">H1:</span>
-                  <span class="text-text-primary"> Saga pattern with orchestrator</span>
-                  <div class="text-text-muted text-xs mt-1">Central coordinator manages the workflow</div>
-                </div>
-                <div>
-                  <span class="text-accent-blue">H2:</span>
-                  <span class="text-text-primary"> Event choreography</span>
-                  <div class="text-text-muted text-xs mt-1">Services react to domain events, no coordinator</div>
-                </div>
-                <div>
-                  <span class="text-accent-blue">H3:</span>
-                  <span class="text-text-primary"> Outbox pattern with CDC</span>
-                  <div class="text-text-muted text-xs mt-1">Transactional outbox, Change Data Capture for publishing</div>
-                </div>
-              </div>
-              <div class="text-text-muted">
-                Hypotheses saved to <span class="text-accent-green">.quint/knowledge/L0/</span>
-              </div>
-              <div class="text-text-secondary">
-                Next: Run <span class="text-accent-blue">/q2-verify</span> to check logical consistency
-              </div>
+    <!-- FAQ -->
+    <section class="border-t border-border-subtle py-20">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold sm:text-3xl">Frequently asked questions</h2>
+
+        <div class="mt-10 border border-border-subtle divide-y divide-border-subtle">
+          <details class="group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-mono text-sm uppercase tracking-wide text-text-primary hover:bg-bg-secondary transition-colors">
+              Why do I need quint-code when there are SDD frameworks?
+              <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
+            </summary>
+            <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
+              SDD frameworks give you a structure for writing specs. quint-code gives your AI agent
+              an operating system for thinking — problem framing, fair comparison, evidence tracking,
+              and decision lifecycle management. It's not a document format. It's a reasoning process
+              that produces artifacts with computed trust scores, expiry dates, and rollback plans.
+              You can use both — SDD for specs, quint-code for the decisions behind them.
             </div>
-          </Terminal>
+          </details>
+
+          <details class="group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-mono text-sm uppercase tracking-wide text-text-primary hover:bg-bg-secondary transition-colors">
+              How is this different from ADRs?
+              <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
+            </summary>
+            <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
+              ADRs are static markdown files you write after deciding. quint-code decisions are live artifacts —
+              they have computed trust scores (R_eff) that degrade as evidence ages, expiry dates that trigger
+              reviews, rollback plans with conditions, and they're searchable via full-text search.
+              An ADR tells you what was decided. A quint-code decision tells you whether you should still trust it.
+            </div>
+          </details>
+
+          <details class="group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-mono text-sm uppercase tracking-wide text-text-primary hover:bg-bg-secondary transition-colors">
+              Can I use it on an existing project?
+              <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
+            </summary>
+            <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
+              Yes. Run <code class="text-accent-blue">quint-code init</code> and then <code class="text-accent-blue">/q-onboard</code> —
+              the agent will scan your codebase and surface existing architectural patterns worth documenting.
+              You don't need to retroactively document everything. Start with your next decision.
+            </div>
+          </details>
+
+          <details class="group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-mono text-sm uppercase tracking-wide text-text-primary hover:bg-bg-secondary transition-colors">
+              What happens when I switch between AI coding tools?
+              <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
+            </summary>
+            <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
+              quint-code stores everything in a local SQLite database with git-tracked markdown projections.
+              The MCP server works with Claude Code, Cursor, Gemini CLI, and Codex CLI.
+              Switch tools, your decisions stay. The knowledge is in your repo, not in a chat thread.
+              Just make sure you initialized quint-code for the correct tool — default is Claude Code.
+            </div>
+          </details>
+
+          <details class="group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-mono text-sm uppercase tracking-wide text-text-primary hover:bg-bg-secondary transition-colors">
+              Isn't this overkill for small projects?
+              <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
+            </summary>
+            <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
+              Use <code class="text-accent-blue">/q-note</code> for micro-decisions and <code class="text-accent-blue">/q-reason</code>
+              which auto-selects tactical mode for small choices. The overhead is one command.
+              The value is remembering why you chose X in 3 months when everything breaks.
+              Small projects become big projects. Decisions made early matter the most.
+            </div>
+          </details>
+
+          <details class="group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-mono text-sm uppercase tracking-wide text-text-primary hover:bg-bg-secondary transition-colors">
+              Does it work for teams or solo only?
+              <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
+            </summary>
+            <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
+              Currently solo-focused. The <code class="text-accent-blue">.quint/</code> directory is git-tracked,
+              so teammates can read your decisions. But there's no collaborative editing, review workflows,
+              or merge conflict resolution for the SQLite database yet. That's on the roadmap.
+            </div>
+          </details>
+
+          <details class="group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-mono text-sm uppercase tracking-wide text-text-primary hover:bg-bg-secondary transition-colors">
+              Is quint-code good for vibe coding?
+              <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
+            </summary>
+            <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
+              If you're building something you'll maintain for more than a week — yes.
+              Vibe coding is fast until you hit a decision you made 2 months ago and can't remember why.
+              <code class="text-accent-blue">/q-reason</code> takes 30 seconds and saves you hours of archaeology later.
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -369,21 +462,197 @@ import Terminal from '../components/Terminal.astro';
   <Footer />
 </Layout>
 
+<style is:global>
+  @import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
+
+  .scramble-hero {
+    font-family: 'Jersey 10', cursive;
+    font-weight: 400;
+    filter: drop-shadow(0 0 0.5px rgba(255, 135, 0, 0.6)) drop-shadow(0 0 1px rgba(255, 68, 68, 0.3));
+    font-size: 1.5rem;
+    line-height: 1.4;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    image-rendering: pixelated;
+    letter-spacing: 0.05em;
+  }
+  @media (min-width: 640px) {
+    .scramble-hero {
+      font-size: 2.5rem;
+      min-height: 3.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .scramble-hero {
+      font-size: 3.25rem;
+      min-height: 4.5rem;
+    }
+  }
+
+  .scramble-text {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  /* Unresolved glyphs — dim ember glow */
+  .scramble-text .glyph {
+    color: rgba(255, 135, 0, 0.3);
+    display: inline-block;
+  }
+
+  /* Tab panels — all stacked in same grid cell */
+  .tab-content {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+  .tab-content.tab-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Tab buttons */
+  .tab-btn {
+    color: #555;
+    background: transparent;
+  }
+  .tab-btn:hover {
+    color: #e8e8e8;
+    background: #1a1a1a;
+  }
+  .tab-btn.tab-active {
+    color: #e8e8e8;
+    background: #111111;
+  }
+</style>
+
 <script>
+  // Tabs — CSS grid overlay, all panels stacked, visibility toggles
+  document.querySelectorAll('.tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tab = (btn as HTMLElement).dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('tab-active'));
+      btn.classList.add('tab-active');
+      document.querySelectorAll('.tab-content').forEach((c) => c.classList.remove('tab-visible'));
+      document.querySelector(`[data-content="${tab}"]`)?.classList.add('tab-visible');
+    });
+  });
+
   // Copy install command
   const copyBtn = document.getElementById('copy-btn');
-  const installCmd =
-    'curl -fsSL https://quint.codes/install.sh | bash';
-
+  const installCmd = 'curl -fsSL https://quint.codes/install.sh | bash';
   copyBtn?.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(installCmd);
       copyBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copyBtn.textContent = 'Copy';
-      }, 2000);
+      setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
   });
+
+  // Text scramble effect — each character resolves independently
+  class TextScramble {
+    el: HTMLElement;
+    chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789@#$%&<>[]{}!?=+*^~アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン漢字決問題解析';
+    queue: { from: string; to: string; start: number; end: number; char?: string }[] = [];
+    frame = 0;
+    frameRequest = 0;
+    resolvePromise: (() => void) | null = null;
+
+    constructor(el: HTMLElement) {
+      this.el = el;
+    }
+
+    setText(newText: string): Promise<void> {
+      const oldText = this.el.innerText;
+      const length = Math.max(oldText.length, newText.length);
+      this.queue = [];
+
+      for (let i = 0; i < length; i++) {
+        const from = oldText[i] || '';
+        const to = newText[i] || '';
+        // Each char gets a random start delay and resolve time
+        // Characters that are disappearing (to='') resolve faster
+        const start = Math.floor(Math.random() * 25);
+        const end = to
+          ? start + Math.floor(Math.random() * 30) + 12
+          : start + Math.floor(Math.random() * 8) + 4;
+        this.queue.push({ from, to, start, end });
+      }
+
+      cancelAnimationFrame(this.frameRequest);
+      this.frame = 0;
+
+      return new Promise((resolve) => {
+        this.resolvePromise = resolve;
+        this.update();
+      });
+    }
+
+    update() {
+      let output = '';
+      let complete = 0;
+
+      for (let i = 0; i < this.queue.length; i++) {
+        const item = this.queue[i];
+        const { from, to, start, end } = item;
+
+        if (this.frame >= end) {
+          // Resolved — show final character
+          complete++;
+          output += to;
+        } else if (this.frame >= start) {
+          // Scrambling — show random glyph
+          if (!item.char || Math.random() < 0.28) {
+            item.char = this.chars[Math.floor(Math.random() * this.chars.length)];
+          }
+          output += `<span class="glyph">${item.char}</span>`;
+        } else {
+          // Not started yet — show old character
+          output += from;
+        }
+      }
+
+      this.el.innerHTML = output;
+
+      if (complete === this.queue.length) {
+        this.resolvePromise?.();
+        return;
+      }
+
+      this.frameRequest = requestAnimationFrame(() => {
+        this.frame++;
+        this.update();
+      });
+    }
+  }
+
+  // Initialize scramble roulette
+  const heroEl = document.querySelector('.scramble-hero') as HTMLElement;
+  const textEl = document.querySelector('.scramble-text') as HTMLElement;
+
+  if (heroEl && textEl) {
+    const words: string[] = JSON.parse(heroEl.dataset.words || '[]');
+    if (words.length > 0) {
+      const fx = new TextScramble(textEl);
+      let counter = 0;
+
+      const next = () => {
+        counter = (counter + 1) % words.length;
+        fx.setText(words[counter]).then(() => {
+          setTimeout(next, 2200);
+        });
+      };
+
+      // First word is already displayed — wait, then start cycling
+      setTimeout(next, 2800);
+    }
+  }
 </script>

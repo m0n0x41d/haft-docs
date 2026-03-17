@@ -5,32 +5,39 @@ export default {
     extend: {
       colors: {
         bg: {
-          primary: '#020617',
-          secondary: '#0f172a',
-          tertiary: '#1e293b',
+          primary: '#0a0a0a',
+          secondary: '#111111',
+          tertiary: '#1a1a1a',
         },
         text: {
-          primary: '#fafafa',
-          secondary: '#a1a1aa',
-          muted: '#8b949e',
+          primary: '#e8e8e8',
+          secondary: '#888888',
+          muted: '#555555',
         },
         accent: {
           green: '#46AB47',
-          blue: '#3b82f6',
+          blue: '#6b8afd',
           purple: '#8b5cf6',
-          // Fire palette for logo only
+          // Fire palette for logo + carousel
           amber: '#ffcc00',
           orange: '#ff8700',
           red: '#ff4444',
         },
         border: {
-          subtle: '#1e293b',
-          hover: '#334155',
+          subtle: '#1e1e1e',
+          hover: '#333333',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Saira', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
+      },
+      borderRadius: {
+        DEFAULT: '2px',
+        md: '3px',
+        lg: '4px',
+        xl: '4px',
+        '2xl': '4px',
       },
       animation: {
         'gradient-shift': 'gradient-shift 4s linear infinite',

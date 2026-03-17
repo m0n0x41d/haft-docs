@@ -1,7 +1,4 @@
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/600.css';
-@import '@fontsource/inter/700.css';
+@import url('https://fonts.googleapis.com/css2?family=Saira:wght@400;500;600;700&display=swap');
 @import '@fontsource/jetbrains-mono/400.css';
 @import '@fontsource/jetbrains-mono/500.css';
 @import '@fontsource/jetbrains-mono/700.css';
@@ -24,7 +21,7 @@
   h2,
   h3,
   h4 {
-    @apply text-text-primary font-semibold;
+    @apply text-text-primary font-mono font-semibold uppercase tracking-wide;
   }
 
   code {
@@ -61,25 +58,20 @@
     );
     background-size: 200% auto;
     animation: gradient-shift 4s linear infinite;
-    filter: drop-shadow(0 0 30px rgba(255, 204, 0, 0.5))
-            drop-shadow(0 0 60px rgba(255, 135, 0, 0.4))
-            drop-shadow(0 0 90px rgba(255, 68, 68, 0.3));
-  }
-
-  .glow-amber {
-    box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
+    filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.3))
+            drop-shadow(0 0 40px rgba(255, 135, 0, 0.2));
   }
 
   .platform-badge {
-    @apply text-sm;
-    color: #c9d1d9;
+    @apply text-sm font-mono uppercase tracking-wider;
+    color: #888888;
   }
 
   .ascii-logo {
     @apply font-mono leading-tight;
     font-size: clamp(8px, 1.4vw, 16px);
-    filter: drop-shadow(0 0 30px rgba(255, 140, 0, 0.4))
-            drop-shadow(0 0 60px rgba(255, 68, 68, 0.2));
+    filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.3))
+            drop-shadow(0 0 40px rgba(255, 68, 68, 0.15));
   }
 
   .ascii-1 { color: #ff4444; }
@@ -89,26 +81,17 @@
   .ascii-5 { color: #ffcc00; }
   .ascii-6 { color: #ffdd66; }
 
-  .bg-grid {
-    background-image: linear-gradient(
-        rgba(255, 255, 255, 0.02) 1px,
-        transparent 1px
-      ),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 64px 64px;
-  }
-
   .hero-glow {
     position: absolute;
-    top: -200px;
+    top: -150px;
     left: 50%;
     transform: translateX(-50%);
-    width: 800px;
-    height: 600px;
+    width: 600px;
+    height: 400px;
     background: radial-gradient(
       ellipse at center,
-      rgba(255, 135, 0, 0.15),
-      rgba(255, 68, 68, 0.05) 50%,
+      rgba(255, 135, 0, 0.08),
+      rgba(255, 68, 68, 0.03) 50%,
       transparent 70%
     );
     pointer-events: none;
