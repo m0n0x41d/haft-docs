@@ -66,8 +66,23 @@ function isActive(href: string): boolean {
       <!-- Sidebar (desktop) -->
       <aside class="hidden lg:block w-56 shrink-0">
         <nav class="sticky top-24 space-y-6 text-sm">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="text-xs font-mono uppercase tracking-wider text-accent-green">v5.1</span>
+          <div class="relative mb-4" id="version-wrapper">
+            <button
+              id="version-toggle"
+              class="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-accent-green hover:text-text-primary transition-colors cursor-pointer"
+            >
+              v5.1
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              id="version-dropdown"
+              class="hidden absolute top-6 left-0 z-50 bg-bg-secondary border border-border-subtle rounded shadow-lg py-1 min-w-[100px]"
+            >
+              <span class="block px-3 py-1.5 text-xs font-mono text-accent-green bg-bg-tertiary">v5.1 (latest)</span>
+              <a href="/docs/5.0" class="block px-3 py-1.5 text-xs font-mono text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors">v5.0</a>
+            </div>
           </div>
           {nav.map(section => (
             <div>
@@ -320,6 +335,7 @@ function isActive(href: string): boolean {
 </style>
 
 <script>
+  // Mobile menu
   const toggle = document.getElementById('docs-menu-toggle');
   const overlay = document.getElementById('docs-menu-overlay');
   const close = document.getElementById('docs-menu-close');
@@ -328,5 +344,20 @@ function isActive(href: string): boolean {
   close?.addEventListener('click', () => overlay?.classList.add('hidden'));
   overlay?.addEventListener('click', (e) => {
     if (e.target === overlay) overlay.classList.add('hidden');
+  });
+
+  // Version dropdown
+  document.querySelectorAll('#version-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dd = btn.parentElement?.querySelector('#version-dropdown');
+      dd?.classList.toggle('hidden');
+    });
+  });
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('#version-dropdown').forEach(dd => {
+      if (!dd.parentElement?.contains(e.target as Node)) {
+        dd.classList.add('hidden');
+      }
+    });
   });
 </script>

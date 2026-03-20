@@ -18,8 +18,9 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <h2>What it does</h2>
 
-  <p>When you're working on a non-trivial engineering task — choosing a database, designing an API,
-    deciding on a caching strategy — you type <code>/q-reason</code> and describe the problem. The agent:</p>
+  <p>When you face a decision that's hard to reverse, affects the team, or has real consequences if
+    you get it wrong — migrating a database, picking an auth architecture, designing a public API,
+    restructuring a service boundary — you type <code>/q-reason</code> and describe the problem. The agent:</p>
 
   <ol>
     <li>Frames the problem (what's broken, what are the constraints, how do we know it's solved)</li>
@@ -39,15 +40,20 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Who is this for</h2>
 
   <p>
-    Software engineers who use AI coding assistants and want their decisions to survive beyond the
-    chat session. If you've ever asked "why did we do it this way?" three months later and found
-    nothing — this is for you.
+    Anyone who makes decisions with real consequences — and needs those decisions to be
+    traceable, challengeable, and aware of their own expiry date. Software architects,
+    engineering managers, systems engineers, tech leads. The problems aren't limited to code:
+    technology selection, infrastructure strategy, process design, organizational trade-offs,
+    vendor evaluation, migration planning.
   </p>
 
   <p>
-    No prior knowledge of FPF (First Principles Framework) is required. Quint Code implements the
-    useful parts and hides the theory. If you want to go deeper,
-    <a href="https://github.com/ailev/FPF" target="_blank" rel="noopener">the FPF spec is on GitHub</a>.
+    The current interface is developer-focused (MCP server for AI coding tools), but the
+    underlying methodology is domain-agnostic. Quint Code implements
+    <a href="https://github.com/ailev/FPF" target="_blank" rel="noopener">FPF (First Principles Framework)</a>
+    by Anatoly Levenchuk — a formal approach to structured reasoning that works wherever
+    decisions need evidence, comparison, and lifecycle management. No prior knowledge of
+    FPF is required; Quint implements the practical parts and stays out of your way.
   </p>
 
   <h2>Supported tools</h2>

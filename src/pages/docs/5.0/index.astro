@@ -1,0 +1,110 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+---
+
+<Layout title="v5.0 Documentation" description="Quint Code v5.0 documentation (archived).">
+  <Header />
+
+  <main class="flex-1">
+    <section class="py-16">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+          <h1 style="font-size: 1.75rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #e8e8e8; margin: 0;">
+            v5.0 Documentation
+          </h1>
+          <span style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: #555; background: #1a1a1a; padding: 0.25rem 0.5rem; border-radius: 3px;">
+            ARCHIVED
+          </span>
+        </div>
+
+        <div style="border: 1px solid rgba(255, 204, 0, 0.2); background: rgba(255, 204, 0, 0.05); padding: 1.25rem; border-radius: 4px; margin-bottom: 2rem;">
+          <p style="color: #888; margin: 0;">
+            You're viewing the archived v5.0 documentation.
+            <a href="/docs" style="color: #6b8afd; text-decoration: underline;">Switch to v5.1 (latest)</a>
+            for current features including codebase awareness, cross-project recall, and unified storage.
+          </p>
+        </div>
+
+        <div style="color: #888; line-height: 1.75;">
+
+          <h2 style="font-size: 1.25rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #e8e8e8; margin-top: 2.5rem; margin-bottom: 1rem;">
+            Installation
+          </h2>
+          <pre style="background: #111; border: 1px solid #1e1e1e; padding: 1rem; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; overflow-x: auto; margin-bottom: 1.5rem;"><code style="color: #888;">curl -fsSL https://quint.codes/install.sh | bash
+
+# Then in your project
+quint-code init            # Claude Code (default)
+quint-code init --cursor   # Cursor
+quint-code init --gemini   # Gemini CLI
+quint-code init --codex    # Codex CLI</code></pre>
+
+          <h2 style="font-size: 1.25rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #e8e8e8; margin-top: 2.5rem; margin-bottom: 1rem;">
+            Decision Modes
+          </h2>
+          <p><strong style="color: #e8e8e8;">/q-reason</strong> — describe your problem, the agent auto-selects depth (tactical, standard, or deep) and runs the decision cycle.</p>
+
+          <p><strong style="color: #e8e8e8;">Full cycle:</strong> <code style="color: #6b8afd; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">/q-frame → /q-explore → /q-compare → /q-decide</code></p>
+
+          <p><strong style="color: #e8e8e8;">Quick cycle:</strong> <code style="color: #6b8afd; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">/q-frame → /q-explore → /q-decide</code></p>
+
+          <p><strong style="color: #e8e8e8;">Micro-note:</strong> The agent captures decisions automatically when it notices them. No rationale → no record. Auto-expires in 90 days.</p>
+
+          <h2 style="font-size: 1.25rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #e8e8e8; margin-top: 2.5rem; margin-bottom: 1rem;">
+            Commands
+          </h2>
+          <table style="width: 100%; font-size: 0.875rem; border: 1px solid #1e1e1e; border-collapse: separate; border-spacing: 0; border-radius: 4px; overflow: hidden; margin-bottom: 1.5rem;">
+            <thead style="background: #1a1a1a;">
+              <tr>
+                <th style="text-align: left; color: #555; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; font-size: 0.75rem; padding: 0.75rem 1rem; border-bottom: 1px solid #1e1e1e;">Command</th>
+                <th style="text-align: left; color: #555; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; font-size: 0.75rem; padding: 0.75rem 1rem; border-bottom: 1px solid #1e1e1e;">What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);"><code style="color: #6b8afd;">/q-reason</code></td><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);">Start structured reasoning (auto-depth)</td></tr>
+              <tr><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);"><code style="color: #6b8afd;">/q-note</code></td><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);">Record micro-decision with rationale</td></tr>
+              <tr><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);"><code style="color: #6b8afd;">/q-frame</code></td><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);">Frame the problem</td></tr>
+              <tr><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);"><code style="color: #6b8afd;">/q-explore</code></td><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);">Generate distinct variants</td></tr>
+              <tr><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);"><code style="color: #6b8afd;">/q-compare</code></td><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);">Fair comparison on Pareto front</td></tr>
+              <tr><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);"><code style="color: #6b8afd;">/q-decide</code></td><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);">Record decision contract</td></tr>
+              <tr><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);"><code style="color: #6b8afd;">/q-refresh</code></td><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);">Manage artifact lifecycle</td></tr>
+              <tr><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);"><code style="color: #6b8afd;">/q-status</code></td><td style="padding: 0.75rem 1rem; border-bottom: 1px solid rgba(30,30,30,0.5);">Dashboard</td></tr>
+              <tr><td style="padding: 0.75rem 1rem;"><code style="color: #6b8afd;">/q-search</code></td><td style="padding: 0.75rem 1rem;">Full-text search</td></tr>
+            </tbody>
+          </table>
+
+          <h2 style="font-size: 1.25rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #e8e8e8; margin-top: 2.5rem; margin-bottom: 1rem;">
+            Key Concepts
+          </h2>
+          <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+            <li><strong style="color: #e8e8e8;">R_eff</strong> — computed trust score = min(evidence scores) with CL penalties. Expired evidence → 0.1.</li>
+            <li><strong style="color: #e8e8e8;">Evidence Decay</strong> — R_eff &lt; 0.5 = stale. R_eff &lt; 0.3 = AT RISK.</li>
+            <li><strong style="color: #e8e8e8;">Indicator Roles</strong> — constraint (hard limit), target (optimize), observation (Anti-Goodhart).</li>
+            <li><strong style="color: #e8e8e8;">Parity</strong> — same inputs, scope, budget for all options.</li>
+            <li><strong style="color: #e8e8e8;">DRR</strong> — four-component decision record: Problem Frame, Decision, Rationale, Consequences.</li>
+          </ul>
+
+          <h2 style="font-size: 1.25rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #e8e8e8; margin-top: 2.5rem; margin-bottom: 1rem;">
+            Storage (v5.0)
+          </h2>
+          <p>
+            In v5.0, the database lives at <code style="color: #6b8afd; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">.quint/quint.db</code> inside your project.
+            Markdown projections are in <code style="color: #6b8afd; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">.quint/decisions/</code>, <code style="color: #6b8afd; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">.quint/problems/</code>, etc.
+          </p>
+          <div style="border: 1px solid rgba(107, 138, 253, 0.2); background: rgba(107, 138, 253, 0.05); padding: 1.25rem; border-radius: 4px; margin: 1.5rem 0;">
+            <p style="margin: 0;">
+              <strong style="color: #e8e8e8;">Upgrading to v5.1?</strong>
+              The database moves to <code style="color: #6b8afd; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;">~/.quint-code/</code>.
+              See the <a href="/docs/migration" style="color: #6b8afd; text-decoration: underline;">migration guide</a>.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

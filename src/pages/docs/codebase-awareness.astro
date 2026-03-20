@@ -30,7 +30,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
       <tr>
         <td>Go</td>
         <td>Every directory with <code>.go</code> files</td>
-        <td><code>go/parser</code> from stdlib — 100% accuracy</td>
+        <td>Uses Go's stdlib <code>go/parser</code></td>
       </tr>
       <tr>
         <td>JS/TS</td>
@@ -105,9 +105,8 @@ Impact propagation:
   <h2>Drift detection</h2>
 
   <p>
-    When you record a decision with affected files and then call <code>baseline</code>, Quint
-    snapshots the SHA-256 hashes of those files. On every <code>/q-refresh scan</code>, it
-    recomputes hashes and detects:
+    After a decision is implemented, the agent snapshots the SHA-256 hashes of affected files
+    (the baseline). On every <code>/q-refresh scan</code>, Quint recomputes hashes and detects:
   </p>
 
   <ul>
