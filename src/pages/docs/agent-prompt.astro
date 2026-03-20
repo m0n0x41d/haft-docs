@@ -2,21 +2,35 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="CLAUDE.md Setup" description="Configure your AI tool for optimal quint-code integration.">
-  <h1>CLAUDE.md Setup</h1>
+<DocsLayout title="Agent Prompt Setup" description="Add a project-level prompt to get more out of quint-code.">
+  <h1>Agent Prompt Setup</h1>
 
   <p>
     Quint Code works out of the box — the MCP tools are always available once you run <code>init</code>.
     But adding a project-level prompt file makes the agent significantly better at using Quint proactively.
   </p>
 
-  <h2>What is CLAUDE.md?</h2>
+  <h2>What is a project prompt?</h2>
 
   <p>
-    <code>CLAUDE.md</code> is a file in your project root that Claude Code reads at the start of every
-    session. It contains project-specific instructions that shape the agent's behavior. Other tools have
-    equivalents — <code>.cursorrules</code> for Cursor, <code>AGENTS.md</code> for Codex.
+    Each AI tool reads a specific file from your project root at the start of every session.
+    This file contains project-specific instructions that shape the agent's behavior:
   </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Prompt file</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Claude Code</td><td><code>CLAUDE.md</code></td></tr>
+      <tr><td>Cursor</td><td><code>.cursorrules</code></td></tr>
+      <tr><td>Codex CLI</td><td><code>AGENTS.md</code></td></tr>
+      <tr><td>Gemini CLI</td><td><code>GEMINI.md</code></td></tr>
+    </tbody>
+  </table>
 
   <p>
     The quint-code repository includes a reference <code>CLAUDE.md</code> that teaches the agent:
@@ -33,8 +47,16 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <h2>Install it</h2>
 
-  <pre><code># From your project root
-curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > CLAUDE.md</code></pre>
+  <p>Download the reference file and rename it for your tool:</p>
+
+  <pre><code># Claude Code
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > CLAUDE.md
+
+# Cursor
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > .cursorrules
+
+# Codex CLI
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > AGENTS.md</code></pre>
 
   <div class="callout">
     <p>
@@ -53,7 +75,7 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
     <li>No structured reasoning unless you ask for it</li>
   </ul>
 
-  <p>With CLAUDE.md:</p>
+  <p>With the prompt file:</p>
   <ul>
     <li>Agent understands when to suggest <code>/q-reason</code> for complex tasks</li>
     <li>Agent records micro-decisions as notes when it notices them in conversation</li>
@@ -62,32 +84,10 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
     <li>Agent follows the recommended FPF protocol for non-trivial decisions</li>
   </ul>
 
-  <h2>For Cursor</h2>
-
-  <p>
-    Cursor reads <code>.cursorrules</code> from project root. You can copy the same content:
-  </p>
-
-  <pre><code>cp CLAUDE.md .cursorrules</code></pre>
-
-  <p>
-    Alternatively, Cursor can read <code>CLAUDE.md</code> if you reference it in your Cursor settings.
-    Check <a href="https://docs.cursor.com" target="_blank" rel="noopener">Cursor docs</a> for the
-    latest on custom instructions files.
-  </p>
-
-  <h2>For Codex</h2>
-
-  <p>
-    Codex CLI reads <code>AGENTS.md</code> from project root:
-  </p>
-
-  <pre><code>cp CLAUDE.md AGENTS.md</code></pre>
-
   <h2>Keeping it up to date</h2>
 
   <p>
-    The reference CLAUDE.md evolves with quint-code releases. When you update the binary, check if
+    The reference prompt evolves with quint-code releases. When you update the binary, check if
     the reference file has changed:
   </p>
 

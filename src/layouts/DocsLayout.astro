@@ -19,7 +19,7 @@ const nav = [
       { href: '/docs', label: 'Introduction' },
       { href: '/docs/install', label: 'Installation' },
       { href: '/docs/first-steps', label: 'First Steps' },
-      { href: '/docs/claude-md', label: 'CLAUDE.md Setup' },
+      { href: '/docs/agent-prompt', label: 'Agent Prompt Setup' },
     ]
   },
   {
@@ -155,56 +155,79 @@ function isActive(href: string): boolean {
 </Layout>
 
 <style>
+  .prose-custom {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
   .prose-custom h1 {
-    @apply text-2xl sm:text-3xl font-bold font-mono uppercase tracking-wider text-text-primary mb-4;
+    @apply text-2xl sm:text-3xl font-bold font-mono uppercase tracking-wider text-text-primary mb-8 pb-4 border-b border-border-subtle;
   }
   .prose-custom h2 {
-    @apply text-xl sm:text-2xl font-semibold font-mono uppercase tracking-wider text-text-primary mt-12 mb-4 pt-6 border-t border-border-subtle;
+    @apply text-lg sm:text-xl font-semibold font-mono uppercase tracking-wider text-text-primary mt-16 mb-6 pt-8 border-t border-border-subtle;
+  }
+  .prose-custom h2:first-of-type {
+    @apply mt-8;
   }
   .prose-custom h3 {
-    @apply text-lg font-semibold text-text-primary mt-8 mb-3;
+    @apply text-base sm:text-lg font-semibold text-text-primary mt-10 mb-4;
   }
   .prose-custom p {
-    @apply text-base text-text-secondary leading-relaxed mb-4;
+    @apply text-base text-text-secondary leading-relaxed mb-5;
   }
   .prose-custom ul, .prose-custom ol {
-    @apply text-text-secondary mb-4 ml-4;
+    @apply text-text-secondary mb-5 ml-6 space-y-2;
+  }
+  .prose-custom ul {
+    @apply list-disc;
+  }
+  .prose-custom ol {
+    @apply list-decimal;
   }
   .prose-custom li {
-    @apply mb-2;
+    @apply leading-relaxed;
   }
   .prose-custom code {
-    @apply text-accent-blue font-mono text-sm;
+    @apply text-accent-blue font-mono text-sm bg-bg-secondary px-1.5 py-0.5 rounded break-all;
   }
   .prose-custom pre {
-    @apply bg-bg-secondary border border-border-subtle p-4 rounded font-mono text-sm overflow-x-auto mb-4;
+    @apply bg-bg-secondary border border-border-subtle p-5 rounded font-mono text-sm mb-6 max-w-full;
+    overflow-x: auto;
   }
   .prose-custom pre code {
-    @apply text-text-secondary;
+    @apply text-text-secondary bg-transparent p-0 break-normal;
   }
   .prose-custom a {
     @apply text-accent-blue hover:text-text-primary transition-colors underline underline-offset-2;
   }
   .prose-custom table {
-    @apply w-full text-sm mb-4 border-collapse;
+    @apply w-full text-sm mb-6 border border-border-subtle rounded overflow-hidden;
+  }
+  .prose-custom thead {
+    @apply bg-bg-tertiary;
   }
   .prose-custom th {
-    @apply text-left text-text-muted font-mono uppercase text-xs tracking-wider py-2 pr-4 border-b border-border-subtle;
+    @apply text-left text-text-muted font-mono uppercase text-xs tracking-wider py-3 px-4 border-b border-border-subtle;
   }
   .prose-custom td {
-    @apply py-2 pr-4 text-text-secondary border-b border-border-subtle/50;
+    @apply py-3 px-4 text-text-secondary border-b border-border-subtle/30;
+  }
+  .prose-custom tbody tr:hover {
+    @apply bg-bg-secondary/50;
   }
   .prose-custom blockquote {
-    @apply border-l-2 border-accent-green pl-4 my-4 text-text-secondary italic;
+    @apply border-l-2 border-accent-green pl-4 my-6 text-text-secondary italic;
   }
   .prose-custom .callout {
-    @apply border border-accent-blue/20 bg-accent-blue/5 p-4 rounded my-4;
+    @apply border border-accent-blue/20 bg-accent-blue/5 p-5 rounded-lg my-6;
   }
   .prose-custom .callout-warn {
-    @apply border border-amber-500/20 bg-amber-500/5 p-4 rounded my-4;
+    @apply border border-amber-500/20 bg-amber-500/5 p-5 rounded-lg my-6;
   }
-  .prose-custom .callout p {
+  .prose-custom .callout p, .prose-custom .callout-warn p {
     @apply mb-0;
+  }
+  .prose-custom strong {
+    @apply text-text-primary;
   }
 </style>
 

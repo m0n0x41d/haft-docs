@@ -47,21 +47,19 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     </p>
   </div>
 
-  <h2>Set up CLAUDE.md for better results</h2>
+  <h2>Set up a project prompt for better results</h2>
 
   <p>
-    Quint Code works without any project-level prompts. But adding a <code>CLAUDE.md</code> (or
-    equivalent for your tool) with Quint-aware instructions makes the agent significantly better
-    at using the tools proactively.
+    Quint Code works without any project-level prompts. But adding a prompt file
+    with Quint-aware instructions makes the agent significantly better
+    at using the tools proactively. See <a href="/docs/agent-prompt">Agent Prompt Setup</a>
+    for details.
   </p>
 
-  <p>
-    We maintain a reference <code>CLAUDE.md</code> in the quint-code repository that you can
-    adapt for your project:
-  </p>
+  <pre><code># Claude Code
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > CLAUDE.md
 
-  <pre><code># Download the reference CLAUDE.md
-curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > CLAUDE.md</code></pre>
+# Cursor → .cursorrules, Codex → AGENTS.md (same content, different filename)</code></pre>
 
   <p>
     This file teaches the agent: communication style (direct, no cheerleading), thinking principles
