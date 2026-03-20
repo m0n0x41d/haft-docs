@@ -26,15 +26,21 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     <li><strong>Scope check</strong> — if it affects many files, suggests <code>/q-frame</code> instead.</li>
   </ul>
 
-  <h2>Auto-capture</h2>
+  <h2>Auto-capture (when /q-reason is active)</h2>
 
   <p>
-    With <a href="/docs/agent-prompt">CLAUDE.md</a> configured, the agent records notes automatically
-    when it notices decisions in conversation. You say "let's use Redis for this" — the agent records
-    it without you explicitly calling <code>/q-note</code>.
+    When <code>/q-reason</code> is active in a session, the agent may record notes automatically
+    when it notices decisions in conversation. This is a best-effort behavior, not a guarantee —
+    the auto-capture instructions are part of the <code>/q-reason</code> skill prompt. If
+    <code>/q-reason</code> hasn't been invoked in the current session, the agent won't auto-capture.
   </p>
 
-  <p>Auto-capture does NOT trigger for:</p>
+  <p>
+    For reliable note capture, use <code>/q-note</code> explicitly. It takes seconds and ensures
+    the rationale is recorded properly.
+  </p>
+
+  <p>When auto-capture is active, it does NOT trigger for:</p>
   <ul>
     <li>Formatting choices, import ordering, variable naming (too trivial)</li>
     <li>Topics already covered by an active decision (overlap check prevents duplicates)</li>
