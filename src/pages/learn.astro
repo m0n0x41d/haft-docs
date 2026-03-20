@@ -28,23 +28,84 @@ import Button from '../components/Button.astro';
 
         <div class="mt-8 space-y-6">
           <div class="border border-border-subtle bg-bg-secondary p-6">
+            <h3 class="text-lg font-bold text-text-primary mb-4">Step 1: Install the binary</h3>
             <code class="text-base text-accent-blue font-mono">
               <span class="text-accent-green">$</span> curl -fsSL https://quint.codes/install.sh | bash
             </code>
-            <p class="mt-4 text-base text-text-secondary">
-              Then initialize in your project:
+          </div>
+
+          <div class="border border-border-subtle bg-bg-secondary p-6">
+            <h3 class="text-lg font-bold text-text-primary mb-4">Step 2: Initialize in your project</h3>
+            <p class="text-base text-text-secondary mb-4">
+              The binary is the same for all tools. The init flag tells quint-code where to write the MCP config — each tool looks for it in a different place.
             </p>
-            <code class="mt-2 block text-base text-accent-blue font-mono">
-              <span class="text-accent-green">$</span> quint-code init --claude
-            </code>
-            <p class="mt-4 text-text-muted text-sm">
-              Also supports: <code>--cursor</code>, <code>--gemini</code>, <code>--codex</code>, <code>--all</code>
+            <div class="space-y-3 font-mono text-sm">
+              <div>
+                <span class="text-text-muted"># Claude Code (default)</span><br/>
+                <span class="text-accent-green">$</span> <span class="text-accent-blue">quint-code init</span>
+              </div>
+              <div>
+                <span class="text-text-muted"># Cursor</span><br/>
+                <span class="text-accent-green">$</span> <span class="text-accent-blue">quint-code init --cursor</span>
+              </div>
+              <div>
+                <span class="text-text-muted"># Gemini CLI</span><br/>
+                <span class="text-accent-green">$</span> <span class="text-accent-blue">quint-code init --gemini</span>
+              </div>
+              <div>
+                <span class="text-text-muted"># Codex CLI / Codex App / Air</span><br/>
+                <span class="text-accent-green">$</span> <span class="text-accent-blue">quint-code init --codex</span>
+              </div>
+              <div>
+                <span class="text-text-muted"># All tools at once</span><br/>
+                <span class="text-accent-green">$</span> <span class="text-accent-blue">quint-code init --all</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="border border-border-subtle bg-bg-secondary p-6">
+            <h3 class="text-lg font-bold text-text-primary mb-4">Where MCP config goes</h3>
+            <p class="text-base text-text-secondary mb-4">
+              Each tool expects its MCP server config in a different location. Init handles this automatically:
             </p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-text-secondary">
+                <thead>
+                  <tr class="text-left text-text-muted border-b border-border-subtle">
+                    <th class="py-2 pr-4">Tool</th>
+                    <th class="py-2 pr-4">MCP Config</th>
+                    <th class="py-2">Note</th>
+                  </tr>
+                </thead>
+                <tbody class="font-mono text-xs">
+                  <tr class="border-b border-border-subtle/50">
+                    <td class="py-2 pr-4 font-sans">Claude Code</td>
+                    <td class="py-2 pr-4">.mcp.json</td>
+                    <td class="py-2 font-sans text-text-muted">Auto-detected</td>
+                  </tr>
+                  <tr class="border-b border-border-subtle/50">
+                    <td class="py-2 pr-4 font-sans">Cursor</td>
+                    <td class="py-2 pr-4">.cursor/mcp.json</td>
+                    <td class="py-2 font-sans text-text-muted">Enable in Settings → MCP</td>
+                  </tr>
+                  <tr class="border-b border-border-subtle/50">
+                    <td class="py-2 pr-4 font-sans">Gemini CLI</td>
+                    <td class="py-2 pr-4">~/.gemini/settings.json</td>
+                    <td class="py-2 font-sans text-text-muted">Global config</td>
+                  </tr>
+                  <tr class="border-b border-border-subtle/50">
+                    <td class="py-2 pr-4 font-sans">Codex / Air</td>
+                    <td class="py-2 pr-4">.codex/config.toml</td>
+                    <td class="py-2 font-sans text-text-muted">Trust project in Codex settings</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <p class="text-base text-text-secondary">
-            This creates a <code class="text-accent-blue">.quint/</code> directory in your project — SQLite database,
-            markdown projections, and configuration. Git-tracked by default.
+            Init creates a <code class="text-accent-blue">.quint/</code> directory in your project with markdown projections for code review.
+            Slash commands and the <code class="text-accent-blue">/q-reason</code> skill are installed globally for your tool.
           </p>
 
           <p class="text-base text-text-secondary">
