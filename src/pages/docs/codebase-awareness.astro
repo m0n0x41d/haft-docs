@@ -1,0 +1,152 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Codebase Awareness" description="How Quint Code understands your project structure — modules, dependencies, and coverage.">
+  <h1>Codebase Awareness</h1>
+
+  <p>
+    Quint Code doesn't just track decisions — it understands your codebase. It knows which modules
+    exist, how they depend on each other, and which parts of your architecture are governed by
+    decisions.
+  </p>
+
+  <h2>Module detection</h2>
+
+  <p>
+    When you run <code>/q-status</code> or <code>quint_query(action="coverage")</code>, Quint scans
+    your project and detects modules using language-specific conventions:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Language</th>
+        <th>What counts as a module</th>
+        <th>How it's detected</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Go</td>
+        <td>Every directory with <code>.go</code> files</td>
+        <td><code>go/parser</code> from stdlib — 100% accuracy</td>
+      </tr>
+      <tr>
+        <td>JS/TS</td>
+        <td><code>package.json</code> boundaries + directories with <code>index.ts</code></td>
+        <td>Monorepo workspaces + barrel file detection</td>
+      </tr>
+      <tr>
+        <td>Python</td>
+        <td>Directories with <code>__init__.py</code></td>
+        <td>Package marker detection</td>
+      </tr>
+      <tr>
+        <td>Rust</td>
+        <td><code>Cargo.toml</code> crates + <code>mod.rs</code> modules</td>
+        <td>Crate boundary + module tree detection</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Module scanning respects <code>.gitignore</code> (local and global) and an optional
+    <code>.quintignore</code> file for project-specific exclusions.
+  </p>
+
+  <h2>Decision coverage</h2>
+
+  <p>
+    Coverage answers: "which parts of my architecture have engineering decisions, and which are
+    blind spots?"
+  </p>
+
+  <pre><code>## Module Coverage (9 modules, 77% governed)
+  ✓ src/internal/artifact   — 3 decisions
+  ✓ src/internal/codebase   — 2 decisions
+  ✗ src/assurance            — no decisions (blind)
+  ✗ src/cmd/indexer          — no decisions (blind)</code></pre>
+
+  <p>Coverage uses three states:</p>
+
+  <ul>
+    <li><strong>✓ Covered</strong> — at least one active decision with R_eff ≥ 0.5 covers files in this module</li>
+    <li><strong>~ Partial</strong> — has decisions, but all evidence is degraded (R_eff &lt; 0.5)</li>
+    <li><strong>✗ Blind</strong> — no decisions reference any file in this module</li>
+  </ul>
+
+  <p>
+    Only <code>DecisionRecord</code> artifacts count as governance. Notes are observations, not
+    architectural contracts — they don't inflate coverage.
+  </p>
+
+  <h2>Dependency graph</h2>
+
+  <p>
+    Quint parses import statements to build a module dependency graph. Go uses <code>go/parser</code>
+    from stdlib (perfect accuracy). JS/TS, Python, and Rust use regex patterns (>90% accuracy for
+    conventional code).
+  </p>
+
+  <p>
+    The dependency graph powers <strong>impact propagation</strong>: when drift is detected in
+    module A, Quint checks which modules depend on A and flags their decisions too.
+  </p>
+
+  <pre><code>Drift detected in auth/:
+  auth/middleware.go — MODIFIED (+8 -2)
+
+Impact propagation:
+  → api/ depends on auth/ — governed by dec-003 "API rate limiting"
+  → payments/ depends on auth/ — governed by dec-007 "Payment auth flow"
+  ⚠ billing/ depends on auth/ — no decisions (blind, potential unmonitored impact)</code></pre>
+
+  <h2>Drift detection</h2>
+
+  <p>
+    When you record a decision with affected files and then call <code>baseline</code>, Quint
+    snapshots the SHA-256 hashes of those files. On every <code>/q-refresh scan</code>, it
+    recomputes hashes and detects:
+  </p>
+
+  <ul>
+    <li><strong>MODIFIED</strong> — file changed since baseline</li>
+    <li><strong>FILE MISSING</strong> — file deleted or moved</li>
+    <li><strong>No drift</strong> — file unchanged</li>
+  </ul>
+
+  <p>
+    Drift is a signal, not automatic invalidation. The agent reads the actual diff and judges
+    whether the change is material (broke an invariant) or cosmetic (comments, formatting).
+  </p>
+
+  <h2>Using it in practice</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>When</th>
+        <th>What to do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>After <code>/q-onboard</code></td>
+        <td>Check coverage — which modules are blind? Prioritize the critical ones.</td>
+      </tr>
+      <tr>
+        <td>During code review</td>
+        <td>If a PR touches files under a decision, the drift report will flag it.</td>
+      </tr>
+      <tr>
+        <td>Before a release</td>
+        <td><code>/q-refresh scan</code> — see all stale decisions and code drift in one view.</td>
+      </tr>
+      <tr>
+        <td>New team member</td>
+        <td><code>/q-status</code> shows the full architecture decision landscape at a glance.</td>
+      </tr>
+    </tbody>
+  </table>
+</DocsLayout>

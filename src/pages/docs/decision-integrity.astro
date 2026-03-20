@@ -1,0 +1,93 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Decision Integrity" description="How Quint Code ensures decisions are honest — verification, evidence quality, and deduplication.">
+  <h1>Decision Integrity</h1>
+
+  <p>
+    A decision record is only valuable if you can trust it. Quint Code has multiple mechanisms
+    to ensure decisions are honest, evidence is real, and the knowledge base stays clean.
+  </p>
+
+  <h2>Adversarial verification gate</h2>
+
+  <p>
+    Before recording any decision, the agent runs a verification check. The principle: the agent
+    that generated the options cannot be the sole validator of those options (FPF A.12 — External
+    Transformer Principle).
+  </p>
+
+  <p>For <strong>tactical</strong> decisions (quick, reversible):</p>
+
+  <ul>
+    <li>One-line counter-argument: "The strongest argument against this decision is..."</li>
+    <li>If the counter-argument kills the decision → back to exploring</li>
+  </ul>
+
+  <p>For <strong>standard/deep</strong> decisions:</p>
+
+  <ol>
+    <li><strong>Deductive consequences</strong> — "If this is correct, what 3 things must be true?"</li>
+    <li><strong>Strongest counter-argument</strong> — genuine, not a strawman</li>
+    <li><strong>Self-evidence check</strong> — "Is the only evidence from this same conversation?"</li>
+    <li><strong>Tail failure scenarios</strong> — low-probability, high-impact failure modes</li>
+    <li><strong>WLNK challenge</strong> — "Is the stated weakest link actually the weakest?"</li>
+  </ol>
+
+  <h2>Inductive measurement gate</h2>
+
+  <p>
+    When recording a measurement (<code>verdict: accepted/partial/failed</code>), Quint checks
+    whether the decision has a baseline (file hashes were snapshotted). If not:
+  </p>
+
+  <ul>
+    <li>Warning appears in the response: "No baseline found — implementation may not be verified"</li>
+    <li>Measurement records at <strong>CL1</strong> (0.4 penalty) instead of CL3 (no penalty)</li>
+    <li>R_eff for unverified measurement: <code>max(0, 1.0 - 0.4) = 0.6</code> — still healthy, but visibly lower than 1.0</li>
+  </ul>
+
+  <p>
+    This prevents the agent from calling <code>measure</code> from memory without actually
+    verifying the implementation — a real problem we discovered and fixed during development.
+  </p>
+
+  <h2>Evidence supersession</h2>
+
+  <p>
+    When a new measurement is recorded on a decision that already has a measurement, the old
+    measurement is marked <code>verdict='superseded'</code> and excluded from R_eff computation.
+    This prevents old partial measurements from permanently dragging R_eff down.
+  </p>
+
+  <p>
+    Superseded evidence stays in the database for audit — it's not deleted, just excluded from
+    the active chain.
+  </p>
+
+  <h2>Note-decision deduplication</h2>
+
+  <p>
+    Notes and decisions serve different purposes. Notes are observations ("we use Redis here").
+    Decisions are contracts ("we chose Redis because X, with invariants Y and rollback Z").
+    When someone tries to record a note that duplicates an existing decision, Quint catches it.
+  </p>
+
+  <p>The check uses <strong>containment</strong> (not Jaccard similarity):</p>
+
+  <ul>
+    <li><strong>>70% of note's words in a decision title</strong> → rejected with explanation</li>
+    <li><strong>50-70%</strong> → warning, note still recorded</li>
+    <li><strong>&lt;50%</strong> → pass silently</li>
+  </ul>
+
+  <p>
+    Same check runs note-vs-note to prevent duplicate notes accumulating.
+  </p>
+
+  <p>
+    Batch cleanup: <code>/q-refresh action="reconcile"</code> scans all active notes against all
+    active decisions in one pass and reports overlaps.
+  </p>
+</DocsLayout>

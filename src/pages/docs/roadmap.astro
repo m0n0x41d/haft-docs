@@ -1,0 +1,118 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Roadmap" description="Where Quint Code is heading — team collaboration, CLI dashboard, cognitive loops.">
+  <h1>Roadmap</h1>
+
+  <p>
+    Quint Code is actively developed. Here's what's coming — not promises, but directions we're
+    building toward.
+  </p>
+
+  <h2>Team collaboration</h2>
+
+  <p>
+    This is the #1 priority after 5.1. The architecture is already prepared:
+  </p>
+
+  <ul>
+    <li>Database is out of the repo (unified storage in <code>~/.quint-code/</code>)</li>
+    <li>Project identity via <code>.quint/project.yaml</code> — stable across machines</li>
+    <li><code>QUINT_SERVER_ORIGIN</code> env var ready for remote server mode</li>
+    <li>Markdown projections in <code>.quint/</code> — git-mergeable, reviewable in PRs</li>
+  </ul>
+
+  <p>The plan for team mode:</p>
+
+  <p>
+    <strong><code>quint-code server</code></strong> — a new subcommand in the same binary. A thin
+    HTTP server that manages the decision database. For solo advanced use, it runs on localhost and
+    enables features that require a long-running process (background analysis, scheduled scans,
+    notifications). For teams, it runs on a shared server.
+  </p>
+
+  <p>
+    The local MCP process (<code>quint-code serve</code>) always runs on your machine and always
+    writes markdown projections locally. In team mode, it talks to the remote server instead of
+    local SQLite. No sync daemon, no sidecar — just two modes of the same binary.
+  </p>
+
+  <pre><code>Solo:  Agent → MCP → quint-code serve → local SQLite
+Team:  Agent → MCP → quint-code serve → quint-code server (remote) → PostgreSQL</code></pre>
+
+  <p>
+    Version compatibility: the local binary reports its version to the server. If they diverge,
+    you get a warning. One server, one version, all developers on the same page.
+  </p>
+
+  <h2>CLI dashboard</h2>
+
+  <p>
+    <code>quint-code status</code> — a terminal command (not MCP) that renders a rich dashboard
+    with ANSI colors, box drawing, and visual hierarchy. Module coverage heatmap, drift alerts,
+    decision health, shipped/pending queue. The "screenshot for the blog post" feature.
+  </p>
+
+  <p>
+    All the data already exists — this is pure presentation on top of the current database.
+  </p>
+
+  <h2>Decision-as-infrastructure</h2>
+
+  <p>
+    <code>quint-code check</code> — a CLI command for CI/CD pipelines. Checks R_eff thresholds
+    and surfaces stale decisions in PR comments. Imagine: "This PR touches files under decision
+    dec-003 (session handling). That decision's evidence expired 2 months ago. R_eff: 0.3 (AT RISK)."
+  </p>
+
+  <p>
+    Decisions stop being documentation and become infrastructure — they participate in the build
+    pipeline.
+  </p>
+
+  <h2>Cognitive review loops</h2>
+
+  <p>
+    Instead of dumb <code>valid_until</code> timers, use
+    <a href="https://github.com/open-spaced-repetition/fsrs4anki" target="_blank" rel="noopener">FSRS</a>
+    (Free Spaced Repetition Scheduler) to schedule decision reviews based on evidence confidence
+    and historical review quality. Decisions reviewed successfully get longer intervals. Decisions
+    that required updates get shorter intervals.
+  </p>
+
+  <p>
+    Background contemplation: pattern discovery across decisions ("you always choose lower-ops
+    solutions for small teams"), cross-project knowledge synthesis, learned heuristics. This
+    requires the server mode (long-running process) and is the furthest-out feature on this list.
+  </p>
+
+  <h2>Autonomy budgets</h2>
+
+  <p>
+    From FPF E.16: treat agent autonomy as a managed resource (like money or risk), not as
+    "magic of a smart model." Typed budgets with guards, separation of duties, override protocols.
+    The agent can decide within its budget; anything outside requires escalation.
+  </p>
+
+  <p>
+    This is the team governance layer — who can decide what, with what level of autonomy, and
+    what happens when the budget is exceeded.
+  </p>
+
+  <h2>What's not on the roadmap</h2>
+
+  <ul>
+    <li><strong>Cloud/SaaS</strong> — Quint is local-first. If there's ever a hosted version, it'll be a server you run yourself, not a SaaS.</li>
+    <li><strong>AI model lock-in</strong> — Quint works with any MCP-compatible AI tool. We don't pick your model.</li>
+    <li><strong>Prescriptive methodology</strong> — Quint provides structure, not opinions. Use as much or as little of the FPF cycle as fits your workflow.</li>
+  </ul>
+
+  <h2>Want to contribute?</h2>
+
+  <p>
+    Check the <a href="https://github.com/m0n0x41d/quint-code/issues" target="_blank" rel="noopener">issues</a>
+    on GitHub. The <a href="https://github.com/m0n0x41d/quint-code/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">contributing guide</a>
+    explains the workflow: issue first, then PR to <code>dev</code>.
+  </p>
+</DocsLayout>

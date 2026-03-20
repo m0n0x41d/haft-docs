@@ -1,0 +1,116 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Migrating from 5.0" description="How to upgrade from quint-code 5.0 to 5.1.">
+  <h1>Migrating from 5.0 to 5.1</h1>
+
+  <p>
+    Version 5.1 moves the database out of your repository into your home directory. This is a
+    one-time migration — your data is preserved automatically.
+  </p>
+
+  <h2>What changed and why</h2>
+
+  <p>
+    In 5.0, the SQLite database lived at <code>.quint/quint.db</code> inside your repo. This caused
+    problems:
+  </p>
+
+  <ul>
+    <li>Binary SQLite files can't be merged in git — team collaboration was impossible</li>
+    <li>Each project was isolated — no cross-project decision recall</li>
+    <li>The database cluttered git status and diffs</li>
+  </ul>
+
+  <p>In 5.1:</p>
+
+  <ul>
+    <li>Database moves to <code>~/.quint-code/projects/&lt;project-id&gt;/quint.db</code></li>
+    <li>Only markdown projections stay in <code>.quint/</code> — human-readable, git-friendly, designed for code review</li>
+    <li>A new <code>.quint/project.yaml</code> identifies your project with a stable ID</li>
+    <li>Cross-project decision recall works automatically via a shared index</li>
+  </ul>
+
+  <h2>How to migrate</h2>
+
+  <p>Update the binary, then re-run init in each project:</p>
+
+  <pre><code># Update quint-code
+curl -fsSL https://quint.codes/install.sh | bash
+
+# In each project directory
+cd your-project
+quint-code init</code></pre>
+
+  <p>Init will:</p>
+
+  <ol>
+    <li>Generate <code>.quint/project.yaml</code> with a unique project ID</li>
+    <li>Copy your existing <code>.quint/quint.db</code> to <code>~/.quint-code/projects/&lt;id&gt;/quint.db</code></li>
+    <li>Add <code>quint.db</code> to <code>.quint/.gitignore</code></li>
+    <li>Populate the cross-project index with your existing decisions</li>
+  </ol>
+
+  <p>All your decisions, problems, notes, and evidence are preserved.</p>
+
+  <h2>After migration</h2>
+
+  <p>
+    Verify it works:
+  </p>
+
+  <pre><code>/q-status</code></pre>
+
+  <p>
+    You should see your existing decisions and problems. If the MCP connection fails, make sure
+    the new binary is in your PATH and restart your AI tool.
+  </p>
+
+  <h3>Delete the old database</h3>
+
+  <p>
+    Once you've confirmed everything works, delete the old database from your repo:
+  </p>
+
+  <pre><code>rm .quint/quint.db
+git add .quint/.gitignore
+git commit -m "chore: remove old quint database, now in ~/.quint-code/"</code></pre>
+
+  <h3>Commit .quint/ as your knowledge base</h3>
+
+  <p>
+    The <code>.quint/</code> directory now contains only markdown files and <code>project.yaml</code>.
+    These are your project's engineering knowledge base — commit them:
+  </p>
+
+  <pre><code>git add .quint/
+git commit -m "chore: add quint knowledge base — decisions, problems, notes"</code></pre>
+
+  <p>
+    This is intentional. Decision records, problem cards, and notes in <code>.quint/</code> are
+    designed for code review. When you create a decision, a markdown file appears in your PR diff.
+    Reviewers can see and comment on engineering decisions alongside code changes.
+  </p>
+
+  <h2>What if I don't migrate?</h2>
+
+  <p>
+    The 5.1 MCP server detects old <code>.quint/quint.db</code> files and blocks all tool calls
+    with a message asking you to run <code>quint-code init</code>. Your data is safe — it just
+    won't work until you migrate.
+  </p>
+
+  <h2>Multiple projects</h2>
+
+  <p>
+    Each project gets its own database in <code>~/.quint-code/projects/</code>, identified by
+    the ID in <code>.quint/project.yaml</code>. Run <code>quint-code init</code> in each project
+    separately.
+  </p>
+
+  <p>
+    After migrating multiple projects, cross-project recall kicks in: when you frame a new problem
+    in one project, related decisions from other projects surface automatically.
+  </p>
+</DocsLayout>

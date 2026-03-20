@@ -1,0 +1,99 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Cross-Project Recall" description="How decisions from one project surface when framing problems in another.">
+  <h1>Cross-Project Recall</h1>
+
+  <p>
+    When you frame a new problem in project B, Quint automatically searches for related decisions
+    from all your other projects. If you solved a similar problem six months ago in project A,
+    that decision surfaces — with a congruence level tag indicating how transferable the context is.
+  </p>
+
+  <h2>How it works</h2>
+
+  <p>
+    Every time you record a decision (<code>/q-decide</code>), a summary is written to a shared
+    index at <code>~/.quint-code/index.db</code>. This index contains: project name, decision title,
+    selected variant, rationale, weakest link, and primary language.
+  </p>
+
+  <p>
+    When you frame a new problem (<code>/q-frame</code>), Quint searches this index using FTS5
+    (full-text search). Matching decisions from <strong>other projects</strong> appear in a
+    "Cross-Project History" section:
+  </p>
+
+  <pre><code>## Cross-Project History
+
+- [dec-20260319-001] Tokio-based parallel executor with semaphore-bounded concurrency
+  — Tokio is already the standard async runtime in the Rust ecosystem...
+  (CL1 (different context), from test-rust)</code></pre>
+
+  <h2>Congruence levels</h2>
+
+  <p>
+    Not all cross-project knowledge transfers equally. A caching decision from another Go project
+    is more relevant than one from a Python project with completely different constraints.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>CL</th>
+        <th>When</th>
+        <th>R_eff penalty</th>
+        <th>Meaning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CL2</td>
+        <td>Same primary language</td>
+        <td>0.1</td>
+        <td>Similar context — likely applicable with minor adjustments</td>
+      </tr>
+      <tr>
+        <td>CL1</td>
+        <td>Different primary language</td>
+        <td>0.4</td>
+        <td>Different context — the rationale may apply but implementation differs</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Primary language is auto-detected from your codebase modules. A Go project recalling a
+    decision from another Go project gets CL2. Recalling from a Rust project gets CL1.
+  </p>
+
+  <h2>What gets shared</h2>
+
+  <p>The index stores <strong>summaries only</strong> — not the full decision body:</p>
+
+  <ul>
+    <li>Decision title and selected variant name</li>
+    <li>Why it was selected (rationale)</li>
+    <li>Weakest link</li>
+    <li>Primary language of the source project</li>
+    <li>Project name (for display)</li>
+  </ul>
+
+  <p>
+    The index is a <strong>projection</strong> — a read-optimized copy. If it's corrupted or deleted,
+    it rebuilds from the per-project databases. No data loss possible.
+  </p>
+
+  <h2>Privacy</h2>
+
+  <p>
+    Everything is local. The index lives at <code>~/.quint-code/index.db</code> on your machine.
+    No data leaves your computer. No cloud. No analytics. No telemetry.
+  </p>
+
+  <p>
+    In future team mode, decisions will flow through a central server that you host yourself.
+    See the <a href="/docs/roadmap">roadmap</a> for what's planned.
+  </p>
+</DocsLayout>

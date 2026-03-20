@@ -20,6 +20,7 @@ const nav = [
       { href: '/docs/install', label: 'Installation' },
       { href: '/docs/first-steps', label: 'First Steps' },
       { href: '/docs/agent-prompt', label: 'Agent Prompt Setup' },
+      { href: '/docs/migration', label: 'Migrating from 5.0' },
     ]
   },
   {
@@ -32,11 +33,20 @@ const nav = [
     ]
   },
   {
+    title: 'Features',
+    items: [
+      { href: '/docs/codebase-awareness', label: 'Codebase Awareness' },
+      { href: '/docs/cross-project', label: 'Cross-Project Recall' },
+      { href: '/docs/decision-integrity', label: 'Decision Integrity' },
+    ]
+  },
+  {
     title: 'Reference',
     items: [
       { href: '/docs/commands', label: 'All Commands' },
       { href: '/docs/concepts', label: 'Key Concepts' },
       { href: '/docs/faq', label: 'FAQ' },
+      { href: '/docs/roadmap', label: 'Roadmap' },
     ]
   },
 ];
@@ -57,7 +67,7 @@ function isActive(href: string): boolean {
       <aside class="hidden lg:block w-56 shrink-0">
         <nav class="sticky top-24 space-y-6 text-sm">
           <div class="flex items-center gap-2 mb-4">
-            <span class="text-xs font-mono uppercase tracking-wider text-accent-green">v5.0</span>
+            <span class="text-xs font-mono uppercase tracking-wider text-accent-green">v5.1</span>
           </div>
           {nav.map(section => (
             <div>
@@ -111,7 +121,7 @@ function isActive(href: string): boolean {
 
           <nav class="space-y-6 text-sm mt-8">
             <div class="flex items-center gap-2 mb-4">
-              <span class="text-xs font-mono uppercase tracking-wider text-accent-green">v5.0</span>
+              <span class="text-xs font-mono uppercase tracking-wider text-accent-green">v5.1</span>
             </div>
             {nav.map(section => (
               <div>
