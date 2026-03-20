@@ -18,8 +18,8 @@ const nav = [
     items: [
       { href: '/docs', label: 'Introduction' },
       { href: '/docs/install', label: 'Installation' },
-      { href: '/docs/first-steps', label: 'First Steps' },
       { href: '/docs/agent-prompt', label: 'Agent Prompt Setup' },
+      { href: '/docs/first-steps', label: 'First Steps' },
       { href: '/docs/migration', label: 'Migrating from 5.0' },
     ]
   },
@@ -250,6 +250,8 @@ function isActive(href: string): boolean {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
     max-width: 100%;
     overflow-x: auto;
   }
@@ -358,6 +360,23 @@ function isActive(href: string): boolean {
       if (!dd.parentElement?.contains(e.target as Node)) {
         dd.classList.add('hidden');
       }
+    });
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = (btn as HTMLElement).dataset.copy || '';
+      await navigator.clipboard.writeText(text);
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      (btn as HTMLElement).style.color = '#46AB47';
+      (btn as HTMLElement).style.borderColor = '#46AB47';
+      setTimeout(() => {
+        btn.textContent = orig;
+        (btn as HTMLElement).style.color = '';
+        (btn as HTMLElement).style.borderColor = '';
+      }, 2000);
     });
   });
 </script>

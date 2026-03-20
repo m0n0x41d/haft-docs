@@ -11,14 +11,23 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <h2>Ask the agent to explain itself</h2>
 
-  <p>The fastest way to learn quint-code is to ask your AI agent:</p>
+  <p>The fastest way to learn Quint Code is to ask your AI agent:</p>
 
-  <pre><code>/q-reason explain how to work with quint-code effectively — what commands exist, when to use each, and what's the recommended workflow</code></pre>
+  <div style="position: relative;">
+    <pre><code>/q-reason explain how to work with quint-code
+effectively — what commands exist, when to use
+each one, and what's the recommended workflow</code></pre>
+    <button
+      class="copy-btn"
+      data-copy="/q-reason explain how to work with quint-code effectively — what commands exist, when to use each one, and what's the recommended workflow"
+      style="position: absolute; top: 0.75rem; right: 0.75rem; background: #1a1a1a; border: 1px solid #333; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; transition: color 0.2s, border-color 0.2s;"
+    >Copy</button>
+  </div>
 
   <p>
-    The agent has full knowledge of all Quint tools and will walk you through them in context of
-    your specific project. This is not a canned tutorial — it's a live conversation with an agent
-    that understands both Quint and your codebase.
+    The agent has full knowledge of all Quint Code tools and will walk you through them in
+    context of your specific project. This is not a canned tutorial — it's a live conversation
+    with an agent that understands both Quint Code and your codebase.
   </p>
 
   <h2>Existing project? Run onboarding</h2>

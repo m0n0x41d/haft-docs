@@ -14,7 +14,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Module detection</h2>
 
   <p>
-    When you run <code>/q-status</code> or <code>quint_query(action="coverage")</code>, Quint scans
+    When you run <code>/q-status</code> or <code>quint_query(action="coverage")</code>, Quint Code scans
     your project and detects modules using language-specific conventions:
   </p>
 
@@ -84,14 +84,13 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Dependency graph</h2>
 
   <p>
-    Quint parses import statements to build a module dependency graph. Go uses <code>go/parser</code>
-    from stdlib (perfect accuracy). JS/TS, Python, and Rust use regex patterns (>90% accuracy for
-    conventional code).
+    Quint Code parses import statements to build a module dependency graph. For Go, it uses
+    the stdlib <code>go/parser</code>. JS/TS, Python, and Rust use regex-based import detection.
   </p>
 
   <p>
     The dependency graph powers <strong>impact propagation</strong>: when drift is detected in
-    module A, Quint checks which modules depend on A and flags their decisions too.
+    module A, Quint Code checks which modules depend on A and flags their decisions too.
   </p>
 
   <pre><code>Drift detected in auth/:
