@@ -9,9 +9,9 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <p>
     ADRs are static markdown files. Nobody checks if they're still valid. Nobody knows when
-    reality diverged from the decision. Quint Code adds: computed trust scores (R_eff), evidence
+    reality diverged from the decision. quint-code adds: computed trust scores (R_eff), evidence
     decay, code drift detection, module coverage, cross-project recall, and a verification gate
-    that challenges decisions before recording. ADRs are the starting point; Quint Code makes them live.
+    that challenges decisions before recording. ADRs are the starting point; quint-code makes them live.
   </p>
 
   <h2>What happens to decisions after they're recorded?</h2>
@@ -33,7 +33,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     runs module coverage to show which parts of your architecture have no decisions.
   </p>
 
-  <h2>I have existing specs in a gitignored folder. Can Quint read them?</h2>
+  <h2>I have existing specs in a gitignored folder. Can quint-code read them?</h2>
 
   <p>
     Yes. Tell the agent: "scan the docs in <code>.specs/</code> and record what you find." The
@@ -88,7 +88,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     First Principles Framework — a formal specification for engineering reasoning by
     <a href="https://ailev.livejournal.com" target="_blank" rel="noopener">Anatoly Levenchuk</a>.
     The <a href="https://github.com/ailev/FPF" target="_blank" rel="noopener">FPF spec is public on GitHub</a>.
-    Quint Code implements the practical parts: the ADI reasoning
+    quint-code implements the practical parts: the ADI reasoning
     cycle (Abduction-Deduction-Induction), evidence-based trust scoring (R_eff), weakest link
     aggregation (WLNK), and the lemniscate (decide-measure-reframe loop). You don't need to
     read the spec to use Quint.

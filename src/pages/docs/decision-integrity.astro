@@ -2,11 +2,11 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Decision Integrity" description="How Quint Code ensures decisions are honest — verification, evidence quality, and deduplication.">
+<DocsLayout title="Decision Integrity" description="How quint-code ensures decisions are honest — verification, evidence quality, and deduplication.">
   <h1>Decision Integrity</h1>
 
   <p>
-    A decision record is only valuable if you can trust it. Quint Code has multiple mechanisms
+    A decision record is only valuable if you can trust it. quint-code has multiple mechanisms
     to ensure decisions are honest, evidence is real, and the knowledge base stays clean.
   </p>
 
@@ -38,7 +38,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Inductive measurement gate</h2>
 
   <p>
-    When recording a measurement (<code>verdict: accepted/partial/failed</code>), Quint Code checks
+    When recording a measurement (<code>verdict: accepted/partial/failed</code>), quint-code checks
     whether the decision has a baseline (file hashes were snapshotted). If not:
   </p>
 
@@ -71,7 +71,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <p>
     Notes and decisions serve different purposes. Notes are observations ("we use Redis here").
     Decisions are contracts ("we chose Redis because X, with invariants Y and rollback Z").
-    When someone tries to record a note that duplicates an existing decision, Quint catches it.
+    When someone tries to record a note that duplicates an existing decision, quint-code catches it.
   </p>
 
   <p>The check uses <strong>containment</strong> (not Jaccard similarity):</p>

@@ -11,7 +11,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <h2>Ask the agent to explain itself</h2>
 
-  <p>The fastest way to learn Quint Code is to ask your AI agent:</p>
+  <p>The fastest way to learn quint-code is to ask your AI agent:</p>
 
   <div style="position: relative;">
     <pre><code>/q-reason explain how to work with quint-code
@@ -25,9 +25,9 @@ each one, and what's the recommended workflow</code></pre>
   </div>
 
   <p>
-    The agent has full knowledge of all Quint Code tools and will walk you through them in
+    The agent has full knowledge of all quint-code tools and will walk you through them in
     context of your specific project. This is not a canned tutorial — it's a live conversation
-    with an agent that understands both Quint Code and your codebase.
+    with an agent that understands both quint-code and your codebase.
   </p>
 
   <h2>Existing project? Run onboarding</h2>
@@ -59,7 +59,7 @@ each one, and what's the recommended workflow</code></pre>
   <h2>Set up a project prompt for better results</h2>
 
   <p>
-    Quint Code works without any project-level prompts. But adding a prompt file
+    quint-code works without any project-level prompts. But adding a prompt file
     with Quint-aware instructions makes the agent significantly better
     at using the tools proactively. See <a href="/docs/agent-prompt">Agent Prompt Setup</a>
     for details.
@@ -81,29 +81,52 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
     The Quint-specific sections (FPF Mode, Commands, Glossary) are the important parts.
   </p>
 
-  <h2>Your first decision</h2>
+  <h2>Two ways to make decisions</h2>
 
-  <p>The next time you face a non-trivial engineering choice, instead of just picking an approach:</p>
-
-  <pre><code>/q-reason [describe the problem]</code></pre>
-
-  <p>For example:</p>
-
-  <pre><code>/q-reason we need to add caching to our API but I'm not sure whether to use Redis, in-memory cache, or CDN-level caching. Latency matters, team is 3 people, we're on AWS.</code></pre>
-
-  <p>The agent will:</p>
-
-  <ol>
-    <li><strong>Frame the problem</strong> — ask clarifying questions about constraints and acceptance criteria</li>
-    <li><strong>Define comparison criteria</strong> — what dimensions matter (latency, ops complexity, cost)</li>
-    <li><strong>Generate variants</strong> — genuinely different approaches, each with its weakest link</li>
-    <li><strong>Compare fairly</strong> — same criteria applied to all options, Pareto front identified</li>
-    <li><strong>Record the decision</strong> — with invariants, rollback plan, and expiry date</li>
-  </ol>
+  <h3>Quick mode: /q-reason</h3>
 
   <p>
-    The result is a decision record in <code>.quint/decisions/</code> that your team can review in
-    a PR, reference later, and refresh when conditions change.
+    The fastest way. Describe your problem, the agent handles the rest:
+  </p>
+
+  <pre><code>/q-reason we need to add caching to our API.
+Latency matters, team is 3 people, we're on AWS.</code></pre>
+
+  <p>
+    The agent frames the problem, generates options, compares them, and records the decision —
+    all in one conversation. Good for getting started and for decisions where speed matters more
+    than thoroughness.
+  </p>
+
+  <div class="callout-warn">
+    <p>
+      <strong>Honest trade-off:</strong> <code>/q-reason</code> runs the entire cycle in one
+      conversation. With long context, the agent can lose focus — comparison criteria may blur,
+      variant generation may become superficial, the verification gate may get rushed. This is
+      not a quint-code limitation; it's how LLMs work with large prompts. The context fills up,
+      and quality at each step can degrade.
+    </p>
+  </div>
+
+  <h3>Full manual cycle (recommended for important decisions)</h3>
+
+  <p>
+    For decisions that are hard to reverse, affect the team, or have real consequences if wrong —
+    drive each step yourself:
+  </p>
+
+  <pre><code>/q-frame  → /q-char  → /q-explore → /q-compare → /q-decide</code></pre>
+
+  <p>
+    Each command loads its own focused prompt with specific guidance for that step. The context
+    stays clean. You think through each step deliberately — and the structured process works for
+    your brain too, not just the AI's. Defining the problem forces clarity. Setting criteria before
+    seeing options prevents bias. The verification gate catches weak reasoning.
+  </p>
+
+  <p>
+    This is where quint-code delivers the best results. Start here for anything that matters.
+    See the <a href="/docs/full-cycle">full cycle walkthrough</a> for details on each step.
   </p>
 
   <h2>What happens after a decision?</h2>

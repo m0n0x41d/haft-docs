@@ -2,11 +2,11 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Codebase Awareness" description="How Quint Code understands your project structure — modules, dependencies, and coverage.">
+<DocsLayout title="Codebase Awareness" description="How quint-code understands your project structure — modules, dependencies, and coverage.">
   <h1>Codebase Awareness</h1>
 
   <p>
-    Quint Code doesn't just track decisions — it understands your codebase. It knows which modules
+    quint-code doesn't just track decisions — it understands your codebase. It knows which modules
     exist, how they depend on each other, and which parts of your architecture are governed by
     decisions.
   </p>
@@ -14,7 +14,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Module detection</h2>
 
   <p>
-    When you run <code>/q-status</code> or <code>quint_query(action="coverage")</code>, Quint Code scans
+    When you run <code>/q-status</code> or <code>quint_query(action="coverage")</code>, quint-code scans
     your project and detects modules using language-specific conventions:
   </p>
 
@@ -84,13 +84,13 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Dependency graph</h2>
 
   <p>
-    Quint Code parses import statements to build a module dependency graph. For Go, it uses
+    quint-code parses import statements to build a module dependency graph. For Go, it uses
     the stdlib <code>go/parser</code>. JS/TS, Python, and Rust use regex-based import detection.
   </p>
 
   <p>
     The dependency graph powers <strong>impact propagation</strong>: when drift is detected in
-    module A, Quint Code checks which modules depend on A and flags their decisions too.
+    module A, quint-code checks which modules depend on A and flags their decisions too.
   </p>
 
   <pre><code>Drift detected in auth/:
@@ -105,7 +105,7 @@ Impact propagation:
 
   <p>
     After a decision is implemented, the agent snapshots the SHA-256 hashes of affected files
-    (the baseline). On every <code>/q-refresh scan</code>, Quint recomputes hashes and detects:
+    (the baseline). On every <code>/q-refresh scan</code>, quint-code recomputes hashes and detects:
   </p>
 
   <ul>
