@@ -6,8 +6,18 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h1>Full Decision Cycle</h1>
 
   <p>
-    When <code>/q-reason</code> picks standard or deep mode, it runs the full cycle. You can also
-    drive each step manually. Here's what each step does and why it matters.
+    <code>/q-reason</code> loads a comprehensive prompt with full knowledge of all Quint Code tools
+    and the FPF methodology. The agent then drives the conversation, calling the right tools at
+    each step. In standard or deep mode, it goes through the full cycle.
+  </p>
+
+  <p>
+    But we recommend driving each step manually — at least until the workflow becomes second
+    nature. Each command loads its own focused prompt with specific guidance for that step.
+    The structured thinking process works the same way for you as it does for the AI:
+    defining the problem first forces clarity, setting criteria before seeing options prevents
+    bias, and the verification gate catches weak reasoning. You'll make better decisions by
+    going through the steps yourself, not just watching the agent do it.
   </p>
 
   <h2>/q-frame — Define the problem</h2>
