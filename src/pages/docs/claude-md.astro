@@ -1,0 +1,107 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="CLAUDE.md Setup" description="Configure your AI tool for optimal quint-code integration.">
+  <h1>CLAUDE.md Setup</h1>
+
+  <p>
+    Quint Code works out of the box — the MCP tools are always available once you run <code>init</code>.
+    But adding a project-level prompt file makes the agent significantly better at using Quint proactively.
+  </p>
+
+  <h2>What is CLAUDE.md?</h2>
+
+  <p>
+    <code>CLAUDE.md</code> is a file in your project root that Claude Code reads at the start of every
+    session. It contains project-specific instructions that shape the agent's behavior. Other tools have
+    equivalents — <code>.cursorrules</code> for Cursor, <code>AGENTS.md</code> for Codex.
+  </p>
+
+  <p>
+    The quint-code repository includes a reference <code>CLAUDE.md</code> that teaches the agent:
+  </p>
+
+  <ul>
+    <li><strong>Communication style</strong> — direct, no validation theater, peer-level technical discourse</li>
+    <li><strong>Thinking principles</strong> — weakest link analysis, reversibility checks, separation of concerns</li>
+    <li><strong>When to use Quint</strong> — the decision framework for quick choices vs. full FPF mode for complex ones</li>
+    <li><strong>FPF commands and workflow</strong> — the recommended protocol (frame → char → explore → compare → decide)</li>
+    <li><strong>Key concepts</strong> — R_eff, evidence decay, CL penalties, Transformer Mandate</li>
+    <li><strong>Glossary</strong> — quick reference for FPF terminology</li>
+  </ul>
+
+  <h2>Install it</h2>
+
+  <pre><code># From your project root
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > CLAUDE.md</code></pre>
+
+  <div class="callout">
+    <p>
+      <strong>Adapt it to your project.</strong> The reference file is opinionated (no emoji, direct
+      communication, functional core / imperative shell). Keep the Quint-specific sections (FPF Mode,
+      Commands, Glossary) and adjust the rest to match your team's style.
+    </p>
+  </div>
+
+  <h2>What it changes</h2>
+
+  <p>Without CLAUDE.md:</p>
+  <ul>
+    <li>Agent uses Quint tools when you explicitly call slash commands</li>
+    <li>No proactive decision capture</li>
+    <li>No structured reasoning unless you ask for it</li>
+  </ul>
+
+  <p>With CLAUDE.md:</p>
+  <ul>
+    <li>Agent understands when to suggest <code>/q-reason</code> for complex tasks</li>
+    <li>Agent records micro-decisions as notes when it notices them in conversation</li>
+    <li>Agent checks <code>/q-status</code> proactively to surface stale decisions</li>
+    <li>Agent applies weakest link analysis and reversibility checks naturally</li>
+    <li>Agent follows the recommended FPF protocol for non-trivial decisions</li>
+  </ul>
+
+  <h2>For Cursor</h2>
+
+  <p>
+    Cursor reads <code>.cursorrules</code> from project root. You can copy the same content:
+  </p>
+
+  <pre><code>cp CLAUDE.md .cursorrules</code></pre>
+
+  <p>
+    Alternatively, Cursor can read <code>CLAUDE.md</code> if you reference it in your Cursor settings.
+    Check <a href="https://docs.cursor.com" target="_blank" rel="noopener">Cursor docs</a> for the
+    latest on custom instructions files.
+  </p>
+
+  <h2>For Codex</h2>
+
+  <p>
+    Codex CLI reads <code>AGENTS.md</code> from project root:
+  </p>
+
+  <pre><code>cp CLAUDE.md AGENTS.md</code></pre>
+
+  <h2>Keeping it up to date</h2>
+
+  <p>
+    The reference CLAUDE.md evolves with quint-code releases. When you update the binary, check if
+    the reference file has changed:
+  </p>
+
+  <pre><code># Compare your version with the latest
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md | diff - CLAUDE.md</code></pre>
+
+  <p>
+    The Quint-specific sections (FPF Mode, Commands table, Glossary) are the most important to
+    keep current. The general engineering style sections can stay customized.
+  </p>
+
+  <h2>Next step</h2>
+
+  <p>
+    <a href="/docs/reasoning">How /q-reason works</a> — learn the primary workflow.
+  </p>
+</DocsLayout>

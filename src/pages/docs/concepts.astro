@@ -1,0 +1,147 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Key Concepts" description="R_eff, congruence levels, weakest link, and other core concepts.">
+  <h1>Key Concepts</h1>
+
+  <h2>R_eff (Effective Reliability)</h2>
+
+  <p>
+    Every decision has a computed trust score: R_eff. It's calculated from evidence attached to the
+    decision — test results, measurements, benchmarks, user feedback.
+  </p>
+
+  <p>Formula: <code>R_eff = min(effective_score)</code> across all evidence items.</p>
+
+  <p>
+    This is the <strong>weakest link principle</strong> — the decision is only as trustworthy as its
+    weakest piece of evidence. No averaging, no optimistic roll-ups.
+  </p>
+
+  <ul>
+    <li><strong>R_eff ≥ 0.5</strong> — healthy, decision is trustworthy</li>
+    <li><strong>R_eff &lt; 0.5</strong> — degraded, surfaces in stale scan</li>
+    <li><strong>R_eff &lt; 0.3</strong> — AT RISK, needs immediate attention</li>
+    <li><strong>No evidence</strong> — decision is fresh, not degraded (treated as healthy)</li>
+  </ul>
+
+  <h2>Congruence Level (CL)</h2>
+
+  <p>
+    Not all evidence is equally relevant. A benchmark from the same project (CL3) is more
+    trustworthy than a blog post about a similar stack (CL1). CL penalties reduce the effective
+    score of cross-context evidence:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>CL</th>
+        <th>Context</th>
+        <th>Penalty</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>CL3</td><td>Same context</td><td>0.0</td><td>Internal test result</td></tr>
+      <tr><td>CL2</td><td>Similar context</td><td>0.1</td><td>Decision from a related project (same language)</td></tr>
+      <tr><td>CL1</td><td>Different context</td><td>0.4</td><td>External documentation, blog post</td></tr>
+      <tr><td>CL0</td><td>Opposed context</td><td>0.9</td><td>Evidence from a conflicting methodology</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    CL matters for cross-project recall too. When a decision from another project surfaces during
+    <code>/q-frame</code>, it gets tagged CL2 (same language) or CL1 (different language).
+  </p>
+
+  <h2>Weakest Link (WLNK)</h2>
+
+  <p>
+    Every variant in <code>/q-explore</code> must identify its weakest link — the single thing that
+    bounds its quality. This is not a generic "cons" list. It's the specific mechanism that will
+    fail first under stress.
+  </p>
+
+  <p>
+    WLNK applies everywhere in Quint: R_eff is min (not average), gate decisions use worst-wins
+    (not voting), evidence chains break at the weakest item.
+  </p>
+
+  <h2>Evidence Decay</h2>
+
+  <p>
+    Evidence has an optional <code>valid_until</code> date. When evidence expires, its score drops
+    to 0.1 regardless of its original verdict. This pulls R_eff down, making the decision surface
+    as stale.
+  </p>
+
+  <p>
+    The intuition: a benchmark from 6 months ago is not as trustworthy as one from last week.
+    Evidence doesn't become false — it becomes weak. 0.1, not 0.0.
+  </p>
+
+  <h2>Indicator Roles</h2>
+
+  <p>
+    When characterizing a problem (<code>/q-char</code>), each comparison dimension gets a role:
+  </p>
+
+  <ul>
+    <li><strong>constraint</strong> — hard limit, must satisfy. Variants that violate it are eliminated.</li>
+    <li><strong>target</strong> — what you're optimizing. 1-3 targets max.</li>
+    <li><strong>observation</strong> — monitor but do NOT optimize. This is Anti-Goodhart: when a metric
+      becomes a target, it ceases to be a good metric. Mark things as observation to prevent
+      reward hacking.</li>
+  </ul>
+
+  <h2>Pareto Front</h2>
+
+  <p>
+    After comparison (<code>/q-compare</code>), variants are plotted on a Pareto front — the set
+    of options where no option is strictly worse than another on all dimensions.
+  </p>
+
+  <p>
+    If variant A is better on latency but worse on cost, and variant B is the reverse — both are
+    on the Pareto front. Neither dominates the other. Your job is to make the trade-off
+    explicitly, not pretend one is objectively "best."
+  </p>
+
+  <h2>Parity</h2>
+
+  <p>
+    A comparison is junk if the options weren't evaluated fairly. Parity means: same inputs,
+    same scope, same budget, same measurement procedure for all variants. If you benchmarked
+    Redis on production hardware and Memcached on a laptop — that's not a fair comparison.
+  </p>
+
+  <h2>Transformer Mandate</h2>
+
+  <p>
+    From FPF: a system cannot transform itself. The agent that generates options cannot be the
+    sole validator of those options. In practice:
+  </p>
+
+  <ul>
+    <li>The agent generates variants — the human decides</li>
+    <li>The verification gate challenges decisions before recording</li>
+    <li>Measurements without independent verification get CL1 (self-evidence), not CL3</li>
+  </ul>
+
+  <h2>Lemniscate</h2>
+
+  <p>
+    The infinity loop: decide → implement → measure → observe → reframe → decide again.
+    Failed measurements create new problems. Stale decisions trigger re-evaluation. The system
+    is self-correcting.
+  </p>
+
+  <h2>Next</h2>
+
+  <ul>
+    <li><a href="/docs/faq">FAQ</a> — common questions about quint-code</li>
+    <li><a href="/docs/lifecycle">Decision lifecycle</a> — how decisions age and refresh</li>
+  </ul>
+</DocsLayout>

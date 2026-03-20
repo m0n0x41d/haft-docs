@@ -1,0 +1,131 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Full Decision Cycle" description="Step-by-step through frame, characterize, explore, compare, decide.">
+  <h1>Full Decision Cycle</h1>
+
+  <p>
+    When <code>/q-reason</code> picks standard or deep mode, it runs the full cycle. You can also
+    drive each step manually. Here's what each step does and why it matters.
+  </p>
+
+  <h2>/q-frame — Define the problem</h2>
+
+  <p>
+    Most engineering mistakes happen because the problem was never properly stated. "We need caching"
+    is not a problem — it's a solution in search of a problem. The actual problem might be "API
+    response time exceeds 500ms on the product listing page."
+  </p>
+
+  <pre><code>/q-frame [describe what's wrong]</code></pre>
+
+  <p>The agent creates a <strong>ProblemCard</strong> with:</p>
+
+  <ul>
+    <li><strong>Signal</strong> — the anomalous observation (not the assumed cause)</li>
+    <li><strong>Constraints</strong> — hard limits that any solution must respect</li>
+    <li><strong>Optimization targets</strong> — what to improve (1-3 max)</li>
+    <li><strong>Observation indicators</strong> — what to monitor but NOT optimize (Anti-Goodhart)</li>
+    <li><strong>Acceptance criteria</strong> — how you'll know the problem is solved</li>
+    <li><strong>Blast radius</strong> — what systems/teams are affected</li>
+  </ul>
+
+  <h2>/q-char — Define comparison criteria</h2>
+
+  <p>
+    Before generating options, define how you'll compare them. This prevents bias — you can't
+    cherry-pick criteria to favor the option you already like.
+  </p>
+
+  <pre><code>/q-char</code></pre>
+
+  <p>Each criterion gets a role:</p>
+
+  <ul>
+    <li><strong>constraint</strong> — hard limit, must satisfy (e.g., "latency &lt; 100ms")</li>
+    <li><strong>target</strong> — what you're optimizing (e.g., "throughput")</li>
+    <li><strong>observation</strong> — watch but don't optimize. This is Anti-Goodhart: if you optimize
+      throughput, you might silently kill reliability. Marking reliability as "observation" means
+      you track it without letting it distort your optimization.</li>
+  </ul>
+
+  <h2>/q-explore — Generate variants</h2>
+
+  <p>
+    The agent generates 2+ genuinely different approaches. "Different" means different in kind,
+    not degree:
+  </p>
+
+  <ul>
+    <li>Bad: "Redis vs Memcached vs in-memory cache" — three variations of the same approach</li>
+    <li>Good: "Cache layer vs CDN optimization vs query redesign" — three fundamentally different strategies</li>
+  </ul>
+
+  <pre><code>/q-explore</code></pre>
+
+  <p>Each variant gets:</p>
+  <ul>
+    <li><strong>Description</strong> — what this approach does</li>
+    <li><strong>Strengths</strong> — why it might work</li>
+    <li><strong>Weakest link</strong> — what will break first (not generic "cons" — the single thing that bounds quality)</li>
+    <li><strong>Risks</strong> — what could go wrong</li>
+    <li><strong>Stepping stone</strong> — does this open future possibilities even if not optimal now?</li>
+  </ul>
+
+  <p>
+    The tool runs a diversity check — if two variants share more than 50% of their words, it warns
+    "do these differ in kind, not degree?"
+  </p>
+
+  <h2>/q-compare — Fair comparison</h2>
+
+  <p>
+    Apply the criteria from <code>/q-char</code> to the variants from <code>/q-explore</code>.
+  </p>
+
+  <pre><code>/q-compare</code></pre>
+
+  <p>The result is a <strong>Pareto front</strong> — the set of variants where no variant is strictly
+    worse than another on all dimensions. This is not "pick the best" — it's "here are the
+    non-dominated options, each sacrificing something different."</p>
+
+  <p>
+    Parity matters: same inputs, same scope, same budget for all options — or the comparison is junk.
+  </p>
+
+  <h2>/q-decide — Record the contract</h2>
+
+  <p>
+    The final step: select a variant and record the decision as a contract.
+  </p>
+
+  <pre><code>/q-decide</code></pre>
+
+  <p>Before recording, the agent runs a <strong>verification gate</strong>:</p>
+  <ul>
+    <li>Strongest counter-argument against the selected variant</li>
+    <li>What would make this decision wrong in 3 months?</li>
+    <li>Is any evidence self-referential (agent's own reasoning as proof)?</li>
+  </ul>
+
+  <p>
+    If the counter-argument survives, the decision is recorded with invariants, rollback plan,
+    refresh triggers, and an expiry date.
+  </p>
+
+  <h2>The protocol at a glance</h2>
+
+  <pre><code>/q-frame  → /q-char  → /q-explore → /q-compare → /q-decide
+  what's      what       genuinely     fair         engineering
+  broken?     matters?   different     comparison   contract
+                         options</code></pre>
+
+  <h2>Next</h2>
+
+  <ul>
+    <li><a href="/docs/notes">Notes & micro-decisions</a> — the lightweight path</li>
+    <li><a href="/docs/lifecycle">Decision lifecycle</a> — what happens after you decide</li>
+    <li><a href="/docs/commands">All commands</a> — complete reference</li>
+  </ul>
+</DocsLayout>

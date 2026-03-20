@@ -1,0 +1,77 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Notes & Micro-decisions" description="Capture small decisions without running the full cycle.">
+  <h1>Notes & Micro-decisions</h1>
+
+  <p>
+    Not every decision needs a full reasoning cycle. "We're using RWMutex instead of channels
+    because contention is under 0.1%" is a perfectly valid engineering choice that should be
+    recorded — but doesn't need five steps and a Pareto front.
+  </p>
+
+  <h2>How notes work</h2>
+
+  <pre><code>/q-note</code></pre>
+
+  <p>
+    Record a micro-decision with a title and rationale. The agent validates:
+  </p>
+
+  <ul>
+    <li><strong>Rationale required</strong> — why this choice? No rationale, no record.</li>
+    <li><strong>Conflict check</strong> — does this contradict an active decision?</li>
+    <li><strong>Overlap check</strong> — does an existing decision already cover this topic? (Rejected if &gt;70% word overlap.)</li>
+    <li><strong>Scope check</strong> — if it affects many files, suggests <code>/q-frame</code> instead.</li>
+  </ul>
+
+  <h2>Auto-capture</h2>
+
+  <p>
+    With <a href="/docs/claude-md">CLAUDE.md</a> configured, the agent records notes automatically
+    when it notices decisions in conversation. You say "let's use Redis for this" — the agent records
+    it without you explicitly calling <code>/q-note</code>.
+  </p>
+
+  <p>Auto-capture does NOT trigger for:</p>
+  <ul>
+    <li>Formatting choices, import ordering, variable naming (too trivial)</li>
+    <li>Topics already covered by an active decision (overlap check prevents duplicates)</li>
+  </ul>
+
+  <h2>Notes are not decisions</h2>
+
+  <p>
+    Notes are observations and micro-decisions. They are NOT architectural decisions.
+    If you find yourself writing a note about a fundamental approach or strategy — stop.
+    Use <code>/q-frame</code> → <code>/q-decide</code> instead.
+  </p>
+
+  <p>
+    Notes auto-expire after 90 days. If the choice is still relevant in 3 months, it deserves
+    a proper decision record.
+  </p>
+
+  <h2>Notes in /q-status</h2>
+
+  <p>
+    <code>/q-status</code> shows the 5 most recent active notes. Deprecated and superseded notes
+    are filtered out. Notes do not count toward module coverage — only decisions do.
+  </p>
+
+  <h2>Cleaning up notes</h2>
+
+  <p>
+    <code>/q-refresh action="reconcile"</code> scans all active notes against all active decisions.
+    If a note overlaps significantly with a decision, it suggests deprecation. This is a batch
+    cleanup — one command, no per-note review needed.
+  </p>
+
+  <h2>Next</h2>
+
+  <ul>
+    <li><a href="/docs/lifecycle">Decision lifecycle</a> — staleness, refresh, evidence decay</li>
+    <li><a href="/docs/concepts">Key concepts</a> — R_eff, CL, weakest link</li>
+  </ul>
+</DocsLayout>

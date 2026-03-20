@@ -1,0 +1,164 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="First Steps" description="What to do after installing quint-code.">
+  <h1>First Steps</h1>
+
+  <p>
+    You've installed quint-code and run <code>init</code>. Now what?
+  </p>
+
+  <h2>Ask the agent to explain itself</h2>
+
+  <p>The fastest way to learn quint-code is to ask your AI agent:</p>
+
+  <pre><code>/q-reason explain how to work with quint-code effectively — what commands exist, when to use each, and what's the recommended workflow</code></pre>
+
+  <p>
+    The agent has full knowledge of all Quint tools and will walk you through them in context of
+    your specific project. This is not a canned tutorial — it's a live conversation with an agent
+    that understands both Quint and your codebase.
+  </p>
+
+  <h2>Existing project? Run onboarding</h2>
+
+  <p>
+    If you're adding quint-code to a project that already has code, architecture docs, or ADRs:
+  </p>
+
+  <pre><code>/q-onboard</code></pre>
+
+  <p>The agent will:</p>
+
+  <ul>
+    <li>Scan your README, architecture docs, ADR directories</li>
+    <li>Record discovered decisions as notes</li>
+    <li>Frame unresolved architectural tensions as problems</li>
+    <li>Run module coverage analysis (which parts of your codebase have decisions, which don't)</li>
+    <li>Suggest what to tackle first</li>
+  </ul>
+
+  <div class="callout">
+    <p>
+      <strong>Have existing specs or design docs in a gitignored folder?</strong>
+      Point the agent to them: "scan the docs in <code>.specs/</code> and record what you find."
+      The agent can read any file in your project — it's not limited to git-tracked files.
+    </p>
+  </div>
+
+  <h2>Set up CLAUDE.md for better results</h2>
+
+  <p>
+    Quint Code works without any project-level prompts. But adding a <code>CLAUDE.md</code> (or
+    equivalent for your tool) with Quint-aware instructions makes the agent significantly better
+    at using the tools proactively.
+  </p>
+
+  <p>
+    We maintain a reference <code>CLAUDE.md</code> in the quint-code repository that you can
+    adapt for your project:
+  </p>
+
+  <pre><code># Download the reference CLAUDE.md
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > CLAUDE.md</code></pre>
+
+  <p>
+    This file teaches the agent: communication style (direct, no cheerleading), thinking principles
+    (weakest link analysis, reversibility checks), the FPF decision workflow, and key concepts like
+    R_eff and evidence decay.
+  </p>
+
+  <p>
+    Adapt it to your project — remove sections that don't apply, add project-specific context.
+    The Quint-specific sections (FPF Mode, Commands, Glossary) are the important parts.
+  </p>
+
+  <h2>Your first decision</h2>
+
+  <p>The next time you face a non-trivial engineering choice, instead of just picking an approach:</p>
+
+  <pre><code>/q-reason [describe the problem]</code></pre>
+
+  <p>For example:</p>
+
+  <pre><code>/q-reason we need to add caching to our API but I'm not sure whether to use Redis, in-memory cache, or CDN-level caching. Latency matters, team is 3 people, we're on AWS.</code></pre>
+
+  <p>The agent will:</p>
+
+  <ol>
+    <li><strong>Frame the problem</strong> — ask clarifying questions about constraints and acceptance criteria</li>
+    <li><strong>Define comparison criteria</strong> — what dimensions matter (latency, ops complexity, cost)</li>
+    <li><strong>Generate variants</strong> — genuinely different approaches, each with its weakest link</li>
+    <li><strong>Compare fairly</strong> — same criteria applied to all options, Pareto front identified</li>
+    <li><strong>Record the decision</strong> — with invariants, rollback plan, and expiry date</li>
+  </ol>
+
+  <p>
+    The result is a decision record in <code>.quint/decisions/</code> that your team can review in
+    a PR, reference later, and refresh when conditions change.
+  </p>
+
+  <h2>What happens after a decision?</h2>
+
+  <p>This is the part most people ask about. After the agent records a decision:</p>
+
+  <ul>
+    <li><strong>A markdown file appears</strong> in <code>.quint/decisions/</code> — commit it with your code</li>
+    <li><strong>The decision tracks affected files</strong> — if those files change later, drift detection flags it</li>
+    <li><strong>Evidence can be attached</strong> — test results, benchmarks, user feedback. Evidence has an expiry date.</li>
+    <li><strong>R_eff (trust score) is computed</strong> — based on evidence quality. Expired evidence degrades the score.</li>
+    <li><strong>Stale decisions surface</strong> — <code>/q-status</code> shows what needs review</li>
+  </ul>
+
+  <p>
+    You don't need to do anything extra. The system is self-correcting: when decisions go stale,
+    they surface. When you work on files covered by a decision, the agent can mention it. The
+    lemniscate (decide → measure → reframe) runs naturally as part of your workflow.
+  </p>
+
+  <h2>Day-to-day usage</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Situation</th>
+        <th>What to do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Big feature, architectural choice</td>
+        <td><code>/q-reason [describe the problem]</code></td>
+      </tr>
+      <tr>
+        <td>Quick tech choice during coding</td>
+        <td>The agent auto-records notes when it notices decisions</td>
+      </tr>
+      <tr>
+        <td>Start of a work session</td>
+        <td><code>/q-status</code> — see what's stale, what's pending</td>
+      </tr>
+      <tr>
+        <td>"Why did we do it this way?"</td>
+        <td><code>/q-search [topic]</code></td>
+      </tr>
+      <tr>
+        <td>Reviewing a PR with decisions</td>
+        <td>Read the <code>.quint/decisions/</code> markdown files in the diff</td>
+      </tr>
+      <tr>
+        <td>Decision feels outdated</td>
+        <td><code>/q-refresh</code> — scan, waive, reopen, or supersede</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Next steps</h2>
+
+  <ul>
+    <li><a href="/docs/reasoning">How /q-reason works</a> — the full reasoning workflow</li>
+    <li><a href="/docs/full-cycle">The full decision cycle</a> — frame → char → explore → compare → decide</li>
+    <li><a href="/docs/commands">All commands</a> — reference for every slash command</li>
+  </ul>
+</DocsLayout>

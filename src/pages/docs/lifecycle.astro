@@ -1,0 +1,163 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Decision Lifecycle" description="How decisions age, go stale, and get refreshed.">
+  <h1>Decision Lifecycle</h1>
+
+  <p>
+    Decisions are not permanent. The world changes — requirements shift, load increases, team grows,
+    dependencies update. Quint Code treats every decision as having a shelf life.
+  </p>
+
+  <h2>The lifecycle</h2>
+
+  <pre><code>Pending Implementation → Shipped → Active → Stale → Superseded/Deprecated
+
+Pending:     Decision recorded, not yet implemented (no measurement)
+Shipped:     Implemented and measured (verdict: accepted/partial/failed)
+Active:      Shipped, R_eff ≥ 0.5, not expired
+Stale:       R_eff &lt; 0.5, or valid_until expired, or code drift detected
+Superseded:  Replaced by a newer decision
+Deprecated:  No longer relevant (archived)</code></pre>
+
+  <h2>Evidence and R_eff</h2>
+
+  <p>
+    Every decision can have evidence attached — test results, benchmarks, user feedback, measurements.
+    Each evidence item has:
+  </p>
+
+  <ul>
+    <li><strong>Verdict</strong> — supports, weakens, or refutes the decision</li>
+    <li><strong>Congruence Level (CL)</strong> — how relevant is this evidence to this context?
+      <ul>
+        <li>CL3: Same project, same context — full weight</li>
+        <li>CL2: Similar project, similar stack — 0.1 penalty</li>
+        <li>CL1: Different context — 0.4 penalty</li>
+        <li>CL0: Opposed context — 0.9 penalty</li>
+      </ul>
+    </li>
+    <li><strong>Expiry date</strong> — when this evidence is no longer trustworthy</li>
+  </ul>
+
+  <p>
+    <strong>R_eff</strong> (effective reliability) is computed as the minimum across all evidence
+    scores, with CL penalties applied. This is the weakest link principle: the chain is as strong
+    as its weakest link.
+  </p>
+
+  <ul>
+    <li>R_eff ≥ 0.5 — healthy, decision is trustworthy</li>
+    <li>R_eff &lt; 0.5 — degraded, needs review</li>
+    <li>R_eff &lt; 0.3 — AT RISK, needs immediate attention</li>
+  </ul>
+
+  <h2>Code drift detection</h2>
+
+  <p>
+    When you record a decision with affected files and then run <code>baseline</code>, Quint
+    snapshots the file hashes. On every <code>/q-refresh scan</code>, it recomputes hashes and
+    detects changes:
+  </p>
+
+  <ul>
+    <li><strong>MODIFIED</strong> — file changed since baseline (may or may not invalidate the decision)</li>
+    <li><strong>FILE MISSING</strong> — file was deleted or moved (likely needs decision update)</li>
+    <li><strong>No drift</strong> — file unchanged</li>
+  </ul>
+
+  <p>
+    Drift is a signal, not an automatic invalidation. The agent reads the diff and judges whether
+    the change is material (broke an invariant) or cosmetic (comments, formatting).
+  </p>
+
+  <h2>Module coverage</h2>
+
+  <p>
+    <code>/q-status</code> shows module coverage — which parts of your codebase are governed by
+    decisions and which are blind spots:
+  </p>
+
+  <pre><code>## Module Coverage (9 modules, 77% governed)
+  ✓ src/internal/artifact — 3 decisions
+  ✓ src/internal/codebase — 2 decisions
+  ✗ src/assurance          — no decisions (blind)
+  ✗ src/cmd/indexer        — no decisions (blind)</code></pre>
+
+  <p>
+    Blind modules are parts of your architecture with no formal engineering decisions. Not necessarily
+    bad — but worth knowing about.
+  </p>
+
+  <h2>Refreshing decisions</h2>
+
+  <pre><code>/q-refresh</code></pre>
+
+  <p>Actions:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>What it does</th>
+        <th>When to use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>scan</code></td>
+        <td>Find all stale artifacts + code drift</td>
+        <td>Routine health check</td>
+      </tr>
+      <tr>
+        <td><code>waive</code></td>
+        <td>Extend validity with justification</td>
+        <td>Decision still valid, just expired</td>
+      </tr>
+      <tr>
+        <td><code>reopen</code></td>
+        <td>Start new problem cycle from old decision</td>
+        <td>Conditions changed, need to reconsider</td>
+      </tr>
+      <tr>
+        <td><code>supersede</code></td>
+        <td>Replace with a different artifact</td>
+        <td>New decision replaces old one</td>
+      </tr>
+      <tr>
+        <td><code>deprecate</code></td>
+        <td>Archive as no longer relevant</td>
+        <td>Decision obsolete, nothing replaces it</td>
+      </tr>
+      <tr>
+        <td><code>reconcile</code></td>
+        <td>Find notes that overlap with decisions</td>
+        <td>Clean up duplicate knowledge</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>The lemniscate</h2>
+
+  <p>
+    The full cycle is an infinity loop (lemniscate):
+  </p>
+
+  <pre><code>Observe → Frame → Decide → Implement → Measure → Observe → ...
+   ↑                                                    ↓
+   └────────── evidence feeds back into new problems ───┘</code></pre>
+
+  <p>
+    Failed measurements create new problems. Stale decisions trigger re-evaluation. Drift detection
+    surfaces unexpected changes. The system is self-correcting — you don't need to remember to
+    check; it surfaces what needs attention.
+  </p>
+
+  <h2>Next</h2>
+
+  <ul>
+    <li><a href="/docs/commands">All commands</a> — complete reference</li>
+    <li><a href="/docs/concepts">Key concepts</a> — R_eff, CL, WLNK explained</li>
+  </ul>
+</DocsLayout>

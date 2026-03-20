@@ -1,0 +1,138 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="All Commands" description="Complete reference for all quint-code slash commands.">
+  <h1>All Commands</h1>
+
+  <h2>Primary workflow</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>What it does</th>
+        <th>When to use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/q-reason</code></td>
+        <td>Start structured reasoning — agent auto-selects depth</td>
+        <td>Non-trivial engineering problem</td>
+      </tr>
+      <tr>
+        <td><code>/q-note</code></td>
+        <td>Record a micro-decision with rationale</td>
+        <td>Quick tech choice worth remembering</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Full decision cycle</h2>
+
+  <p>Use these to drive each step manually (or let <code>/q-reason</code> orchestrate):</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>What it does</th>
+        <th>Creates</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/q-frame</code></td>
+        <td>Frame the problem — signal, constraints, acceptance</td>
+        <td>ProblemCard</td>
+      </tr>
+      <tr>
+        <td><code>/q-char</code></td>
+        <td>Define comparison dimensions with roles</td>
+        <td>Characterization (on ProblemCard)</td>
+      </tr>
+      <tr>
+        <td><code>/q-explore</code></td>
+        <td>Generate genuinely distinct variants</td>
+        <td>SolutionPortfolio</td>
+      </tr>
+      <tr>
+        <td><code>/q-compare</code></td>
+        <td>Fair comparison on the Pareto front</td>
+        <td>Comparison (on SolutionPortfolio)</td>
+      </tr>
+      <tr>
+        <td><code>/q-decide</code></td>
+        <td>Record decision as contract with invariants</td>
+        <td>DecisionRecord</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Lifecycle management</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/q-refresh</code></td>
+        <td>Manage artifact lifecycle — scan stale, waive, reopen, supersede, deprecate, reconcile</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Query & dashboard</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/q-status</code></td>
+        <td>Dashboard — Shipped/Pending decisions, problems, module coverage</td>
+      </tr>
+      <tr>
+        <td><code>/q-search</code></td>
+        <td>Full-text search across all artifacts</td>
+      </tr>
+      <tr>
+        <td><code>/q-problems</code></td>
+        <td>List active problems with readiness signals</td>
+      </tr>
+      <tr>
+        <td><code>/q-onboard</code></td>
+        <td>Discover existing project knowledge and build initial map</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Recommended protocol</h2>
+
+  <pre><code>/q-frame  → /q-char  → /q-explore → /q-compare → /q-decide
+  what's      what       genuinely     fair         engineering
+  broken?     matters?   different     comparison   contract
+                         options</code></pre>
+
+  <p>
+    You can enter at any step, but the protocol works best in order. <code>/q-char</code> before
+    <code>/q-explore</code> prevents bias (criteria defined before options). <code>/q-compare</code>
+    before <code>/q-decide</code> ensures fair evaluation.
+  </p>
+
+  <h2>Next</h2>
+
+  <ul>
+    <li><a href="/docs/concepts">Key concepts</a> — R_eff, CL, WLNK, evidence decay</li>
+    <li><a href="/docs/faq">FAQ</a> — common questions</li>
+  </ul>
+</DocsLayout>

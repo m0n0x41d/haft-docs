@@ -1,0 +1,144 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Installation" description="Install quint-code and configure it for your AI tool.">
+  <h1>Installation</h1>
+
+  <h2>Install the binary</h2>
+
+  <pre><code>curl -fsSL https://quint.codes/install.sh | bash</code></pre>
+
+  <p>
+    This downloads the latest release for your platform (macOS/Linux, arm64/amd64) and places it
+    in <code>~/.local/bin/</code>. Make sure this directory is in your <code>PATH</code>.
+  </p>
+
+  <h2>Initialize in your project</h2>
+
+  <p>
+    <code>cd</code> into your project directory and run <code>init</code> with the flag for your AI tool:
+  </p>
+
+  <pre><code># Claude Code (default if no flag)
+quint-code init
+
+# Cursor
+quint-code init --cursor
+
+# Gemini CLI
+quint-code init --gemini
+
+# Codex CLI / Codex App / Air
+quint-code init --codex
+
+# All tools at once
+quint-code init --all</code></pre>
+
+  <div class="callout-warn">
+    <p>
+      <strong>The flag matters.</strong> Each tool looks for its MCP config in a different location.
+      Running <code>quint-code init</code> without a flag only configures Claude Code.
+      If you use Cursor, you need <code>--cursor</code>.
+    </p>
+  </div>
+
+  <h2>Where MCP config goes</h2>
+
+  <p>
+    The binary is the same for all tools. Init writes the MCP server config to the location your
+    tool expects:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>MCP Config</th>
+        <th>Commands</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Claude Code</td>
+        <td><code>.mcp.json</code></td>
+        <td><code>~/.claude/commands/</code></td>
+        <td>Auto-detected</td>
+      </tr>
+      <tr>
+        <td>Cursor</td>
+        <td><code>.cursor/mcp.json</code></td>
+        <td><code>~/.cursor/commands/</code></td>
+        <td>Enable in Settings → MCP</td>
+      </tr>
+      <tr>
+        <td>Gemini CLI</td>
+        <td><code>~/.gemini/settings.json</code></td>
+        <td><code>~/.gemini/commands/</code></td>
+        <td>Global config</td>
+      </tr>
+      <tr>
+        <td>Codex / Air</td>
+        <td><code>.codex/config.toml</code></td>
+        <td><code>~/.codex/prompts/</code></td>
+        <td>Trust project in Codex</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Cursor-specific setup</h3>
+
+  <p>
+    After running <code>quint-code init --cursor</code>, open Cursor Settings → MCP → find
+    <code>quint-code</code> → <strong>enable the toggle</strong>. Cursor adds MCP servers as
+    disabled by default.
+  </p>
+
+  <p>
+    Cursor also picks up Claude Code slash commands from <code>~/.claude/commands/</code>, so
+    commands like <code>/q-reason</code> may work even without <code>--cursor</code>. But the
+    MCP connection (the tools backend) requires <code>.cursor/mcp.json</code>.
+  </p>
+
+  <h2>What init creates</h2>
+
+  <p>Init creates a <code>.quint/</code> directory in your project:</p>
+
+  <pre><code>.quint/
+├── project.yaml        # Project identity (unique ID, name)
+├── decisions/          # Decision record markdown files
+├── problems/           # Problem card markdown files
+├── notes/              # Micro-decision markdown files
+├── solutions/          # Solution portfolio markdown files
+├── evidence/           # Evidence pack markdown files
+└── refresh/            # Refresh report markdown files</code></pre>
+
+  <p>
+    These markdown files are <strong>projections</strong> — human-readable copies of what's in the
+    database. They're designed for code review: when you create a decision, a markdown file appears
+    in your PR diff. Reviewers can see and comment on engineering decisions alongside code changes.
+  </p>
+
+  <p>
+    The database itself lives in <code>~/.quint-code/</code> (not in your repo). The <code>.quint/</code>
+    directory contains only markdown and YAML — safe to commit.
+  </p>
+
+  <h2>Verify it works</h2>
+
+  <p>Open your AI tool in the project directory and type:</p>
+
+  <pre><code>/q-status</code></pre>
+
+  <p>
+    You should see an empty dashboard. If you see an error about MCP connection, check that
+    the MCP server is enabled in your tool's settings.
+  </p>
+
+  <h2>Next step</h2>
+
+  <p>
+    <a href="/docs/first-steps">First steps</a> — what to do after installation.
+  </p>
+</DocsLayout>

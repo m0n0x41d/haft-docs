@@ -1,0 +1,77 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Documentation" description="Learn how to use quint-code for structured engineering decisions.">
+  <h1>Quint Code Documentation</h1>
+
+  <p>
+    Quint Code is a decision engineering tool for AI coding assistants. It helps you frame problems,
+    compare options fairly, record decisions as contracts, and know when those decisions go stale.
+  </p>
+
+  <p>
+    It works as an <a href="https://modelcontextprotocol.io">MCP server</a> — a backend that your AI tool
+    (Claude Code, Cursor, Gemini CLI, Codex) connects to. You interact with it through slash commands
+    in your AI tool's chat interface. The agent does the heavy lifting; you make the calls.
+  </p>
+
+  <h2>What it does</h2>
+
+  <p>When you're working on a non-trivial engineering task — choosing a database, designing an API,
+    deciding on a caching strategy — you type <code>/q-reason</code> and describe the problem. The agent:</p>
+
+  <ol>
+    <li>Frames the problem (what's broken, what are the constraints, how do we know it's solved)</li>
+    <li>Defines comparison criteria before generating options (prevents bias)</li>
+    <li>Generates genuinely different variants (not three versions of the same idea)</li>
+    <li>Compares them on a Pareto front (no single-score collapse)</li>
+    <li>Records the decision as a contract with invariants, rollback plan, and expiry date</li>
+  </ol>
+
+  <p>
+    Every decision gets an <strong>R_eff score</strong> — a computed trust metric that degrades over time
+    as evidence expires. When R_eff drops below 0.5, the decision surfaces as stale. You review it,
+    re-validate, or supersede it with a new decision. This is the
+    <a href="https://github.com/incose-org/se-handbook" target="_blank" rel="noopener">lemniscate</a>
+    — the infinite loop of decide → measure → reframe.
+  </p>
+
+  <h2>Who is this for</h2>
+
+  <p>
+    Software engineers who use AI coding assistants and want their decisions to survive beyond the
+    chat session. If you've ever asked "why did we do it this way?" three months later and found
+    nothing — this is for you.
+  </p>
+
+  <p>
+    No prior knowledge of FPF (First Principles Framework) is required. Quint Code implements the
+    useful parts and hides the theory. If you want to go deeper,
+    <a href="https://github.com/incose-org/se-handbook" target="_blank" rel="noopener">the FPF spec is public</a>.
+  </p>
+
+  <h2>Supported tools</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Claude Code</td><td>Full support (default)</td></tr>
+      <tr><td>Cursor</td><td>Full support</td></tr>
+      <tr><td>Gemini CLI</td><td>Supported</td></tr>
+      <tr><td>Codex CLI / Codex App</td><td>Supported</td></tr>
+      <tr><td>JetBrains Air</td><td>Supported</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Next step</h2>
+
+  <p>
+    <a href="/docs/install">Install quint-code</a> — takes about 30 seconds.
+  </p>
+</DocsLayout>

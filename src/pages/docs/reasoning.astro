@@ -1,0 +1,133 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Reasoning with /q-reason" description="The primary workflow — let the agent pick the right depth.">
+  <h1>Reasoning with /q-reason</h1>
+
+  <p>
+    <code>/q-reason</code> is the entry point for structured engineering reasoning. Describe your
+    problem, and the agent frames it, generates options, compares them, and records the decision.
+    It auto-selects the right depth based on complexity.
+  </p>
+
+  <h2>How to use it</h2>
+
+  <pre><code>/q-reason [describe the problem or question]</code></pre>
+
+  <p>Examples:</p>
+
+  <pre><code>/q-reason we need to add real-time updates to the dashboard. WebSocket vs SSE vs polling — what makes sense for our stack?
+
+/q-reason the auth middleware is getting complex. Should we refactor it into a separate service or keep it as middleware?
+
+/q-reason evaluate whether we should migrate from PostgreSQL to CockroachDB for the multi-region deployment</code></pre>
+
+  <h2>What the agent does</h2>
+
+  <p>
+    The agent reads your problem and selects a depth:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Mode</th>
+        <th>When</th>
+        <th>What happens</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Tactical</strong></td>
+        <td>Reversible, low risk, obvious approach</td>
+        <td>Frame → Explore → Decide (skip characterization and comparison)</td>
+      </tr>
+      <tr>
+        <td><strong>Standard</strong></td>
+        <td>Multiple viable approaches, moderate blast radius</td>
+        <td>Frame → Char → Explore → Compare → Decide (full cycle)</td>
+      </tr>
+      <tr>
+        <td><strong>Deep</strong></td>
+        <td>Hard to reverse, security implications, cross-team impact</td>
+        <td>Full cycle + rich parity rules, rollback runbook, refresh triggers</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    You can override the depth: <code>/q-reason deep: should we change our database?</code>
+  </p>
+
+  <h2>The diagnostic conversation</h2>
+
+  <p>
+    Before the agent starts generating options, it drives a diagnostic conversation. This is the
+    most important part — problem quality determines solution quality. The agent asks:
+  </p>
+
+  <ol>
+    <li><strong>"What observation doesn't fit?"</strong> — the signal, not the assumed cause</li>
+    <li><strong>"What have you already tried?"</strong> — avoids re-treading dead ends</li>
+    <li><strong>"What would solved look like?"</strong> — measurable acceptance criteria</li>
+    <li><strong>"What constraints are non-negotiable?"</strong> — hard limits</li>
+    <li><strong>"How reversible is this?"</strong> — determines mode</li>
+    <li><strong>"What should we watch but NOT optimize?"</strong> — Anti-Goodhart indicators</li>
+  </ol>
+
+  <p>
+    Answer these honestly. The better the framing, the better the variants.
+  </p>
+
+  <h2>What you get at the end</h2>
+
+  <p>A decision record (<code>.quint/decisions/dec-XXXXXXXX-XXX.md</code>) with four sections:</p>
+
+  <ol>
+    <li><strong>Problem Frame</strong> — what triggered the decision, constraints, acceptance criteria</li>
+    <li><strong>Decision</strong> — what was selected, invariants (what must always be true), pre/post conditions</li>
+    <li><strong>Rationale</strong> — why this and not the alternatives, comparison table, weakest link</li>
+    <li><strong>Consequences</strong> — rollback plan, refresh triggers, affected files</li>
+  </ol>
+
+  <p>
+    This file is designed for code review. Commit it alongside the code it describes.
+  </p>
+
+  <h2>After the decision</h2>
+
+  <p>
+    After implementing the decision, the agent should:
+  </p>
+
+  <ol>
+    <li>Run <code>baseline</code> — snapshot the affected files so drift detection works</li>
+    <li>Run <code>measure</code> — record whether acceptance criteria were met</li>
+  </ol>
+
+  <p>
+    This closes the loop. Without measurement, the decision stays in "Pending Implementation"
+    on <code>/q-status</code>.
+  </p>
+
+  <h2>When not to use it</h2>
+
+  <ul>
+    <li>Obvious bug fixes with clear solutions</li>
+    <li>Formatting, import ordering, variable naming</li>
+    <li>Anything that takes less than 5 minutes and is trivially reversible</li>
+  </ul>
+
+  <p>
+    For these, just code. If the agent notices a decision worth recording, it'll create a note
+    automatically.
+  </p>
+
+  <h2>Next</h2>
+
+  <ul>
+    <li><a href="/docs/full-cycle">The full decision cycle</a> — step-by-step through each command</li>
+    <li><a href="/docs/notes">Notes & micro-decisions</a> — lightweight capture</li>
+  </ul>
+</DocsLayout>

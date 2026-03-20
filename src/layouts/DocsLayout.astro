@@ -1,0 +1,221 @@
+---
+import Layout from './Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+
+const nav = [
+  {
+    title: 'Getting Started',
+    items: [
+      { href: '/docs', label: 'Introduction' },
+      { href: '/docs/install', label: 'Installation' },
+      { href: '/docs/first-steps', label: 'First Steps' },
+      { href: '/docs/claude-md', label: 'CLAUDE.md Setup' },
+    ]
+  },
+  {
+    title: 'Workflow',
+    items: [
+      { href: '/docs/reasoning', label: 'Reasoning with /q-reason' },
+      { href: '/docs/full-cycle', label: 'Full Decision Cycle' },
+      { href: '/docs/notes', label: 'Notes & Micro-decisions' },
+      { href: '/docs/lifecycle', label: 'Decision Lifecycle' },
+    ]
+  },
+  {
+    title: 'Reference',
+    items: [
+      { href: '/docs/commands', label: 'All Commands' },
+      { href: '/docs/concepts', label: 'Key Concepts' },
+      { href: '/docs/faq', label: 'FAQ' },
+    ]
+  },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/docs') return currentPath === '/docs' || currentPath === '/docs/';
+  return currentPath.startsWith(href);
+}
+---
+
+<Layout title={title} description={description}>
+  <Header />
+
+  <div class="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex gap-8 py-8">
+
+      <!-- Sidebar (desktop) -->
+      <aside class="hidden lg:block w-56 shrink-0">
+        <nav class="sticky top-24 space-y-6 text-sm">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-xs font-mono uppercase tracking-wider text-accent-green">v5.0</span>
+          </div>
+          {nav.map(section => (
+            <div>
+              <h4 class="font-mono text-xs uppercase tracking-wider text-text-muted mb-2">
+                {section.title}
+              </h4>
+              <ul class="space-y-1">
+                {section.items.map(item => (
+                  <li>
+                    <a
+                      href={item.href}
+                      class:list={[
+                        'block py-1.5 px-3 rounded transition-colors',
+                        isActive(item.href)
+                          ? 'text-text-primary bg-bg-tertiary border-l-2 border-accent-green'
+                          : 'text-text-secondary hover:text-text-primary hover:bg-bg-secondary'
+                      ]}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+      </aside>
+
+      <!-- Mobile sidebar toggle -->
+      <button
+        id="docs-menu-toggle"
+        class="lg:hidden fixed bottom-6 right-6 z-40 flex items-center gap-2 bg-bg-tertiary border border-border-hover text-text-primary px-4 py-3 rounded shadow-lg font-mono text-sm"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        Menu
+      </button>
+
+      <!-- Mobile sidebar overlay -->
+      <div
+        id="docs-menu-overlay"
+        class="hidden lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+      >
+        <div class="absolute right-0 top-0 h-full w-72 bg-bg-primary border-l border-border-subtle overflow-y-auto p-6">
+          <button id="docs-menu-close" class="absolute top-4 right-4 text-text-muted hover:text-text-primary p-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <nav class="space-y-6 text-sm mt-8">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="text-xs font-mono uppercase tracking-wider text-accent-green">v5.0</span>
+            </div>
+            {nav.map(section => (
+              <div>
+                <h4 class="font-mono text-xs uppercase tracking-wider text-text-muted mb-2">
+                  {section.title}
+                </h4>
+                <ul class="space-y-1">
+                  {section.items.map(item => (
+                    <li>
+                      <a
+                        href={item.href}
+                        class:list={[
+                          'block py-2 px-3 rounded transition-colors',
+                          isActive(item.href)
+                            ? 'text-text-primary bg-bg-tertiary border-l-2 border-accent-green'
+                            : 'text-text-secondary hover:text-text-primary hover:bg-bg-secondary'
+                        ]}
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <main class="flex-1 min-w-0">
+        <article class="prose-custom max-w-3xl">
+          <slot />
+        </article>
+      </main>
+
+    </div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<style>
+  .prose-custom h1 {
+    @apply text-2xl sm:text-3xl font-bold font-mono uppercase tracking-wider text-text-primary mb-4;
+  }
+  .prose-custom h2 {
+    @apply text-xl sm:text-2xl font-semibold font-mono uppercase tracking-wider text-text-primary mt-12 mb-4 pt-6 border-t border-border-subtle;
+  }
+  .prose-custom h3 {
+    @apply text-lg font-semibold text-text-primary mt-8 mb-3;
+  }
+  .prose-custom p {
+    @apply text-base text-text-secondary leading-relaxed mb-4;
+  }
+  .prose-custom ul, .prose-custom ol {
+    @apply text-text-secondary mb-4 ml-4;
+  }
+  .prose-custom li {
+    @apply mb-2;
+  }
+  .prose-custom code {
+    @apply text-accent-blue font-mono text-sm;
+  }
+  .prose-custom pre {
+    @apply bg-bg-secondary border border-border-subtle p-4 rounded font-mono text-sm overflow-x-auto mb-4;
+  }
+  .prose-custom pre code {
+    @apply text-text-secondary;
+  }
+  .prose-custom a {
+    @apply text-accent-blue hover:text-text-primary transition-colors underline underline-offset-2;
+  }
+  .prose-custom table {
+    @apply w-full text-sm mb-4 border-collapse;
+  }
+  .prose-custom th {
+    @apply text-left text-text-muted font-mono uppercase text-xs tracking-wider py-2 pr-4 border-b border-border-subtle;
+  }
+  .prose-custom td {
+    @apply py-2 pr-4 text-text-secondary border-b border-border-subtle/50;
+  }
+  .prose-custom blockquote {
+    @apply border-l-2 border-accent-green pl-4 my-4 text-text-secondary italic;
+  }
+  .prose-custom .callout {
+    @apply border border-accent-blue/20 bg-accent-blue/5 p-4 rounded my-4;
+  }
+  .prose-custom .callout-warn {
+    @apply border border-amber-500/20 bg-amber-500/5 p-4 rounded my-4;
+  }
+  .prose-custom .callout p {
+    @apply mb-0;
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('docs-menu-toggle');
+  const overlay = document.getElementById('docs-menu-overlay');
+  const close = document.getElementById('docs-menu-close');
+
+  toggle?.addEventListener('click', () => overlay?.classList.remove('hidden'));
+  close?.addEventListener('click', () => overlay?.classList.add('hidden'));
+  overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.add('hidden');
+  });
+</script>
