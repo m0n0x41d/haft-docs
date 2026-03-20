@@ -27,3 +27,5 @@ Thumbs.db
 
 # astro
 .astro/
+.quint
+.mcp.json
