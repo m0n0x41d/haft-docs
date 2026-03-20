@@ -12,14 +12,14 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <h2>The lifecycle</h2>
 
-  <pre><code>Pending Implementation → Shipped → Active → Stale → Superseded/Deprecated
-
-Pending:     Decision recorded, not yet implemented (no measurement)
-Shipped:     Implemented and measured (verdict: accepted/partial/failed)
-Active:      Shipped, R_eff ≥ 0.5, not expired
-Stale:       R_eff &lt; 0.5, or valid_until expired, or code drift detected
-Superseded:  Replaced by a newer decision
-Deprecated:  No longer relevant (archived)</code></pre>
+  <ul>
+    <li><strong>Pending</strong> — decision recorded, not yet implemented (no measurement)</li>
+    <li><strong>Shipped</strong> — implemented and measured (verdict: accepted/partial/failed)</li>
+    <li><strong>Active</strong> — shipped, R_eff ≥ 0.5, not expired</li>
+    <li><strong>Stale</strong> — R_eff &lt; 0.5, or valid_until expired, or code drift detected</li>
+    <li><strong>Superseded</strong> — replaced by a newer decision</li>
+    <li><strong>Deprecated</strong> — no longer relevant (archived)</li>
+  </ul>
 
   <h2>Evidence and R_eff</h2>
 
@@ -138,48 +138,60 @@ Deprecated:  No longer relevant (archived)</code></pre>
     </tbody>
   </table>
 
-  <h2>The lemniscate</h2>
+  <h2>The two cycles</h2>
 
   <p>
-    The full cycle is an infinity loop — the <strong>lemniscate</strong>, a concept from
-    Anatoly Levenchuk's systems engineering methodology. It has two halves:
+    Anatoly Levenchuk's systems engineering methodology describes two interconnected cycles
+    that feed into each other:
   </p>
 
-  <pre><code>Left cycle (observe):          Right cycle (act):
-  Signals, drift, evidence  →    Frame → Char → Explore →
-  ← Measure, learn, reframe      Compare → Decide → Implement</code></pre>
+  <h3>The observation cycle</h3>
 
   <p>
-    quint-code tries its best to implement mechanisms for supporting each stage
-    of this loop, making it close naturally instead of depending on human memory:
+    Notice what changed → characterize the situation → measure → identify problems →
+    pick the right problem to work on.
   </p>
+
+  <p>quint-code supports this with:</p>
 
   <ul>
-    <li><strong>Observe</strong> — drift detection watches for code changes under decisions.
-      <code>/q-refresh scan</code> finds expired evidence and R_eff degradation. Module coverage
-      shows blind spots. These signals feed the left cycle without you asking.</li>
-    <li><strong>Frame</strong> — <code>/q-frame</code> forces a diagnostic conversation before jumping
-      to solutions. Cross-project recall surfaces related decisions from other projects.</li>
-    <li><strong>Characterize</strong> — <code>/q-char</code> locks comparison criteria before options
-      are visible, preventing bias.</li>
-    <li><strong>Explore</strong> — <code>/q-explore</code> generates variants with mandatory weakest
-      link labels. Diversity check warns if variants are too similar.</li>
-    <li><strong>Compare</strong> — <code>/q-compare</code> enforces parity and identifies the Pareto front.</li>
-    <li><strong>Decide</strong> — <code>/q-decide</code> records the contract. The adversarial
-      verification gate challenges the decision before recording.</li>
-    <li><strong>Implement</strong> — the agent baselines affected files after committing code.</li>
-    <li><strong>Measure</strong> — <code>measure</code> records whether acceptance criteria were met.
-      The inductive gate warns if there's no baseline (unverified implementation). CL scoring
-      reflects verification quality.</li>
-    <li><strong>Close the loop</strong> — failed measurements with <code>verdict: failed</code> suggest
-      reopening the problem. Stale decisions surface in <code>/q-status</code>. Evidence supersession
-      ensures R_eff reflects current state, not historical worst-case.</li>
+    <li><strong>Drift detection</strong> — watches for code changes under existing decisions</li>
+    <li><strong>R_eff degradation</strong> — evidence expires, trust scores drop, stale decisions surface</li>
+    <li><strong>Module coverage</strong> — shows which parts of the architecture have no decisions (blind spots)</li>
+    <li><strong>Cross-project recall</strong> — surfaces related decisions from other projects when framing new problems</li>
+    <li><strong>Goldilocks problem selection</strong> — <code>/q-problems</code> shows readiness signals to help pick the right problem</li>
   </ul>
 
+  <h3>The decision cycle</h3>
+
   <p>
-    The goal is that you don't need to remember to check — the system surfaces what needs attention.
-    This isn't fully automatic today (some steps require the agent to be proactive), but every
-    release adds more closing mechanisms.
+    Define comparison criteria → generate variants → fair comparison → select → implement →
+    measure impact → feed results back into the observation cycle.
+  </p>
+
+  <p>quint-code supports this with:</p>
+
+  <ul>
+    <li><strong>Frame → Char → Explore → Compare → Decide</strong> — the full command cycle with focused prompts at each step</li>
+    <li><strong>Adversarial verification</strong> — challenges decisions before recording</li>
+    <li><strong>Baseline + Measure</strong> — snapshots implementation, records whether acceptance criteria were met</li>
+    <li><strong>Evidence supersession</strong> — newer measurements replace older ones, R_eff reflects current state</li>
+    <li><strong>Failed measurement → reopen</strong> — when implementation doesn't meet criteria, the system suggests reopening the problem</li>
+  </ul>
+
+  <h3>Closing the loop</h3>
+
+  <p>
+    The two cycles are connected: the results of implementing a decision (measurements, evidence,
+    drift) become inputs to the observation cycle. Stale decisions trigger re-evaluation. Failed
+    implementations create new problems. The goal is that this happens naturally — you don't need to
+    remember to check, the system surfaces what needs attention.
+  </p>
+
+  <p>
+    This isn't fully automatic today. Some steps require the agent to be proactive,
+    and some require your judgment. But each release adds more mechanisms to close the loop
+    tighter.
   </p>
 
   <h2>Next</h2>
