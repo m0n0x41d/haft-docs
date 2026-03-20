@@ -141,17 +141,46 @@ Deprecated:  No longer relevant (archived)</code></pre>
   <h2>The lemniscate</h2>
 
   <p>
-    The full cycle is an infinity loop (lemniscate):
+    The full cycle is an infinity loop — the <strong>lemniscate</strong> from
+    <a href="https://github.com/ailev/FPF" target="_blank" rel="noopener">FPF</a>.
+    It has two halves:
   </p>
 
-  <pre><code>Observe → Frame → Decide → Implement → Measure → Observe → ...
-   ↑                                                    ↓
-   └────────── evidence feeds back into new problems ───┘</code></pre>
+  <pre><code>Left cycle (observe):          Right cycle (act):
+  Signals, drift, evidence  →    Frame → Char → Explore →
+  ← Measure, learn, reframe      Compare → Decide → Implement</code></pre>
 
   <p>
-    Failed measurements create new problems. Stale decisions trigger re-evaluation. Drift detection
-    surfaces unexpected changes. The system is self-correcting — you don't need to remember to
-    check; it surfaces what needs attention.
+    quint-code implements concrete mechanisms at each stage to make this loop
+    close automatically instead of depending on human memory:
+  </p>
+
+  <ul>
+    <li><strong>Observe</strong> — drift detection watches for code changes under decisions.
+      <code>/q-refresh scan</code> finds expired evidence and R_eff degradation. Module coverage
+      shows blind spots. These signals feed the left cycle without you asking.</li>
+    <li><strong>Frame</strong> — <code>/q-frame</code> forces a diagnostic conversation before jumping
+      to solutions. Cross-project recall surfaces related decisions from other projects.</li>
+    <li><strong>Characterize</strong> — <code>/q-char</code> locks comparison criteria before options
+      are visible, preventing bias.</li>
+    <li><strong>Explore</strong> — <code>/q-explore</code> generates variants with mandatory weakest
+      link labels. Diversity check warns if variants are too similar.</li>
+    <li><strong>Compare</strong> — <code>/q-compare</code> enforces parity and identifies the Pareto front.</li>
+    <li><strong>Decide</strong> — <code>/q-decide</code> records the contract. The adversarial
+      verification gate challenges the decision before recording.</li>
+    <li><strong>Implement</strong> — the agent baselines affected files after committing code.</li>
+    <li><strong>Measure</strong> — <code>measure</code> records whether acceptance criteria were met.
+      The inductive gate warns if there's no baseline (unverified implementation). CL scoring
+      reflects verification quality.</li>
+    <li><strong>Close the loop</strong> — failed measurements with <code>verdict: failed</code> suggest
+      reopening the problem. Stale decisions surface in <code>/q-status</code>. Evidence supersession
+      ensures R_eff reflects current state, not historical worst-case.</li>
+  </ul>
+
+  <p>
+    The goal is that you don't need to remember to check — the system surfaces what needs attention.
+    This isn't fully automatic today (some steps require the agent to be proactive), but every
+    release adds more closing mechanisms.
   </p>
 
   <h2>Next</h2>
