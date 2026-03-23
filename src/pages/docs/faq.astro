@@ -40,6 +40,28 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     agent can read any file in your project. It's not limited to git-tracked files.
   </p>
 
+  <h2>My artifacts ended up in a different project</h2>
+
+  <p>
+    This happens when the MCP config points to the wrong project. Common causes:
+  </p>
+
+  <ul>
+    <li>You added quint-code to a global MCP config instead of running <code>init</code> per project — the
+      project path in the config stays fixed to whatever directory you set, regardless of which project
+      is open.</li>
+    <li>In an IDE-based tool (Cursor, Windsurf): you opened a new project window without running
+      <code>init</code>, and the tool reused the MCP connection from a previously opened project.</li>
+  </ul>
+
+  <p>
+    <strong>Fix:</strong> run <code>quint-code init</code> in the correct project directory, then
+    restart your AI tool (or reload the MCP connection). The init command writes a
+    per-project MCP config with the correct path and project ID. This is an inherent constraint of the
+    MCP plugin architecture — quint-code runs inside your tool, not as an independent agent, so it
+    relies on the tool passing the right config.
+  </p>
+
   <h2>Does this work with Cursor?</h2>
 
   <p>

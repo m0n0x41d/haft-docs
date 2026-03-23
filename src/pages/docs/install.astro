@@ -23,6 +23,20 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <h2>Initialize in your project</h2>
 
+  <div class="callout-warn">
+    <p>
+      <strong>You must run init in every project.</strong> quint-code runs as an MCP plugin inside
+      your AI tool — not as a standalone agent. Each project needs its own MCP config with a unique
+      project ID and path. A global MCP config pointing to a single project will silently send all
+      artifacts to that project, even when you're working in a different directory.
+    </p>
+    <p style="margin-top: 0.75rem;">
+      CLI tools (Claude Code, Gemini CLI, Codex CLI) always launch from the current directory, so
+      this mostly works transparently. IDE-based tools (Cursor, Windsurf) may behave differently —
+      if something goes wrong, run init in the correct directory and restart the tool.
+    </p>
+  </div>
+
   <p>
     <code>cd</code> into your project directory and run <code>init</code> with the flag for your AI tool:
   </p>
