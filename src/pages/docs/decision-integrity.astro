@@ -90,4 +90,26 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     Batch cleanup: <code>/q-refresh action="reconcile"</code> scans all active notes against all
     active decisions in one pass and reports overlaps.
   </p>
+
+  <h2>From decisions to machine-verified evidence</h2>
+
+  <p>
+    The integrity mechanisms above ensure decisions are honest at recording time. But the strongest
+    evidence comes from machine verification — tests that prove invariants hold against real code.
+  </p>
+
+  <p>
+    Decision records from the <a href="/docs/full-cycle">full cycle</a> contain enough structure
+    to serve as test specifications: invariants, post-conditions, admissibility constraints,
+    and affected file paths. Any coding agent can translate these into property-based tests
+    and attach the results as CL3 evidence — the highest confidence level in the R_eff model.
+  </p>
+
+  <p>
+    This creates a closed loop: decisions define what must hold, tests verify that it holds,
+    evidence records the verification, and R_eff reflects the trust level. When code drifts
+    (files change after baseline), R_eff drops, and the tests need to re-run. The integrity
+    system doesn't just check that decisions were made honestly — it checks that reality still
+    matches the decision.
+  </p>
 </DocsLayout>

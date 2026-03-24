@@ -130,6 +130,61 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   broken?     matters?   different     comparison   contract
                          options</code></pre>
 
+  <h2>Decisions as test specifications</h2>
+
+  <p>
+    A decision record produced by the full cycle is not just documentation. It's a formal
+    enough specification to generate tests from — directly, without any additional tooling.
+  </p>
+
+  <p>
+    Look at what a standard/deep decision contains after the full cycle:
+  </p>
+
+  <ul>
+    <li><strong>Invariants</strong> — "warning fires for any decision with affected_files that has no baseline hashes"</li>
+    <li><strong>Post-conditions</strong> — checklist of what must be true after implementation</li>
+    <li><strong>Admissibility</strong> — what is NOT acceptable (negative constraints)</li>
+    <li><strong>Acceptance criteria</strong> — from the problem frame, measurable</li>
+    <li><strong>Affected files</strong> — exact code locations</li>
+    <li><strong>Weakest link</strong> — what to stress-test</li>
+  </ul>
+
+  <p>
+    This is enough for any coding agent to generate property-based tests, integration tests,
+    or module tests — without quint-code commands or special prompts. Just ask your agent:
+  </p>
+
+  <pre><code>"Read the decision record in .quint/decisions/dec-XXX.md.
+Write property-based tests that verify the invariants and post-conditions
+against the affected files."</code></pre>
+
+  <p>
+    The agent knows the project language (from the codebase), knows the invariants (from the decision),
+    and knows which files to test (from affected_files). Property-based testing frameworks exist
+    for every major language:
+  </p>
+
+  <ul>
+    <li><strong>Go</strong> — <code>rapid</code>, <code>gopter</code></li>
+    <li><strong>Python</strong> — <code>Hypothesis</code></li>
+    <li><strong>Rust</strong> — <code>proptest</code></li>
+    <li><strong>TypeScript</strong> — <code>fast-check</code></li>
+  </ul>
+
+  <p>
+    This is a side effect of structured reasoning, not a separate feature. The more rigorous
+    the decision cycle, the more testable the output. A tactical note ("we use Redis") gives the
+    agent nothing to test. A full-cycle decision with invariants, constraints, and acceptance
+    criteria gives it a complete test specification.
+  </p>
+
+  <p>
+    The test results can then be attached as evidence
+    (<code>quint_decision(action="evidence")</code>), raising R_eff with machine-verified CL3 evidence
+    — the strongest kind in the trust model.
+  </p>
+
   <h2>Next</h2>
 
   <ul>

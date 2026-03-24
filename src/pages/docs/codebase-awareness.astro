@@ -47,6 +47,11 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
         <td><code>Cargo.toml</code> crates + <code>mod.rs</code> modules</td>
         <td>Crate boundary + module tree detection</td>
       </tr>
+      <tr>
+        <td>C/C++</td>
+        <td>Directories with <code>.c</code>, <code>.cpp</code>, <code>.h</code>, <code>.hpp</code> files</td>
+        <td><code>compile_commands.json</code> (CMake, Bazel, Meson) with directory-based fallback</td>
+      </tr>
     </tbody>
   </table>
 
@@ -85,7 +90,9 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <p>
     quint-code parses import statements to build a module dependency graph. For Go, it uses
-    the stdlib <code>go/parser</code>. JS/TS, Python, and Rust use regex-based import detection.
+    the stdlib <code>go/parser</code>. JS/TS, Python, Rust, and C/C++ use regex-based import detection.
+    C/C++ resolves <code>#include "..."</code> paths using <code>-I</code> flags from
+    <code>compile_commands.json</code> when available.
   </p>
 
   <p>
