@@ -2,37 +2,83 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Reasoning with /q-reason" description="The primary workflow — let the agent pick the right depth.">
+<DocsLayout title="Reasoning with /q-reason" description="The primary workflow — context-aware entry that reads your intent.">
   <h1>Reasoning with /q-reason</h1>
 
   <p>
-    <code>/q-reason</code> is the entry point for structured engineering reasoning. Describe your
-    problem, and the agent frames it, generates options, compares them, and records the decision.
-    It auto-selects the right depth based on complexity.
+    <code>/q-reason</code> is the entry point for structured engineering reasoning. It reads your
+    intent from context and chooses the right behavior — not every question needs a full decision cycle.
   </p>
 
-  <h2>How to use it</h2>
-
-  <pre><code>/q-reason [describe the problem or question]</code></pre>
-
-  <p>Examples:</p>
-
-  <pre><code>/q-reason we need to add real-time updates
-to the dashboard. WebSocket vs SSE vs polling
-— what makes sense for our stack?</code></pre>
-
-  <pre><code>/q-reason the auth middleware is getting
-complex. Should we refactor it into a separate
-service or keep it as middleware?</code></pre>
-
-  <pre><code>/q-reason evaluate whether we should migrate
-from PostgreSQL to CockroachDB for the
-multi-region deployment</code></pre>
-
-  <h2>What the agent does</h2>
+  <h2>Three paths, one command</h2>
 
   <p>
-    The agent reads your problem and selects a depth:
+    The agent assesses what you actually want before doing anything. There are three distinct paths:
+  </p>
+
+  <h3>Path 1: Think and respond</h3>
+
+  <p>
+    You want structured thinking, not artifacts. The agent reasons through the problem using FPF
+    principles and gives you a well-structured answer. No tool calls, no decision records.
+  </p>
+
+  <pre><code>/q-reason what do you think about using gRPC
+here instead of REST? what are the trade-offs?</code></pre>
+
+  <pre><code>/q-reason is our current auth approach the
+right one? what's the weakest link?</code></pre>
+
+  <h3>Path 2: Prepare and wait (human drives)</h3>
+
+  <p>
+    You want to drive the decision cycle yourself. The agent gathers context — reads relevant code,
+    searches existing decisions, researches the topic — and presents findings. Then it stops and
+    waits for you to decide the next step. You call <code>/q-frame</code>, <code>/q-char</code>,
+    etc. when ready.
+  </p>
+
+  <pre><code>/q-reason I want to think through our caching
+strategy. Gather context and prepare for framing.</code></pre>
+
+  <pre><code>/q-reason let's reason about the database
+migration before deciding anything</code></pre>
+
+  <p>
+    This is the default when intent is unclear. The agent never assumes you want it to drive
+    the full cycle.
+  </p>
+
+  <h3>Path 3: Full autonomous cycle (agent drives)</h3>
+
+  <p>
+    You explicitly delegate. The agent runs the full cycle: frame, generate options, compare,
+    decide, implement.
+  </p>
+
+  <pre><code>/q-reason figure out the best caching approach
+for our API and implement it</code></pre>
+
+  <pre><code>/q-reason fix the auth architecture problem,
+go through the full cycle and implement</code></pre>
+
+  <p>
+    Only this path runs without pausing. The agent asks for confirmation only at the final decision.
+  </p>
+
+  <div class="callout">
+    <p>
+      <strong>Why this matters:</strong> FPF is powerful, but if the agent always drives the whole
+      cycle, you end up approving outputs rather than thinking. The three-path design ensures
+      <code>/q-reason</code> augments your reasoning when you want to think, and takes over only
+      when you explicitly ask it to.
+    </p>
+  </div>
+
+  <h2>Depth modes</h2>
+
+  <p>
+    When the agent does enter the decision cycle (Paths 2 or 3), it selects a depth:
   </p>
 
   <table>
@@ -99,6 +145,9 @@ multi-region deployment</code></pre>
 
   <p>
     This file is designed for code review. Commit it alongside the code it describes.
+    Full-cycle decisions contain enough structure to serve as
+    <a href="/docs/full-cycle">test specifications</a> — any agent can generate
+    property-based tests from the invariants and post-conditions.
   </p>
 
   <h2>After the decision</h2>
@@ -114,7 +163,7 @@ multi-region deployment</code></pre>
 
   <p>
     This closes the loop. Without measurement, the decision stays in "Pending Implementation"
-    on <code>/q-status</code>.
+    on <code>/q-status</code> and on the <a href="/docs/commands">board</a>.
   </p>
 
   <h2>When not to use it</h2>

@@ -2,13 +2,23 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Roadmap" description="Where quint-code is heading — team collaboration, CLI dashboard, cognitive loops.">
+<DocsLayout title="Roadmap" description="Where quint-code is heading — team collaboration, formal specification, standalone agent.">
   <h1>Roadmap</h1>
 
   <p>
     quint-code is actively developed. Here's what's coming — not promises, but directions we're
     building toward.
   </p>
+
+  <h2>Recently shipped (5.3)</h2>
+
+  <ul>
+    <li><strong>Interactive terminal dashboard</strong> — <code>quint-code board</code> with four tabs, vim navigation, glamour markdown, live refresh, health checks</li>
+    <li><strong>Context-aware <code>/q-reason</code></strong> — three paths based on intent (think, prepare-and-wait, or full autonomous)</li>
+    <li><strong>Decision mode from artifact chain</strong> — mode reflects actual reasoning depth, not agent's self-report</li>
+    <li><strong>C/C++ language support</strong> — compile_commands.json, header modules, symlink-safe resolution</li>
+    <li><strong>FTS5 search enrichment</strong> — agent-generated keywords at write time</li>
+  </ul>
 
   <h2>Team collaboration</h2>
 
@@ -21,6 +31,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     <li>Project identity via <code>.quint/project.yaml</code> — stable across machines</li>
     <li><code>QUINT_SERVER_ORIGIN</code> env var ready for remote server mode</li>
     <li>Markdown projections in <code>.quint/</code> — git-mergeable, reviewable in PRs</li>
+    <li><code>quint-code board</code> — the foundation for team-visible dashboards</li>
   </ul>
 
   <p>The plan for team mode:</p>
@@ -28,47 +39,30 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <p>
     <strong><code>quint-code server</code></strong> — a new subcommand in the same binary. A thin
     HTTP server that manages the decision database. For solo advanced use, it runs on localhost and
-    enables features that require a long-running process (background analysis, scheduled scans,
-    notifications). For teams, it runs on a shared server.
-  </p>
-
-  <p>
-    The local MCP process (<code>quint-code serve</code>) always runs on your machine and always
-    writes markdown projections locally. In team mode, it talks to the remote server instead of
-    local SQLite. No sync daemon, no sidecar — just two modes of the same binary.
+    enables features that require a long-running process. For teams, it runs on a shared server.
   </p>
 
   <pre><code>Solo:  Agent → MCP → quint-code serve → local SQLite
 Team:  Agent → MCP → quint-code serve → quint-code server (remote) → PostgreSQL</code></pre>
 
   <p>
-    Version compatibility: the local binary reports its version to the server. If they diverge,
-    you get a warning. One server, one version, all developers on the same page.
+    When team mode exists, <code>quint-code board</code> switches to the remote database automatically.
+    <code>quint-code board --check</code> becomes a real CI command that connects to the server.
   </p>
 
-  <h2>CLI dashboard</h2>
+  <h2>Formal specification (research)</h2>
 
   <p>
-    <code>quint-code status</code> — a terminal command (not MCP) that renders a rich dashboard
-    with ANSI colors, box drawing, and visual hierarchy. Module coverage heatmap, drift alerts,
-    decision health, shipped/pending queue. The "screenshot for the blog post" feature.
-  </p>
-
-  <p>
-    All the data already exists — this is pure presentation on top of the current database.
-  </p>
-
-  <h2>Decision-as-infrastructure</h2>
-
-  <p>
-    <code>quint-code check</code> — a CLI command for CI/CD pipelines. Checks R_eff thresholds
-    and surfaces stale decisions in PR comments. Imagine: "This PR touches files under decision
-    dec-003 (session handling). That decision's evidence expired 2 months ago. R_eff: 0.3 (AT RISK)."
+    Decision records from the <a href="/docs/full-cycle">full cycle</a> contain invariants,
+    post-conditions, and acceptance criteria — enough structure for any agent to generate
+    property-based tests today. This works without any quint-code changes.
   </p>
 
   <p>
-    Decisions stop being documentation and become infrastructure — they participate in the build
-    pipeline.
+    The research direction: can we go further? Translating decision invariants into
+    <a href="https://quint-lang.org/" target="_blank" rel="noopener">Quint specifications</a>
+    (TLA+ with TypeScript syntax) for model checking — verifying that invariants hold across
+    all reachable states, not just random inputs. This is in research phase.
   </p>
 
   <h2>Cognitive review loops</h2>
@@ -77,14 +71,7 @@ Team:  Agent → MCP → quint-code serve → quint-code server (remote) → Pos
     Instead of dumb <code>valid_until</code> timers, use
     <a href="https://github.com/open-spaced-repetition/fsrs4anki" target="_blank" rel="noopener">FSRS</a>
     (Free Spaced Repetition Scheduler) to schedule decision reviews based on evidence confidence
-    and historical review quality. Decisions reviewed successfully get longer intervals. Decisions
-    that required updates get shorter intervals.
-  </p>
-
-  <p>
-    Background contemplation: pattern discovery across decisions ("you always choose lower-ops
-    solutions for small teams"), cross-project knowledge synthesis, learned heuristics. This
-    requires the server mode (long-running process) and is the furthest-out feature on this list.
+    and historical review quality. Requires the server mode (long-running process).
   </p>
 
   <h2>Autonomy budgets</h2>
@@ -92,12 +79,7 @@ Team:  Agent → MCP → quint-code serve → quint-code server (remote) → Pos
   <p>
     From FPF E.16: treat agent autonomy as a managed resource (like money or risk), not as
     "magic of a smart model." Typed budgets with guards, separation of duties, override protocols.
-    The agent can decide within its budget; anything outside requires escalation.
-  </p>
-
-  <p>
-    This is the team governance layer — who can decide what, with what level of autonomy, and
-    what happens when the budget is exceeded.
+    This is the team governance layer.
   </p>
 
   <h2>What's not on the roadmap</h2>

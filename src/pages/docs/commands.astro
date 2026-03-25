@@ -87,7 +87,27 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     </tbody>
   </table>
 
-  <h2>Query & dashboard</h2>
+  <h2>Terminal dashboard</h2>
+
+  <p>
+    Not a slash command — a CLI command you run directly in your terminal:
+  </p>
+
+  <pre><code>quint-code board</code></pre>
+
+  <p>
+    Interactive TUI with four tabs: Overview (health, activity, depth distribution, coverage),
+    Problems (backlog with drill-in), Decisions (R_eff, drift, glamour markdown detail view),
+    Modules (coverage tree). Live refresh every 3 seconds — run it in a side terminal and it
+    stays current as you work with the agent in another.
+  </p>
+
+  <p>
+    Use <code>quint-code board --check</code> for CI/hooks — exits with code 1 if critical issues
+    exist (R_eff &lt; 0.3, decisions expired &gt; 30 days).
+  </p>
+
+  <h2>Query & dashboard (MCP)</h2>
 
   <table>
     <thead>
@@ -99,7 +119,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     <tbody>
       <tr>
         <td><code>/q-status</code></td>
-        <td>Dashboard — Shipped/Pending decisions, problems, module coverage</td>
+        <td>Dashboard via agent — Shipped/Pending decisions, problems, module coverage</td>
       </tr>
       <tr>
         <td><code>/q-search</code></td>
