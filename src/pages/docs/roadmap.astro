@@ -2,60 +2,54 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Roadmap" description="Where quint-code is heading — team collaboration, formal specification, standalone agent.">
+<DocsLayout title="Roadmap" description="Where haft is heading — server mode, formal specification, cognitive review, autonomy budgets.">
   <h1>Roadmap</h1>
 
   <p>
-    quint-code is actively developed. Here's what's coming — not promises, but directions we're
-    building toward.
+    Haft is actively developed. Here's what's shipped and what's coming — not promises,
+    but directions we're building toward.
   </p>
 
-  <h2>Recently shipped (5.3)</h2>
+  <h2>Recently shipped (6.0)</h2>
 
   <ul>
-    <li><strong>Interactive terminal dashboard</strong> — <code>quint-code board</code> with four tabs, vim navigation, glamour markdown, live refresh, health checks</li>
-    <li><strong>Context-aware <code>/q-reason</code></strong> — three paths based on intent (think, prepare-and-wait, or full autonomous)</li>
-    <li><strong>Decision mode from artifact chain</strong> — mode reflects actual reasoning depth, not agent's self-report</li>
-    <li><strong>C/C++ language support</strong> — compile_commands.json, header modules, symlink-safe resolution</li>
-    <li><strong>FTS5 search enrichment</strong> — agent-generated keywords at write time</li>
+    <li><strong>Haft rename</strong> — quint-code is now haft. <code>.quint/</code> becomes <code>.haft/</code>, <code>/q-*</code> becomes <code>/h-*</code></li>
+    <li><strong>5-mode model</strong> — Understand, Explore, Choose, Execute, Verify (+ Note fast path)</li>
+    <li><strong>Claim-aware decisions</strong> — structured predictions with <code>verify_after</code> dates, observable, threshold. <code>/h-verify scan</code> surfaces unverified claims</li>
+    <li><strong>Team sync</strong> — <code>haft sync</code> imports <code>.haft/*.md</code> from git into local database. Decisions flow through PRs</li>
+    <li><strong>Desktop app</strong> — pre-alpha native app for browsing decisions, problems, and coverage outside the terminal</li>
+    <li><strong>Standalone agent runtime</strong> — <code>haft agent [goal]</code> runs reasoning with TUI, independent of external AI tools</li>
+    <li><strong>Knowledge graph</strong> — <code>FindDecisionsForFile</code>, <code>FindInvariantsForFile</code>, <code>ComputeImpactSet</code> queries across the file-module-decision graph</li>
+    <li><strong>Invariant injection</strong> — when implementing a decision, agents receive invariants from all decisions governing affected files</li>
+    <li><strong>Invariant verification</strong> — structural invariants ("no dependency from X to Y", "no circular dependencies") verified against the live dependency graph</li>
+    <li><strong>Constraint-aware Pareto</strong> — variants violating constraint-role indicators are eliminated before dominance comparison</li>
+    <li><strong>Deterministic projections</strong> — <code>/h-view</code> renders artifacts for engineer, manager, audit, compare, delegated-agent, and change-rationale audiences</li>
+    <li><strong>Expanded integrations</strong> — <code>haft init</code> supports <code>--claude</code>, <code>--cursor</code>, <code>--gemini</code>, <code>--codex</code>, <code>--air</code>, <code>--all</code></li>
   </ul>
 
-  <h2>Team collaboration</h2>
+  <h2>Server mode (next priority)</h2>
 
   <p>
-    This is the #1 priority. The architecture is already prepared:
-  </p>
-
-  <ul>
-    <li>Database is out of the repo (unified storage in <code>~/.quint-code/</code>)</li>
-    <li>Project identity via <code>.quint/project.yaml</code> — stable across machines</li>
-    <li><code>QUINT_SERVER_ORIGIN</code> env var ready for remote server mode</li>
-    <li>Markdown projections in <code>.quint/</code> — git-mergeable, reviewable in PRs</li>
-    <li><code>quint-code board</code> — the foundation for team-visible dashboards</li>
-  </ul>
-
-  <p>The plan for team mode:</p>
-
-  <p>
-    <strong><code>quint-code server</code></strong> — a new subcommand in the same binary. A thin
+    <strong><code>haft server</code></strong> — a new subcommand in the same binary. A thin
     HTTP server that manages the decision database. For solo advanced use, it runs on localhost and
     enables features that require a long-running process. For teams, it runs on a shared server.
   </p>
 
-  <pre><code>Solo:  Agent → MCP → quint-code serve → local SQLite
-Team:  Agent → MCP → quint-code serve → quint-code server (remote) → PostgreSQL</code></pre>
+  <pre><code>Solo:  Agent → MCP → haft serve → local SQLite
+Team:  Agent → MCP → haft serve → haft server (remote) → PostgreSQL</code></pre>
 
   <p>
-    When team mode exists, <code>quint-code board</code> switches to the remote database automatically.
-    <code>quint-code board --check</code> becomes a real CI command that connects to the server.
+    When server mode exists, <code>haft board</code> switches to the remote database automatically.
+    <code>haft board --check</code> becomes a real CI command that connects to the server.
+    This enables real-time collaboration and a shared search index across the team.
   </p>
 
   <h2>Formal specification (research)</h2>
 
   <p>
-    Decision records from the <a href="/docs/full-cycle">full cycle</a> contain invariants,
+    Decision records from the full cycle contain invariants,
     post-conditions, and acceptance criteria — enough structure for any agent to generate
-    property-based tests today. This works without any quint-code changes.
+    property-based tests today. This works without any haft changes.
   </p>
 
   <p>
@@ -85,9 +79,9 @@ Team:  Agent → MCP → quint-code serve → quint-code server (remote) → Pos
   <h2>What's not on the roadmap</h2>
 
   <ul>
-    <li><strong>Cloud/SaaS</strong> — quint-code is local-first. If there's ever a hosted version, it'll be a server you run yourself, not a SaaS.</li>
-    <li><strong>AI model lock-in</strong> — quint-code works with any MCP-compatible AI tool. We don't pick your model.</li>
-    <li><strong>Prescriptive methodology</strong> — quint-code provides structure, not opinions. Use as much or as little of the FPF cycle as fits your workflow.</li>
+    <li><strong>Cloud/SaaS</strong> — haft is local-first. If there's ever a hosted version, it'll be a server you run yourself, not a SaaS.</li>
+    <li><strong>AI model lock-in</strong> — haft works with any MCP-compatible AI tool. We don't pick your model.</li>
+    <li><strong>Prescriptive methodology</strong> — haft provides structure, not opinions. Use as much or as little of the FPF cycle as fits your workflow.</li>
   </ul>
 
   <h2>Want to contribute?</h2>

@@ -2,89 +2,93 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Reasoning with /q-reason" description="The primary workflow — context-aware entry that reads your intent.">
-  <h1>Reasoning with /q-reason</h1>
+<DocsLayout title="Reasoning with /h-reason" description="The all-in-one entry point for structured engineering reasoning.">
+  <h1>Reasoning with /h-reason</h1>
 
   <p>
-    <code>/q-reason</code> is the entry point for structured engineering reasoning. It reads your
-    intent from context and chooses the right behavior — not every question needs a full decision cycle.
+    <code>/h-reason</code> is the single entry point for structured engineering reasoning.
+    Describe your problem in plain language. The agent reads your intent from context and
+    picks the right behavior — most questions don't need a full decision cycle.
   </p>
 
-  <h2>Three paths, one command</h2>
+  <h2>Three interaction modes</h2>
 
   <p>
-    The agent assesses what you actually want before doing anything. There are three distinct paths:
+    The agent assesses what you actually want before doing anything. How much it drives
+    depends on the mode:
   </p>
 
-  <h3>Path 1: Think and respond</h3>
+  <h3>1. Direct response</h3>
 
   <p>
-    You want structured thinking, not artifacts. The agent reasons through the problem using FPF
-    principles and gives you a well-structured answer. No tool calls, no decision records.
+    You want structured thinking, not artifacts. The agent reasons through the problem using
+    FPF principles and responds. Nothing is persisted — no tool calls, no decision records.
   </p>
 
-  <pre><code>/q-reason what do you think about using gRPC
-here instead of REST? what are the trade-offs?</code></pre>
+  <pre><code>/h-reason what are the trade-offs of gRPC vs REST
+for our internal services?</code></pre>
 
-  <pre><code>/q-reason is our current auth approach the
-right one? what's the weakest link?</code></pre>
+  <pre><code>/h-reason is our current auth approach sound?
+what's the weakest link?</code></pre>
 
-  <h3>Path 2: Prepare and wait (human drives)</h3>
+  <h3>2. Research / prepare-and-wait</h3>
 
   <p>
-    You want to drive the decision cycle yourself. The agent gathers context — reads relevant code,
-    searches existing decisions, researches the topic — and presents findings. Then it stops and
-    waits for you to decide the next step. You call <code>/q-frame</code>, <code>/q-char</code>,
-    etc. when ready.
+    You want to drive the decision yourself. The agent gathers context — reads relevant code,
+    searches existing decisions, researches the topic — and presents findings. Then it stops.
+    You call <code>/h-frame</code>, <code>/h-char</code>, etc. when ready.
   </p>
 
-  <pre><code>/q-reason I want to think through our caching
+  <pre><code>/h-reason I want to think through our caching
 strategy. Gather context and prepare for framing.</code></pre>
 
-  <pre><code>/q-reason let's reason about the database
+  <pre><code>/h-reason let's reason about the database
 migration before deciding anything</code></pre>
 
   <p>
-    This is the default when intent is unclear. The agent never assumes you want it to drive
-    the full cycle.
+    This is the default when intent is ambiguous. The agent never assumes you want
+    it to drive the full cycle.
   </p>
 
-  <h3>Path 3: Full autonomous cycle (agent drives)</h3>
+  <h3>3. Delegated reasoning</h3>
 
   <p>
-    You explicitly delegate. The agent runs the full cycle: frame, generate options, compare,
-    decide, implement.
+    You explicitly delegate. The agent runs through the
+    <a href="/docs/five-modes">five modes</a> — Understand, Explore, Choose — and
+    stops at Choose for the human decision. The agent generates options and compares
+    them, but you pick. This is the Transformer Mandate: agents document, humans decide.
   </p>
 
-  <pre><code>/q-reason figure out the best caching approach
-for our API and implement it</code></pre>
+  <pre><code>/h-reason figure out the best caching approach
+for our API. Run the full cycle, I'll decide.</code></pre>
 
-  <pre><code>/q-reason fix the auth architecture problem,
-go through the full cycle and implement</code></pre>
+  <pre><code>/h-reason analyze the auth architecture problem,
+go through frame/explore/compare</code></pre>
 
   <p>
-    Only this path runs without pausing. The agent asks for confirmation only at the final decision.
+    The agent asks for confirmation at the Choose step. After you select a variant,
+    it records the decision and proceeds to Execute.
   </p>
 
   <div class="callout">
     <p>
-      <strong>Why this matters:</strong> FPF is powerful, but if the agent always drives the whole
-      cycle, you end up approving outputs rather than thinking. The three-path design ensures
-      <code>/q-reason</code> augments your reasoning when you want to think, and takes over only
-      when you explicitly ask it to.
+      <strong>Why three modes:</strong> If the agent always drove the whole cycle, you'd end up
+      rubber-stamping outputs instead of thinking. Direct response augments your reasoning.
+      Prepare-and-wait gives you the research without the autopilot. Delegated reasoning
+      handles the mechanical parts while preserving human judgment at the decision point.
     </p>
   </div>
 
   <h2>Depth modes</h2>
 
   <p>
-    When the agent does enter the decision cycle (Paths 2 or 3), it selects a depth:
+    When the agent enters the decision cycle (modes 2 or 3), it auto-selects a depth:
   </p>
 
   <table>
     <thead>
       <tr>
-        <th>Mode</th>
+        <th>Depth</th>
         <th>When</th>
         <th>What happens</th>
       </tr>
@@ -93,12 +97,12 @@ go through the full cycle and implement</code></pre>
       <tr>
         <td><strong>Tactical</strong></td>
         <td>Reversible, low risk, obvious approach</td>
-        <td>Frame → Explore → Decide (skip characterization and comparison)</td>
+        <td>Understand → Explore → Execute (skip characterization, skip formal comparison)</td>
       </tr>
       <tr>
         <td><strong>Standard</strong></td>
         <td>Multiple viable approaches, moderate blast radius</td>
-        <td>Frame → Char → Explore → Compare → Decide (full cycle)</td>
+        <td>Full 5-mode cycle: Understand → Explore → Choose → Execute → Verify</td>
       </tr>
       <tr>
         <td><strong>Deep</strong></td>
@@ -109,14 +113,14 @@ go through the full cycle and implement</code></pre>
   </table>
 
   <p>
-    You can override the depth: <code>/q-reason deep: should we change our database?</code>
+    Override the depth explicitly: <code>/h-reason deep: should we change our database?</code>
   </p>
 
   <h2>The diagnostic conversation</h2>
 
   <p>
-    Before the agent starts generating options, it drives a diagnostic conversation. This is the
-    most important part — problem quality determines solution quality. The agent asks:
+    Before generating options, the agent drives a diagnostic conversation in the Understand mode.
+    Problem quality determines solution quality. The agent asks:
   </p>
 
   <ol>
@@ -124,46 +128,49 @@ go through the full cycle and implement</code></pre>
     <li><strong>"What have you already tried?"</strong> — avoids re-treading dead ends</li>
     <li><strong>"What would solved look like?"</strong> — measurable acceptance criteria</li>
     <li><strong>"What constraints are non-negotiable?"</strong> — hard limits</li>
-    <li><strong>"How reversible is this?"</strong> — determines mode</li>
+    <li><strong>"How reversible is this?"</strong> — determines depth mode</li>
     <li><strong>"What should we watch but NOT optimize?"</strong> — Anti-Goodhart indicators</li>
   </ol>
 
   <p>
-    Answer these honestly. The better the framing, the better the variants.
+    Answer these honestly. The better the framing, the better the variants. If you skip
+    the diagnostic, you get generic options.
   </p>
 
-  <h2>What you get at the end</h2>
+  <h2>Decision record structure</h2>
 
-  <p>A decision record (<code>.quint/decisions/dec-XXXXXXXX-XXX.md</code>) with four sections:</p>
+  <p>A decision record (<code>.haft/decisions/dec-XXXXXXXX-XXX.md</code>) has four sections:</p>
 
   <ol>
-    <li><strong>Problem Frame</strong> — what triggered the decision, constraints, acceptance criteria</li>
-    <li><strong>Decision</strong> — what was selected, invariants (what must always be true), pre/post conditions</li>
-    <li><strong>Rationale</strong> — why this and not the alternatives, comparison table, weakest link</li>
-    <li><strong>Consequences</strong> — rollback plan, refresh triggers, affected files</li>
+    <li><strong>Problem Frame</strong> — what triggered the decision, signal, constraints, acceptance criteria</li>
+    <li><strong>Decision</strong> — selected variant, invariants (what must always be true), pre/post conditions, DO/DON'T rules</li>
+    <li><strong>Rationale</strong> — why this and not the alternatives, comparison table, weakest link identification</li>
+    <li><strong>Consequences</strong> — rollback plan, refresh triggers, affected files, claims with <code>verify_after</code> dates</li>
   </ol>
 
   <p>
-    This file is designed for code review. Commit it alongside the code it describes.
+    This file is designed for code review. Commit it alongside the code it governs.
     Full-cycle decisions contain enough structure to serve as
-    <a href="/docs/full-cycle">test specifications</a> — any agent can generate
+    <a href="/docs/five-modes">test specifications</a> — any agent can generate
     property-based tests from the invariants and post-conditions.
   </p>
 
   <h2>After the decision</h2>
 
   <p>
-    After implementing the decision, the agent should:
+    After implementing a decision, the agent:
   </p>
 
   <ol>
-    <li>Snapshot affected files (baseline) — so drift detection can track changes</li>
-    <li>Run <code>measure</code> — record whether acceptance criteria were met</li>
+    <li>Snapshots affected file hashes (baseline) — so drift detection can track changes later</li>
+    <li>Records claims with <code>verify_after</code> dates — "latency stays under 100ms" verified in 2 weeks</li>
+    <li>Runs measurement — records whether acceptance criteria were met</li>
   </ol>
 
   <p>
-    This closes the loop. Without measurement, the decision stays in "Pending Implementation"
-    on <code>/q-status</code> and on the <a href="/docs/commands">board</a>.
+    Without measurement, the decision stays in "Pending Implementation" on <code>/h-status</code>
+    and on the <a href="/docs/commands">board</a>. Claims with passed <code>verify_after</code>
+    dates surface in <code>/h-verify scan</code> until they're measured or waived.
   </p>
 
   <h2>When not to use it</h2>
@@ -175,14 +182,14 @@ go through the full cycle and implement</code></pre>
   </ul>
 
   <p>
-    For these, just code. If the agent notices a decision worth recording, it'll create a note
-    automatically.
+    For these, just code. If the agent notices a decision worth recording during conversation,
+    it'll create a <a href="/docs/notes">note</a> automatically.
   </p>
 
   <h2>Next</h2>
 
   <ul>
-    <li><a href="/docs/full-cycle">The full decision cycle</a> — step-by-step through each command</li>
+    <li><a href="/docs/five-modes">The five modes</a> — Understand, Explore, Choose, Execute, Verify</li>
     <li><a href="/docs/notes">Notes & micro-decisions</a> — lightweight capture</li>
   </ul>
 </DocsLayout>

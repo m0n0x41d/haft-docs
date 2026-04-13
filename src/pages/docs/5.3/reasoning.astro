@@ -1,0 +1,188 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Reasoning with /q-reason" description="The primary workflow — context-aware entry that reads your intent.">
+  <h1>Reasoning with /q-reason</h1>
+
+  <p>
+    <code>/q-reason</code> is the entry point for structured engineering reasoning. It reads your
+    intent from context and chooses the right behavior — not every question needs a full decision cycle.
+  </p>
+
+  <h2>Three paths, one command</h2>
+
+  <p>
+    The agent assesses what you actually want before doing anything. There are three distinct paths:
+  </p>
+
+  <h3>Path 1: Think and respond</h3>
+
+  <p>
+    You want structured thinking, not artifacts. The agent reasons through the problem using FPF
+    principles and gives you a well-structured answer. No tool calls, no decision records.
+  </p>
+
+  <pre><code>/q-reason what do you think about using gRPC
+here instead of REST? what are the trade-offs?</code></pre>
+
+  <pre><code>/q-reason is our current auth approach the
+right one? what's the weakest link?</code></pre>
+
+  <h3>Path 2: Prepare and wait (human drives)</h3>
+
+  <p>
+    You want to drive the decision cycle yourself. The agent gathers context — reads relevant code,
+    searches existing decisions, researches the topic — and presents findings. Then it stops and
+    waits for you to decide the next step. You call <code>/q-frame</code>, <code>/q-char</code>,
+    etc. when ready.
+  </p>
+
+  <pre><code>/q-reason I want to think through our caching
+strategy. Gather context and prepare for framing.</code></pre>
+
+  <pre><code>/q-reason let's reason about the database
+migration before deciding anything</code></pre>
+
+  <p>
+    This is the default when intent is unclear. The agent never assumes you want it to drive
+    the full cycle.
+  </p>
+
+  <h3>Path 3: Full autonomous cycle (agent drives)</h3>
+
+  <p>
+    You explicitly delegate. The agent runs the full cycle: frame, generate options, compare,
+    decide, implement.
+  </p>
+
+  <pre><code>/q-reason figure out the best caching approach
+for our API and implement it</code></pre>
+
+  <pre><code>/q-reason fix the auth architecture problem,
+go through the full cycle and implement</code></pre>
+
+  <p>
+    Only this path runs without pausing. The agent asks for confirmation only at the final decision.
+  </p>
+
+  <div class="callout">
+    <p>
+      <strong>Why this matters:</strong> FPF is powerful, but if the agent always drives the whole
+      cycle, you end up approving outputs rather than thinking. The three-path design ensures
+      <code>/q-reason</code> augments your reasoning when you want to think, and takes over only
+      when you explicitly ask it to.
+    </p>
+  </div>
+
+  <h2>Depth modes</h2>
+
+  <p>
+    When the agent does enter the decision cycle (Paths 2 or 3), it selects a depth:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Mode</th>
+        <th>When</th>
+        <th>What happens</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Tactical</strong></td>
+        <td>Reversible, low risk, obvious approach</td>
+        <td>Frame → Explore → Decide (skip characterization and comparison)</td>
+      </tr>
+      <tr>
+        <td><strong>Standard</strong></td>
+        <td>Multiple viable approaches, moderate blast radius</td>
+        <td>Frame → Char → Explore → Compare → Decide (full cycle)</td>
+      </tr>
+      <tr>
+        <td><strong>Deep</strong></td>
+        <td>Hard to reverse, security implications, cross-team impact</td>
+        <td>Full cycle + rich parity rules, rollback runbook, refresh triggers</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    You can override the depth: <code>/q-reason deep: should we change our database?</code>
+  </p>
+
+  <h2>The diagnostic conversation</h2>
+
+  <p>
+    Before the agent starts generating options, it drives a diagnostic conversation. This is the
+    most important part — problem quality determines solution quality. The agent asks:
+  </p>
+
+  <ol>
+    <li><strong>"What observation doesn't fit?"</strong> — the signal, not the assumed cause</li>
+    <li><strong>"What have you already tried?"</strong> — avoids re-treading dead ends</li>
+    <li><strong>"What would solved look like?"</strong> — measurable acceptance criteria</li>
+    <li><strong>"What constraints are non-negotiable?"</strong> — hard limits</li>
+    <li><strong>"How reversible is this?"</strong> — determines mode</li>
+    <li><strong>"What should we watch but NOT optimize?"</strong> — Anti-Goodhart indicators</li>
+  </ol>
+
+  <p>
+    Answer these honestly. The better the framing, the better the variants.
+  </p>
+
+  <h2>What you get at the end</h2>
+
+  <p>A decision record (<code>.quint/decisions/dec-XXXXXXXX-XXX.md</code>) with four sections:</p>
+
+  <ol>
+    <li><strong>Problem Frame</strong> — what triggered the decision, constraints, acceptance criteria</li>
+    <li><strong>Decision</strong> — what was selected, invariants (what must always be true), pre/post conditions</li>
+    <li><strong>Rationale</strong> — why this and not the alternatives, comparison table, weakest link</li>
+    <li><strong>Consequences</strong> — rollback plan, refresh triggers, affected files</li>
+  </ol>
+
+  <p>
+    This file is designed for code review. Commit it alongside the code it describes.
+    Full-cycle decisions contain enough structure to serve as
+    <a href="/docs/full-cycle">test specifications</a> — any agent can generate
+    property-based tests from the invariants and post-conditions.
+  </p>
+
+  <h2>After the decision</h2>
+
+  <p>
+    After implementing the decision, the agent should:
+  </p>
+
+  <ol>
+    <li>Snapshot affected files (baseline) — so drift detection can track changes</li>
+    <li>Run <code>measure</code> — record whether acceptance criteria were met</li>
+  </ol>
+
+  <p>
+    This closes the loop. Without measurement, the decision stays in "Pending Implementation"
+    on <code>/q-status</code> and on the <a href="/docs/commands">board</a>.
+  </p>
+
+  <h2>When not to use it</h2>
+
+  <ul>
+    <li>Obvious bug fixes with clear solutions</li>
+    <li>Formatting, import ordering, variable naming</li>
+    <li>Anything that takes less than 5 minutes and is trivially reversible</li>
+  </ul>
+
+  <p>
+    For these, just code. If the agent notices a decision worth recording, it'll create a note
+    automatically.
+  </p>
+
+  <h2>Next</h2>
+
+  <ul>
+    <li><a href="/docs/full-cycle">The full decision cycle</a> — step-by-step through each command</li>
+    <li><a href="/docs/notes">Notes & micro-decisions</a> — lightweight capture</li>
+  </ul>
+</DocsLayout>

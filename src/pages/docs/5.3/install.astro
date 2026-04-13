@@ -1,8 +1,8 @@
 ---
-import DocsLayout from '../../layouts/DocsLayout.astro';
+import DocsLayout from '../../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Installation" description="Install haft and configure it for your AI tool.">
+<DocsLayout title="Installation" description="Install quint-code and configure it for your AI tool.">
   <h1>Installation</h1>
 
   <h2>Install the binary</h2>
@@ -25,7 +25,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <div class="callout-warn">
     <p>
-      <strong>You must run init in every project.</strong> haft runs as an MCP plugin inside
+      <strong>You must run init in every project.</strong> quint-code runs as an MCP plugin inside
       your AI tool — not as a standalone agent. Each project needs its own MCP config with a unique
       project ID and path. A global MCP config pointing to a single project will silently send all
       artifacts to that project, even when you're working in a different directory.
@@ -42,27 +42,24 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   </p>
 
   <pre><code># Claude Code (default if no flag)
-haft init
+quint-code init
 
 # Cursor
-haft init --cursor
+quint-code init --cursor
 
 # Gemini CLI
-haft init --gemini
+quint-code init --gemini
 
-# Codex CLI / Codex App
-haft init --codex
-
-# JetBrains Air
-haft init --air
+# Codex CLI / Codex App / Air
+quint-code init --codex
 
 # All tools at once
-haft init --all</code></pre>
+quint-code init --all</code></pre>
 
   <div class="callout-warn">
     <p>
       <strong>The flag matters.</strong> Each tool looks for its MCP config in a different location.
-      Running <code>haft init</code> without a flag only configures Claude Code.
+      Running <code>quint-code init</code> without a flag only configures Claude Code.
       If you use Cursor, you need <code>--cursor</code>.
     </p>
   </div>
@@ -114,29 +111,29 @@ haft init --all</code></pre>
   <h3>Cursor-specific setup</h3>
 
   <p>
-    After running <code>haft init --cursor</code>, open Cursor Settings → MCP → find
-    <code>haft</code> → <strong>enable the toggle</strong>. Cursor adds MCP servers as
+    After running <code>quint-code init --cursor</code>, open Cursor Settings → MCP → find
+    <code>quint-code</code> → <strong>enable the toggle</strong>. Cursor adds MCP servers as
     disabled by default.
   </p>
 
   <p>
     Cursor also picks up Claude Code slash commands from <code>~/.claude/commands/</code>, so
-    commands like <code>/h-reason</code> may work even without <code>--cursor</code>. But the
+    commands like <code>/q-reason</code> may work even without <code>--cursor</code>. But the
     MCP connection (the tools backend) requires <code>.cursor/mcp.json</code>.
   </p>
 
   <h2>What init creates</h2>
 
-  <p>Init creates a <code>.haft/</code> directory in your project:</p>
+  <p>Init creates a <code>.quint/</code> directory in your project:</p>
 
-  <pre><code>.haft/
+  <pre><code>.quint/
 ├── project.yaml        # Project identity (unique ID, name)
 ├── decisions/          # Decision record markdown files
 ├── problems/           # Problem card markdown files
 ├── notes/              # Micro-decision markdown files
 ├── solutions/          # Solution portfolio markdown files
 ├── evidence/           # Evidence pack markdown files
-└── refresh/            # Verification report markdown files</code></pre>
+└── refresh/            # Refresh report markdown files</code></pre>
 
   <p>
     These markdown files are <strong>projections</strong> — human-readable copies of what's in the
@@ -145,24 +142,15 @@ haft init --all</code></pre>
   </p>
 
   <p>
-    The database itself lives in <code>~/.haft/projects/{'{'}id{'}'}/</code> (not in your repo). The <code>.haft/</code>
+    The database itself lives in <code>~/.quint-code/</code> (not in your repo). The <code>.quint/</code>
     directory contains only markdown and YAML — safe to commit.
   </p>
-
-  <div class="callout">
-    <p>
-      <strong>Migrating from v5?</strong> If you have an existing <code>.quint/</code> directory,
-      <code>haft init</code> detects it and migrates everything automatically — renames the directory
-      to <code>.haft/</code>, moves the database, preserves all artifacts.
-      See <a href="/docs/migration">Migration guide</a> for details.
-    </p>
-  </div>
 
   <h2>Verify it works</h2>
 
   <p>Open your AI tool in the project directory and type:</p>
 
-  <pre><code>/h-status</code></pre>
+  <pre><code>/q-status</code></pre>
 
   <p>
     You should see an empty dashboard. If you see an error about MCP connection, check that

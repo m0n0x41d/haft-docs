@@ -1,0 +1,95 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Documentation" description="Learn how to use quint-code for structured engineering decisions.">
+  <h1>quint-code Documentation</h1>
+
+  <p>
+    quint-code is a decision engineering tool for AI coding assistants. It helps you frame problems,
+    compare options fairly, record decisions as contracts, and know when those decisions go stale.
+  </p>
+
+  <p>
+    It works as an <a href="https://modelcontextprotocol.io">MCP server</a> — a backend that your AI tool
+    (Claude Code, Cursor, Gemini CLI, Codex) connects to. You interact with it through slash commands
+    in your AI tool's chat interface. The agent does the heavy lifting; you make the calls.
+  </p>
+
+  <h2>What it does</h2>
+
+  <p>When you face a decision that's hard to reverse, affects the team, or has real consequences if
+    you get it wrong — migrating a database, picking an auth architecture, designing a public API,
+    restructuring a service boundary — you type <code>/q-reason</code> and describe the problem. The agent:</p>
+
+  <ol>
+    <li>Frames the problem (what's broken, what are the constraints, how do we know it's solved)</li>
+    <li>Defines comparison criteria before generating options (prevents bias)</li>
+    <li>Generates genuinely different variants (not three versions of the same idea)</li>
+    <li>Compares them on a Pareto front (no single-score collapse)</li>
+    <li>Records the decision as a contract with invariants, rollback plan, and expiry date</li>
+  </ol>
+
+  <p>
+    Every decision gets an <strong>R_eff score</strong> — a computed trust metric that degrades over time
+    as evidence expires. When R_eff drops below 0.5, the decision surfaces as stale. You review it,
+    re-validate, or supersede it with a new decision. This is the
+    the continuous loop of decide → measure → reframe.
+  </p>
+
+  <h2>Who is this for</h2>
+
+  <p>
+    Anyone who makes decisions with real consequences — and needs those decisions to be
+    traceable, challengeable, and aware of their own expiry date. Software architects,
+    engineering managers, systems engineers, tech leads. The problems aren't limited to code:
+    technology selection, infrastructure strategy, process design, organizational trade-offs,
+    vendor evaluation, migration planning.
+  </p>
+
+  <p>
+    The current interface is developer-focused (MCP server for AI coding tools), but the
+    underlying methodology is domain-agnostic. quint-code aims to implement as much as possible of
+    <a href="https://github.com/ailev/FPF" target="_blank" rel="noopener">FPF (First Principles Framework)</a>
+    by Anatoly Levenchuk — a formal approach to structured reasoning that works wherever
+    decisions need evidence, comparison, and lifecycle management. No prior knowledge of
+    FPF is required; quint-code implements the practical parts and stays out of your way.
+  </p>
+
+  <h2>Supported tools</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Claude Code</td><td>Full support (default)</td></tr>
+      <tr><td>Cursor</td><td>Full support</td></tr>
+      <tr><td>Gemini CLI</td><td>Supported</td></tr>
+      <tr><td>Codex CLI / Codex App</td><td>Supported</td></tr>
+      <tr><td>JetBrains Air</td><td>Supported</td></tr>
+    </tbody>
+  </table>
+
+  <h2>What's new in 5.3</h2>
+
+  <ul>
+    <li><strong>Interactive terminal dashboard</strong> — <code>quint-code board</code> gives you real-time project health without starting an agent session. Four tabs, vim navigation, glamour markdown, live refresh.</li>
+    <li><strong>Context-aware reasoning</strong> — <code>/q-reason</code> now reads your intent: think-and-respond (no artifacts), prepare-and-wait (you drive the cycle), or full autonomous (agent drives). No longer defaults to running the full cycle.</li>
+    <li><a href="/docs/codebase-awareness">Codebase awareness</a> — 6 languages (Go, JS/TS, Python, Rust, C/C++), module detection, dependency graph, decision coverage, drift detection</li>
+    <li><a href="/docs/cross-project">Cross-project recall</a> — decisions from other projects surface when framing new problems</li>
+    <li><a href="/docs/decision-integrity">Decision integrity</a> — adversarial verification, inductive measurement gates, evidence supersession, search keyword enrichment</li>
+    <li><a href="/docs/full-cycle">Decisions as test specs</a> — full-cycle decisions contain enough structure for any agent to generate property-based tests</li>
+    <li><a href="/docs/roadmap">Roadmap</a> — team collaboration, formal specification, and more</li>
+  </ul>
+
+  <h2>Next step</h2>
+
+  <p>
+    <a href="/docs/install">Install quint-code</a> — takes about 30 seconds.
+    Already on 5.0? <a href="/docs/migration">Migration guide</a>.
+  </p>
+</DocsLayout>

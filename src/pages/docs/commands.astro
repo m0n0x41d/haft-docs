@@ -2,7 +2,7 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="All Commands" description="Complete reference for all quint-code slash commands.">
+<DocsLayout title="All Commands" description="Complete reference for all haft slash commands, CLI commands, and the recommended protocol.">
   <h1>All Commands</h1>
 
   <h2>Primary workflow</h2>
@@ -17,60 +17,69 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     </thead>
     <tbody>
       <tr>
-        <td><code>/q-reason</code></td>
+        <td><code>/h-reason</code></td>
         <td>Start structured reasoning — agent auto-selects depth</td>
         <td>Non-trivial engineering problem</td>
       </tr>
       <tr>
-        <td><code>/q-note</code></td>
-        <td>Record a micro-decision with rationale</td>
+        <td><code>/h-note</code></td>
+        <td>Record a micro-decision with rationale validation</td>
         <td>Quick tech choice worth remembering</td>
       </tr>
     </tbody>
   </table>
 
-  <h2>Full decision cycle</h2>
+  <h2>The five modes</h2>
 
-  <p>Use these to drive each step manually (or let <code>/q-reason</code> orchestrate):</p>
+  <p>
+    Each mode creates or updates a specific artifact. Use these to drive each step manually,
+    or let <code>/h-reason</code> orchestrate:
+  </p>
 
   <table>
     <thead>
       <tr>
         <th>Command</th>
+        <th>Mode</th>
         <th>What it does</th>
         <th>Creates</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><code>/q-frame</code></td>
+        <td><code>/h-frame</code></td>
+        <td>Understand</td>
         <td>Frame the problem — signal, constraints, acceptance</td>
         <td>ProblemCard</td>
       </tr>
       <tr>
-        <td><code>/q-char</code></td>
-        <td>Define comparison dimensions with roles</td>
-        <td>Characterization (on ProblemCard)</td>
+        <td><code>/h-char</code></td>
+        <td>Explore (prep)</td>
+        <td>Define comparison dimensions with indicator roles</td>
+        <td>Characterization on ProblemCard</td>
       </tr>
       <tr>
-        <td><code>/q-explore</code></td>
-        <td>Generate genuinely distinct variants</td>
+        <td><code>/h-explore</code></td>
+        <td>Explore</td>
+        <td>Generate genuinely distinct variants with weakest link</td>
         <td>SolutionPortfolio</td>
       </tr>
       <tr>
-        <td><code>/q-compare</code></td>
-        <td>Fair comparison on the Pareto front</td>
-        <td>Comparison (on SolutionPortfolio)</td>
+        <td><code>/h-compare</code></td>
+        <td>Choose</td>
+        <td>Fair comparison with parity enforcement, constraint-aware Pareto</td>
+        <td>Comparison on SolutionPortfolio</td>
       </tr>
       <tr>
-        <td><code>/q-decide</code></td>
-        <td>Record decision as contract with invariants</td>
+        <td><code>/h-decide</code></td>
+        <td>Execute</td>
+        <td>Record decision as contract with invariants, claims, rollback</td>
         <td>DecisionRecord</td>
       </tr>
     </tbody>
   </table>
 
-  <h2>Lifecycle management</h2>
+  <h2>Verify mode</h2>
 
   <table>
     <thead>
@@ -81,19 +90,130 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     </thead>
     <tbody>
       <tr>
-        <td><code>/q-refresh</code></td>
-        <td>Manage artifact lifecycle — scan stale, waive, reopen, supersede, deprecate, reconcile</td>
+        <td><code>/h-verify</code></td>
+        <td>Scan for stale artifacts, code drift, pending <code>verify_after</code> claims, and structural invariant violations</td>
       </tr>
     </tbody>
   </table>
 
-  <h2>Terminal dashboard</h2>
+  <p>Actions available within <code>/h-verify</code>:</p>
+
+  <ul>
+    <li><strong>scan</strong> — detect all stale artifacts, drifted files, unverified claims, and invariant violations</li>
+    <li><strong>waive</strong> — acknowledge drift as intentional (decision still valid)</li>
+    <li><strong>reopen</strong> — mark decision for reconsideration</li>
+    <li><strong>supersede</strong> — replace with a new decision</li>
+    <li><strong>deprecate</strong> — mark as no longer applicable</li>
+    <li><strong>reconcile</strong> — batch scan notes against decisions for deduplication</li>
+  </ul>
+
+  <h2>Dashboard and query</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/h-status</code></td>
+        <td>Text dashboard — active decisions, stale items, recent notes, module coverage</td>
+      </tr>
+      <tr>
+        <td><code>/h-search</code></td>
+        <td>Full-text search across all artifacts</td>
+      </tr>
+      <tr>
+        <td><code>/h-problems</code></td>
+        <td>List active problems with Goldilocks readiness and complexity signals</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Advanced</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/h-view</code></td>
+        <td>Deterministic projections of the artifact graph for different audiences</td>
+      </tr>
+      <tr>
+        <td><code>/h-onboard</code></td>
+        <td>Scan existing project for architecture knowledge — READMEs, ADRs, specs</td>
+      </tr>
+    </tbody>
+  </table>
 
   <p>
-    Not a slash command — a CLI command you run directly in your terminal:
+    <code>/h-view</code> renders the same artifacts differently depending on audience:
   </p>
 
-  <pre><code>quint-code board</code></pre>
+  <ul>
+    <li><strong>engineer</strong> — invariants, affected files, drift status, WLNK</li>
+    <li><strong>manager</strong> — decision titles, health summary, stale count, coverage</li>
+    <li><strong>audit</strong> — full evidence chain, CL tags, verification dates, supersession history</li>
+    <li><strong>compare</strong> — side-by-side variant comparison with Pareto front</li>
+    <li><strong>delegated-agent</strong> — machine-readable format for autonomous agent consumption</li>
+    <li><strong>change-rationale</strong> — why this changed from the previous version, for PR descriptions</li>
+  </ul>
+
+  <h2>CLI commands</h2>
+
+  <p>
+    These run directly in your terminal, not through an AI agent:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>haft init</code></td>
+        <td>Initialize project. Flags: <code>--claude</code>, <code>--cursor</code>, <code>--gemini</code>, <code>--codex</code>, <code>--air</code>, <code>--all</code></td>
+      </tr>
+      <tr>
+        <td><code>haft serve</code></td>
+        <td>Start MCP server (used by AI tools to communicate with haft)</td>
+      </tr>
+      <tr>
+        <td><code>haft agent [goal]</code></td>
+        <td>Standalone agent with TUI runtime — runs reasoning without an external AI tool</td>
+      </tr>
+      <tr>
+        <td><code>haft sync</code></td>
+        <td>Sync <code>.haft/*.md</code> markdown projections into local database (team workflow)</td>
+      </tr>
+      <tr>
+        <td><code>haft board</code></td>
+        <td>Interactive TUI dashboard with four tabs, vim navigation, live refresh</td>
+      </tr>
+      <tr>
+        <td><code>haft doctor</code></td>
+        <td>Diagnose project setup issues — MCP config, database, permissions</td>
+      </tr>
+      <tr>
+        <td><code>haft fpf search [query]</code></td>
+        <td>Search the embedded FPF specification</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>haft board</h3>
+
+  <pre><code>$ haft board</code></pre>
 
   <p>
     Interactive TUI with four tabs: Overview (health, activity, depth distribution, coverage),
@@ -103,56 +223,38 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   </p>
 
   <p>
-    Use <code>quint-code board --check</code> for CI/hooks — exits with code 1 if critical issues
-    exist (R_eff &lt; 0.3, decisions expired &gt; 30 days).
+    Use <code>haft board --check</code> for CI/hooks — exits with code 1 if critical issues
+    exist (R_eff &lt; 0.3, decisions expired > 30 days).
   </p>
 
-  <h2>Query & dashboard (MCP)</h2>
+  <h3>haft sync</h3>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Command</th>
-        <th>What it does</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>/q-status</code></td>
-        <td>Dashboard via agent — Shipped/Pending decisions, problems, module coverage</td>
-      </tr>
-      <tr>
-        <td><code>/q-search</code></td>
-        <td>Full-text search across all artifacts</td>
-      </tr>
-      <tr>
-        <td><code>/q-problems</code></td>
-        <td>List active problems with readiness signals</td>
-      </tr>
-      <tr>
-        <td><code>/q-onboard</code></td>
-        <td>Discover existing project knowledge and build initial map</td>
-      </tr>
-    </tbody>
-  </table>
+  <pre><code>$ haft sync</code></pre>
+
+  <p>
+    Reads <code>.haft/*.md</code> files from git and imports them into the local database.
+    This is the team workflow: decisions commit to git, each engineer pulls and runs
+    <code>haft sync</code> to update their local state. See
+    <a href="/docs/team-sync">Team Sync</a> for details.
+  </p>
 
   <h2>Recommended protocol</h2>
 
-  <pre><code>/q-frame  → /q-char  → /q-explore → /q-compare → /q-decide
+  <pre><code>/h-frame  → /h-char  → /h-explore → /h-compare → /h-decide
   what's      what       genuinely     fair         engineering
   broken?     matters?   different     comparison   contract
                          options</code></pre>
 
   <p>
-    You can enter at any step, but the protocol works best in order. <code>/q-char</code> before
-    <code>/q-explore</code> prevents bias (criteria defined before options). <code>/q-compare</code>
-    before <code>/q-decide</code> ensures fair evaluation.
+    You can enter at any step, but the protocol works best in order. <code>/h-char</code> before
+    <code>/h-explore</code> prevents bias (criteria defined before options). <code>/h-compare</code>
+    before <code>/h-decide</code> ensures fair evaluation.
   </p>
 
   <h2>Next</h2>
 
   <ul>
-    <li><a href="/docs/concepts">Key concepts</a> — R_eff, CL, WLNK, evidence decay</li>
+    <li><a href="/docs/concepts">Key concepts</a> — R_eff, CL, WLNK, evidence decay, claims</li>
     <li><a href="/docs/faq">FAQ</a> — common questions</li>
   </ul>
 </DocsLayout>

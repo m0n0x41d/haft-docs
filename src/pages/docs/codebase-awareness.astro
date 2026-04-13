@@ -2,19 +2,19 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Codebase Awareness" description="How quint-code understands your project structure — modules, dependencies, and coverage.">
+<DocsLayout title="Codebase Awareness" description="How haft understands your project structure — modules, dependencies, knowledge graph, and invariant verification.">
   <h1>Codebase Awareness</h1>
 
   <p>
-    quint-code doesn't just track decisions — it understands your codebase. It knows which modules
-    exist, how they depend on each other, and which parts of your architecture are governed by
-    decisions.
+    Haft doesn't just track decisions — it understands your codebase. It knows which modules
+    exist, how they depend on each other, which parts of your architecture are governed by
+    decisions, and which invariants apply to every file you touch.
   </p>
 
   <h2>Module detection</h2>
 
   <p>
-    When you run <code>/q-status</code> or <code>quint_query(action="coverage")</code>, quint-code scans
+    When you run <code>/h-status</code> or <code>haft_query(action="coverage")</code>, haft scans
     your project and detects modules using language-specific conventions:
   </p>
 
@@ -57,7 +57,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <p>
     Module scanning respects <code>.gitignore</code> (local and global) and an optional
-    <code>.quintignore</code> file for project-specific exclusions.
+    <code>.haftignore</code> file for project-specific exclusions.
   </p>
 
   <h2>Decision coverage</h2>
@@ -76,9 +76,9 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <p>Coverage uses three states:</p>
 
   <ul>
-    <li><strong>✓ Covered</strong> — at least one active decision with R_eff ≥ 0.5 covers files in this module</li>
-    <li><strong>~ Partial</strong> — has decisions, but all evidence is degraded (R_eff &lt; 0.5)</li>
-    <li><strong>✗ Blind</strong> — no decisions reference any file in this module</li>
+    <li><strong>Covered</strong> — at least one active decision with R_eff >= 0.5 covers files in this module</li>
+    <li><strong>Partial</strong> — has decisions, but all evidence is degraded (R_eff &lt; 0.5)</li>
+    <li><strong>Blind</strong> — no decisions reference any file in this module</li>
   </ul>
 
   <p>
@@ -89,7 +89,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Dependency graph</h2>
 
   <p>
-    quint-code parses import statements to build a module dependency graph. For Go, it uses
+    Haft parses import statements to build a module dependency graph. For Go, it uses
     the stdlib <code>go/parser</code>. JS/TS, Python, Rust, and C/C++ use regex-based import detection.
     C/C++ resolves <code>#include "..."</code> paths using <code>-I</code> flags from
     <code>compile_commands.json</code> when available.
@@ -97,7 +97,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <p>
     The dependency graph powers <strong>impact propagation</strong>: when drift is detected in
-    module A, quint-code checks which modules depend on A and flags their decisions too.
+    module A, haft checks which modules depend on A and flags their decisions too.
   </p>
 
   <pre><code>Drift detected in auth/:
@@ -112,7 +112,7 @@ Impact propagation:
 
   <p>
     After a decision is implemented, the agent snapshots the SHA-256 hashes of affected files
-    (the baseline). On every <code>/q-refresh scan</code>, quint-code recomputes hashes and detects:
+    (the baseline). On every <code>/h-verify scan</code>, haft recomputes hashes and detects:
   </p>
 
   <ul>
@@ -126,6 +126,104 @@ Impact propagation:
     whether the change is material (broke an invariant) or cosmetic (comments, formatting).
   </p>
 
+  <h2>Knowledge graph</h2>
+
+  <p>
+    Beyond flat module detection, haft maintains a knowledge graph that connects files,
+    modules, decisions, and invariants. This graph powers several queries that agents and
+    CLI commands use internally:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Query</th>
+        <th>What it returns</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>FindDecisionsForFile</code></td>
+        <td>All active decisions whose affected files include the given path</td>
+      </tr>
+      <tr>
+        <td><code>FindInvariantsForFile</code></td>
+        <td>All invariants from all decisions governing a file — collected transitively through the dependency graph</td>
+      </tr>
+      <tr>
+        <td><code>FindModuleForFile</code></td>
+        <td>The module boundary a file belongs to</td>
+      </tr>
+      <tr>
+        <td><code>TransitiveDependents</code></td>
+        <td>All modules that depend on a given module, directly or transitively</td>
+      </tr>
+      <tr>
+        <td><code>ComputeImpactSet</code></td>
+        <td>Given a set of changed files, returns all decisions and invariants that may be affected — the union of direct governance and transitive dependency impact</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    <code>ComputeImpactSet</code> is what <code>/h-verify scan</code> uses under the hood. It's
+    also available to any agent through MCP, so custom workflows can query impact before
+    making changes.
+  </p>
+
+  <h2>Invariant injection</h2>
+
+  <p>
+    When an agent begins implementing a decision, haft collects invariants from
+    <strong>all</strong> decisions governing the affected files — not just the decision being
+    implemented. The agent receives these as constraints in its prompt.
+  </p>
+
+  <pre><code>Implementing dec-012 "Payment retry logic"
+Affected files: payments/retry.go, payments/circuit.go
+
+Injected invariants (from all governing decisions):
+  [dec-007] "Payment auth flow"
+    — auth token must be refreshed before retry, not reused from failed attempt
+    — max 3 retries with exponential backoff
+  [dec-003] "API rate limiting"
+    — retry requests count against rate limit budget
+    — no bypass of rate limiter for internal retries</code></pre>
+
+  <p>
+    This prevents the classic problem: implementing one decision while accidentally violating
+    invariants from another decision that governs the same files.
+  </p>
+
+  <h2>Invariant verification</h2>
+
+  <p>
+    Some invariants are structural — they describe relationships between modules, not runtime
+    behavior. Haft can verify these against the live dependency graph:
+  </p>
+
+  <ul>
+    <li><strong>"no dependency from X to Y"</strong> — verified by checking that the dependency graph has no path from module X to module Y</li>
+    <li><strong>"no circular dependencies"</strong> — verified by checking the dependency graph for cycles</li>
+  </ul>
+
+  <p>
+    These checks run during <code>/h-verify scan</code>. When a structural invariant is violated,
+    the decision is flagged with the specific dependency chain that breaks it.
+  </p>
+
+  <pre><code>Invariant violation: dec-005 "Layered architecture"
+  Invariant: "no dependency from domain/ to infrastructure/"
+  Violation: domain/user.go imports infrastructure/postgres/conn.go
+  Chain: domain/ → infrastructure/postgres/</code></pre>
+
+  <div class="callout">
+    <p>
+      Structural invariant verification is deterministic — it checks the actual import graph,
+      not heuristics. If the graph says there's a dependency, there is one.
+    </p>
+  </div>
+
   <h2>Using it in practice</h2>
 
   <table>
@@ -137,7 +235,7 @@ Impact propagation:
     </thead>
     <tbody>
       <tr>
-        <td>After <code>/q-onboard</code></td>
+        <td>After <code>/h-onboard</code></td>
         <td>Check coverage — which modules are blind? Prioritize the critical ones.</td>
       </tr>
       <tr>
@@ -146,11 +244,15 @@ Impact propagation:
       </tr>
       <tr>
         <td>Before a release</td>
-        <td><code>/q-refresh scan</code> — see all stale decisions and code drift in one view.</td>
+        <td><code>/h-verify scan</code> — see all stale decisions, code drift, and invariant violations in one view.</td>
       </tr>
       <tr>
         <td>New team member</td>
-        <td><code>/q-status</code> shows the full architecture decision landscape at a glance.</td>
+        <td><code>/h-status</code> shows the full architecture decision landscape at a glance.</td>
+      </tr>
+      <tr>
+        <td>Before implementing</td>
+        <td>Invariant injection ensures the agent knows all constraints on affected files.</td>
       </tr>
     </tbody>
   </table>

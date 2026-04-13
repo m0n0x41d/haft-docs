@@ -27,19 +27,19 @@ const rouletteWords = [
       <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col items-center text-center">
           <!-- ASCII Logo - Desktop -->
-<pre class="ascii-logo hidden md:block" aria-hidden="true"><span class="ascii-1"> ██████╗ ██╗   ██╗██╗███╗   ██╗████████╗</span>
-<span class="ascii-2">██╔═══██╗██║   ██║██║████╗  ██║╚══██╔══╝</span>
-<span class="ascii-3">██║   ██║██║   ██║██║██╔██╗ ██║   ██║   </span>
-<span class="ascii-4">██║▄▄ ██║██║   ██║██║██║╚██╗██║   ██║   </span>
-<span class="ascii-5">╚██████╔╝╚██████╔╝██║██║ ╚████║   ██║   </span>
-<span class="ascii-6"> ╚══▀▀═╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝   ╚═╝   </span></pre>
+<pre class="ascii-logo hidden md:block" aria-hidden="true"><span class="ascii-1">██╗  ██╗ █████╗ ███████╗████████╗</span>
+<span class="ascii-2">██║  ██║██╔══██╗██╔════╝╚══██╔══╝</span>
+<span class="ascii-3">███████║███████║█████╗     ██║   </span>
+<span class="ascii-4">██╔══██║██╔══██║██╔══╝     ██║   </span>
+<span class="ascii-5">██║  ██║██║  ██║██║        ██║   </span>
+<span class="ascii-6">╚═╝  ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝   </span></pre>
           <!-- Text Logo - Mobile -->
           <h1
             class="gradient-text-glow font-mono text-5xl font-bold md:hidden"
           >
-            quint-code
+            haft
           </h1>
-          <span class="sr-only">quint-code</span>
+          <span class="sr-only">haft</span>
 
           <!-- Scramble Roulette -->
           <div class="mt-6 w-full max-w-2xl" aria-label="ProblemOps for AI coding tools">
@@ -169,8 +169,8 @@ const rouletteWords = [
 
         <!-- Tabs -->
         <div class="mt-10 flex gap-0 border border-border-subtle w-fit">
-          <button data-tab="auto" class="tab-btn tab-active px-5 py-3 font-mono text-sm uppercase tracking-wider transition-colors">/q-reason</button>
-          <button data-tab="full" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Full cycle</button>
+          <button data-tab="auto" class="tab-btn tab-active px-5 py-3 font-mono text-sm uppercase tracking-wider transition-colors">/h-reason</button>
+          <button data-tab="full" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Five modes</button>
           <button data-tab="tactical" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Quick cycle</button>
           <button data-tab="note" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Micro-note</button>
         </div>
@@ -178,12 +178,12 @@ const rouletteWords = [
         <!-- Tab content — grid overlay keeps tallest height -->
         <div class="mt-0 border border-t-0 border-border-subtle bg-bg-secondary p-8 sm:p-10 grid [&>*]:col-start-1 [&>*]:row-start-1">
 
-          <!-- /q-reason -->
+          <!-- /h-reason -->
           <div data-content="auto" class="tab-content tab-visible">
             <div class="max-w-3xl">
               <p class="text-text-primary font-semibold text-lg">One command. The agent reasons for you.</p>
               <p class="mt-4 text-base text-text-secondary leading-relaxed">
-                Type <code class="text-accent-blue">/q-reason</code> and describe your problem.
+                Type <code class="text-accent-blue">/h-reason</code> and describe your problem.
                 The agent follows a structured operating system of thought: frames the problem before solving it,
                 generates genuinely distinct alternatives, compares them fairly on declared dimensions,
                 and records the decision with full rationale, rollback plan, and expiry date.
@@ -194,44 +194,45 @@ const rouletteWords = [
                 You stay in the loop for every choice that matters.
               </p>
               <div class="mt-6 font-mono text-sm text-text-muted">
-                <span class="text-accent-green">$</span> /q-reason "How should we handle cross-service transaction failures?"
+                <span class="text-accent-green">$</span> /h-reason "How should we handle cross-service transaction failures?"
               </div>
             </div>
           </div>
 
-          <!-- Full cycle -->
+          <!-- Five modes -->
           <div data-content="full" class="tab-content">
             <div class="max-w-3xl">
-              <p class="text-text-primary font-semibold text-lg">Full control. Five steps, each a slash command.</p>
+              <p class="text-text-primary font-semibold text-lg">Five modes. Each a slash command. Full control.</p>
               <p class="mt-4 text-base text-text-secondary leading-relaxed">
-                When you want to drive each phase manually — define dimensions before seeing options,
+                The decision cycle maps to five cognitive modes — Understand, Explore, Choose, Execute, Verify.
+                Drive each phase manually for maximum rigor: define dimensions before seeing options,
                 enforce parity across variants, attach evidence with congruence levels.
               </p>
               <div class="mt-8 space-y-4">
                 <div class="flex items-start gap-4">
                   <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">1</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-frame</code>
-                  <span class="text-base text-text-secondary">Define signal, constraints, optimization targets, acceptance criteria</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-frame</code>
+                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Understand</strong> — define signal, constraints, optimization targets, acceptance criteria</span>
                 </div>
                 <div class="flex items-start gap-4">
                   <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">2</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-char</code>
-                  <span class="text-base text-text-secondary">Set comparison dimensions with roles — constraint, target, observation</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-explore</code>
+                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Explore</strong> — generate genuinely distinct alternatives with weakest link per variant</span>
                 </div>
                 <div class="flex items-start gap-4">
                   <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">3</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-explore</code>
-                  <span class="text-base text-text-secondary">Generate genuinely distinct alternatives with weakest link per variant</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-compare</code>
+                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Choose</strong> — fair comparison, same inputs, same scope, parity enforced</span>
                 </div>
                 <div class="flex items-start gap-4">
                   <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">4</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-compare</code>
-                  <span class="text-base text-text-secondary">Fair comparison — same inputs, same scope, parity enforced</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-decide</code>
+                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Execute</strong> — decision contract with invariants, rollback plan, and claims</span>
                 </div>
                 <div class="flex items-start gap-4">
                   <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">5</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-decide</code>
-                  <span class="text-base text-text-secondary">Decision contract — invariants, rollback plan, refresh triggers, expiry</span>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-verify</code>
+                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Verify</strong> — check claims against reality, refresh or supersede stale decisions</span>
                 </div>
               </div>
             </div>
@@ -248,17 +249,17 @@ const rouletteWords = [
               <div class="mt-8 space-y-4">
                 <div class="flex items-start gap-4">
                   <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">1</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-frame</code>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-frame</code>
                   <span class="text-base text-text-secondary">What's broken, what constraints, what does solved look like</span>
                 </div>
                 <div class="flex items-start gap-4">
                   <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">2</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-explore</code>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-explore</code>
                   <span class="text-base text-text-secondary">2-3 alternatives with tradeoffs</span>
                 </div>
                 <div class="flex items-start gap-4">
                   <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">3</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/q-decide</code>
+                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-decide</code>
                   <span class="text-base text-text-secondary">Pick one, record why, set expiry</span>
                 </div>
               </div>
@@ -276,14 +277,14 @@ const rouletteWords = [
                 These things never make it into docs — but they shape every decision downstream.
               </p>
               <p class="mt-4 text-base text-text-secondary leading-relaxed">
-                You don't need to call <code class="text-accent-blue">/q-note</code> yourself — the agent
+                You don't need to call <code class="text-accent-blue">/h-note</code> yourself — the agent
                 captures micro-decisions automatically when it notices them in conversation.
                 You said "let's go with gRPC" — it's recorded with rationale before you move on.
                 No rationale — no record. Conflicts with active decisions are flagged.
                 Auto-expires in 90 days so your knowledge base doesn't rot.
               </p>
               <div class="mt-6 font-mono text-sm text-text-muted">
-                <span class="text-accent-green">$</span> /q-note "Auth token hard limit 4KB — breaks at 12+ roles, must split claims before RBAC expansion"
+                <span class="text-accent-green">$</span> /h-note "Auth token hard limit 4KB — breaks at 12+ roles, must split claims before RBAC expansion"
               </div>
             </div>
           </div>
@@ -300,7 +301,7 @@ const rouletteWords = [
             Built on First Principles Framework
           </h2>
           <p class="mt-6 text-base text-text-secondary leading-relaxed">
-            quint-code is built on top of
+            haft is built on top of
             <a
               href="https://github.com/ailev/FPF"
               target="_blank"
@@ -339,15 +340,15 @@ const rouletteWords = [
         <div class="mt-10 border border-border-subtle divide-y divide-border-subtle">
           <details class="group">
             <summary class="flex items-center justify-between p-6 cursor-pointer font-mono text-sm uppercase tracking-wide text-text-primary hover:bg-bg-secondary transition-colors">
-              Why do I need quint-code when there are SDD frameworks?
+              Why do I need haft when there are SDD frameworks?
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              SDD frameworks give you a structure for writing specs. quint-code gives your AI agent
+              SDD frameworks give you a structure for writing specs. haft gives your AI agent
               an operating system for thinking — problem framing, fair comparison, evidence tracking,
               and decision lifecycle management. It's not a document format. It's a reasoning process
               that produces artifacts with computed trust scores, expiry dates, and rollback plans.
-              You can use both — SDD for specs, quint-code for the decisions behind them.
+              You can use both — SDD for specs, haft for the decisions behind them.
             </div>
           </details>
 
@@ -357,10 +358,10 @@ const rouletteWords = [
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              ADRs are static markdown files you write after deciding. quint-code decisions are live artifacts —
+              ADRs are static markdown files you write after deciding. haft decisions are live artifacts —
               they have computed trust scores (R_eff) that degrade as evidence ages, expiry dates that trigger
               reviews, rollback plans with conditions, and they're searchable via full-text search.
-              An ADR tells you what was decided. A quint-code decision tells you whether you should still trust it.
+              An ADR tells you what was decided. A haft decision tells you whether you should still trust it.
             </div>
           </details>
 
@@ -370,7 +371,7 @@ const rouletteWords = [
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              Yes. Run <code class="text-accent-blue">quint-code init</code> and then <code class="text-accent-blue">/q-onboard</code> —
+              Yes. Run <code class="text-accent-blue">haft init</code> and then <code class="text-accent-blue">/h-onboard</code> —
               the agent will scan your codebase and surface existing architectural patterns worth documenting.
               You don't need to retroactively document everything. Start with your next decision.
             </div>
@@ -382,10 +383,10 @@ const rouletteWords = [
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              quint-code stores everything in a local SQLite database with git-tracked markdown projections.
+              haft stores everything in a local SQLite database with git-tracked markdown projections.
               The MCP server works with Claude Code, Cursor, Gemini CLI, Codex CLI, Codex App, and Air.
               Switch tools, your decisions stay. The knowledge is in your repo, not in a chat thread.
-              Just make sure you initialized quint-code for the correct tool — default is Claude Code.
+              Just make sure you initialized haft for the correct tool — default is Claude Code.
             </div>
           </details>
 
@@ -395,7 +396,7 @@ const rouletteWords = [
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              Use <code class="text-accent-blue">/q-note</code> for micro-decisions and <code class="text-accent-blue">/q-reason</code>
+              Use <code class="text-accent-blue">/h-note</code> for micro-decisions and <code class="text-accent-blue">/h-reason</code>
               which auto-selects tactical mode for small choices. The overhead is one command.
               The value is remembering why you chose X in 3 months when everything breaks.
               Small projects become big projects. Decisions made early matter the most.
@@ -408,21 +409,23 @@ const rouletteWords = [
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              Currently solo-focused. The <code class="text-accent-blue">.quint/</code> directory is git-tracked,
-              so teammates can read your decisions. But there's no collaborative editing, review workflows,
-              or merge conflict resolution for the SQLite database yet. That's on the roadmap.
+              Both. The <code class="text-accent-blue">.haft/</code> directory is git-tracked,
+              so decisions ship with your code in PRs. For team sync, run <code class="text-accent-blue">haft sync</code> —
+              each engineer pulls the latest markdown projections from git and syncs them into their local database.
+              No shared database, no merge conflicts on binary files. Each person has a local copy that stays in sync
+              through your normal git workflow.
             </div>
           </details>
 
           <details class="group">
             <summary class="flex items-center justify-between p-6 cursor-pointer font-mono text-sm uppercase tracking-wide text-text-primary hover:bg-bg-secondary transition-colors">
-              Is quint-code good for vibe coding?
+              Is haft good for vibe coding?
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
               If you're building something you'll maintain for more than a week — yes.
               Vibe coding is fast until you hit a decision you made 2 months ago and can't remember why.
-              <code class="text-accent-blue">/q-reason</code> takes 30 seconds and saves you hours of archaeology later.
+              <code class="text-accent-blue">/h-reason</code> takes 30 seconds and saves you hours of archaeology later.
             </div>
           </details>
         </div>
@@ -435,14 +438,14 @@ const rouletteWords = [
         <div
           class="mx-auto max-w-xl rounded-2xl border border-border-subtle bg-bg-primary p-8 text-center sm:p-12"
         >
-          <p class="text-sm font-medium text-accent-green">From the creator of quint-code</p>
+          <p class="text-sm font-medium text-accent-green">From the creator of haft</p>
           <h2 class="mt-3 text-2xl font-bold text-text-primary">
             ivan zakutni
           </h2>
           <p class="mt-1 text-sm text-text-muted">First Principles Engineering</p>
           <p class="mt-4 text-text-secondary">
             Production AI systems. Software architecture decisions that don't age like milk.
-            The same methodology behind quint-code — applied to real-world engineering problems.
+            The same methodology behind haft — applied to real-world engineering problems.
           </p>
           <p class="mt-3 text-sm text-text-muted">
             Deep dives, not hot takes. For engineers who ship.
@@ -564,7 +567,7 @@ const rouletteWords = [
   // Text scramble effect — each character resolves independently
   class TextScramble {
     el: HTMLElement;
-    chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789@#$%&<>[]{}!?=+*^~アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン漢字決問題解析';
+    chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789@#$%&<>[]{}!?=+*^~';
     queue: { from: string; to: string; start: number; end: number; char?: string }[] = [];
     frame = 0;
     frameRequest = 0;

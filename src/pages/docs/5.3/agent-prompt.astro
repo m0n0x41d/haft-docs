@@ -1,13 +1,13 @@
 ---
-import DocsLayout from '../../layouts/DocsLayout.astro';
+import DocsLayout from '../../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Agent Prompt Setup" description="Add a project-level prompt to get more out of haft.">
+<DocsLayout title="Agent Prompt Setup" description="Add a project-level prompt to get more out of quint-code.">
   <h1>Agent Prompt Setup</h1>
 
   <p>
-    haft works out of the box — the MCP tools are always available once you run <code>init</code>.
-    But adding a project-level prompt file makes the agent significantly better at using haft proactively.
+    quint-code works out of the box — the MCP tools are always available once you run <code>init</code>.
+    But adding a project-level prompt file makes the agent significantly better at using quint-code proactively.
   </p>
 
   <h2>What is a project prompt?</h2>
@@ -33,7 +33,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   </table>
 
   <p>
-    The haft repository includes a
+    The quint-code repository includes a
     <a href="https://github.com/m0n0x41d/quint-code/blob/main/CLAUDE.md" target="_blank" rel="noopener">reference CLAUDE.md</a>
     that teaches the agent:
   </p>
@@ -41,9 +41,9 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <ul>
     <li><strong>Communication style</strong> — direct, no validation theater, peer-level technical discourse</li>
     <li><strong>Thinking principles</strong> — weakest link analysis, reversibility checks, separation of concerns</li>
-    <li><strong>When to use haft</strong> — the decision framework for quick choices vs. full FPF mode for complex ones</li>
-    <li><strong>FPF commands and workflow</strong> — the recommended protocol (frame, explore, compare, decide, verify)</li>
-    <li><strong>Key concepts</strong> — R_eff, evidence decay, CL penalties, claims, Transformer Mandate</li>
+    <li><strong>When to use quint-code</strong> — the decision framework for quick choices vs. full FPF mode for complex ones</li>
+    <li><strong>FPF commands and workflow</strong> — the recommended protocol (frame → char → explore → compare → decide)</li>
+    <li><strong>Key concepts</strong> — R_eff, evidence decay, CL penalties, Transformer Mandate</li>
     <li><strong>Glossary</strong> — quick reference for FPF terminology</li>
   </ul>
 
@@ -58,15 +58,12 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
 curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > .cursorrules
 
 # Codex CLI
-curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > AGENTS.md
-
-# Gemini CLI
-curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > GEMINI.md</code></pre>
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > AGENTS.md</code></pre>
 
   <div class="callout">
     <p>
       <strong>Adapt it to your project.</strong> The reference file is opinionated (no emoji, direct
-      communication, functional core / imperative shell). Keep the haft-specific sections (FPF Mode,
+      communication, functional core / imperative shell). Keep the Quint-specific sections (FPF Mode,
       Commands, Glossary) and adjust the rest to match your team's style.
     </p>
   </div>
@@ -75,16 +72,16 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
 
   <p>Without CLAUDE.md:</p>
   <ul>
-    <li>Agent uses haft tools when you explicitly call slash commands</li>
+    <li>Agent uses quint-code tools when you explicitly call slash commands</li>
     <li>No proactive decision capture</li>
     <li>No structured reasoning unless you ask for it</li>
   </ul>
 
   <p>With the prompt file:</p>
   <ul>
-    <li>Agent understands when to suggest <code>/h-reason</code> for complex tasks</li>
+    <li>Agent understands when to suggest <code>/q-reason</code> for complex tasks</li>
     <li>Agent records micro-decisions as notes when it notices them in conversation</li>
-    <li>Agent checks <code>/h-status</code> proactively to surface stale decisions</li>
+    <li>Agent checks <code>/q-status</code> proactively to surface stale decisions</li>
     <li>Agent applies weakest link analysis and reversibility checks naturally</li>
     <li>Agent follows the recommended FPF protocol for non-trivial decisions</li>
   </ul>
@@ -92,7 +89,7 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
   <h2>Keeping it up to date</h2>
 
   <p>
-    The reference prompt evolves with haft releases. When you update the binary, check if
+    The reference prompt evolves with quint-code releases. When you update the binary, check if
     the reference file has changed:
   </p>
 
@@ -100,13 +97,13 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
 curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md | diff - CLAUDE.md</code></pre>
 
   <p>
-    The haft-specific sections (FPF Mode, Commands table, Glossary) are the most important to
+    The Quint-specific sections (FPF Mode, Commands table, Glossary) are the most important to
     keep current. The general engineering style sections can stay customized.
   </p>
 
   <h2>Next step</h2>
 
   <p>
-    <a href="/docs/reasoning">How /h-reason works</a> — learn the primary workflow.
+    <a href="/docs/reasoning">How /q-reason works</a> — learn the primary workflow.
   </p>
 </DocsLayout>

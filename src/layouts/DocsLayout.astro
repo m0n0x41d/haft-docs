@@ -20,14 +20,14 @@ const nav = [
       { href: '/docs/install', label: 'Installation' },
       { href: '/docs/agent-prompt', label: 'Agent Prompt Setup' },
       { href: '/docs/first-steps', label: 'First Steps' },
-      { href: '/docs/migration', label: 'Migrating from 5.0' },
+      { href: '/docs/migration', label: 'Migrating from v5' },
     ]
   },
   {
     title: 'Workflow',
     items: [
-      { href: '/docs/reasoning', label: 'Reasoning with /q-reason' },
-      { href: '/docs/full-cycle', label: 'Full Decision Cycle' },
+      { href: '/docs/reasoning', label: 'Reasoning with /h-reason' },
+      { href: '/docs/five-modes', label: 'The Five Modes' },
       { href: '/docs/notes', label: 'Notes & Micro-decisions' },
       { href: '/docs/lifecycle', label: 'Decision Lifecycle' },
     ]
@@ -38,6 +38,7 @@ const nav = [
       { href: '/docs/codebase-awareness', label: 'Codebase Awareness' },
       { href: '/docs/cross-project', label: 'Cross-Project Recall' },
       { href: '/docs/decision-integrity', label: 'Decision Integrity' },
+      { href: '/docs/team-sync', label: 'Team Sync' },
     ]
   },
   {
@@ -71,7 +72,7 @@ function isActive(href: string): boolean {
               id="version-toggle"
               class="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-accent-green hover:text-text-primary transition-colors cursor-pointer"
             >
-              v5.3
+              v6.0
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
@@ -80,7 +81,8 @@ function isActive(href: string): boolean {
               id="version-dropdown"
               class="hidden absolute top-6 left-0 z-50 bg-bg-secondary border border-border-subtle rounded shadow-lg py-1 min-w-[100px]"
             >
-              <span class="block px-3 py-1.5 text-xs font-mono text-accent-green bg-bg-tertiary">v5.3 (latest)</span>
+              <span class="block px-3 py-1.5 text-xs font-mono text-accent-green bg-bg-tertiary">v6.0 (latest)</span>
+              <a href="/docs/5.3" class="block px-3 py-1.5 text-xs font-mono text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors">v5.3</a>
               <a href="/docs/5.0" class="block px-3 py-1.5 text-xs font-mono text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors">v5.0</a>
             </div>
           </div>
@@ -136,7 +138,7 @@ function isActive(href: string): boolean {
 
           <nav class="space-y-6 text-sm mt-8">
             <div class="flex items-center gap-2 mb-4">
-              <span class="text-xs font-mono uppercase tracking-wider text-accent-green">v5.3</span>
+              <span class="text-xs font-mono uppercase tracking-wider text-accent-green">v6.0</span>
             </div>
             {nav.map(section => (
               <div>

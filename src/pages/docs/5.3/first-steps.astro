@@ -1,42 +1,42 @@
 ---
-import DocsLayout from '../../layouts/DocsLayout.astro';
+import DocsLayout from '../../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="First Steps" description="What to do after installing haft.">
+<DocsLayout title="First Steps" description="What to do after installing quint-code.">
   <h1>First Steps</h1>
 
   <p>
-    You've installed haft and run <code>init</code>. Now what?
+    You've installed quint-code and run <code>init</code>. Now what?
   </p>
 
   <h2>Ask the agent to explain itself</h2>
 
-  <p>The fastest way to learn haft is to ask your AI agent:</p>
+  <p>The fastest way to learn quint-code is to ask your AI agent:</p>
 
   <div style="position: relative;">
-    <pre><code>/h-reason explain how to work with haft
+    <pre><code>/q-reason explain how to work with quint-code
 effectively — what commands exist, when to use
 each one, and what's the recommended workflow</code></pre>
     <button
       class="copy-btn"
-      data-copy="/h-reason explain how to work with haft effectively — what commands exist, when to use each one, and what's the recommended workflow"
+      data-copy="/q-reason explain how to work with quint-code effectively — what commands exist, when to use each one, and what's the recommended workflow"
       style="position: absolute; top: 0.75rem; right: 0.75rem; background: #1a1a1a; border: 1px solid #333; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; transition: color 0.2s, border-color 0.2s;"
     >Copy</button>
   </div>
 
   <p>
-    The agent has full knowledge of all haft tools and will walk you through them in
+    The agent has full knowledge of all quint-code tools and will walk you through them in
     context of your specific project. This is not a canned tutorial — it's a live conversation
-    with an agent that understands both haft and your codebase.
+    with an agent that understands both quint-code and your codebase.
   </p>
 
   <h2>Existing project? Run onboarding</h2>
 
   <p>
-    If you're adding haft to a project that already has code, architecture docs, or ADRs:
+    If you're adding quint-code to a project that already has code, architecture docs, or ADRs:
   </p>
 
-  <pre><code>/h-onboard</code></pre>
+  <pre><code>/q-onboard</code></pre>
 
   <p>The agent will:</p>
 
@@ -59,8 +59,8 @@ each one, and what's the recommended workflow</code></pre>
   <h2>Set up a project prompt for better results</h2>
 
   <p>
-    haft works without any project-level prompts. But adding a prompt file
-    with haft-aware instructions makes the agent significantly better
+    quint-code works without any project-level prompts. But adding a prompt file
+    with Quint-aware instructions makes the agent significantly better
     at using the tools proactively. See <a href="/docs/agent-prompt">Agent Prompt Setup</a>
     for details.
   </p>
@@ -78,18 +78,18 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
 
   <p>
     Adapt it to your project — remove sections that don't apply, add project-specific context.
-    The haft-specific sections (FPF Mode, Commands, Glossary) are the important parts.
+    The Quint-specific sections (FPF Mode, Commands, Glossary) are the important parts.
   </p>
 
   <h2>Two ways to make decisions</h2>
 
-  <h3>Quick mode: /h-reason</h3>
+  <h3>Quick mode: /q-reason</h3>
 
   <p>
     The fastest way. Describe your problem, the agent handles the rest:
   </p>
 
-  <pre><code>/h-reason we need to add caching to our API.
+  <pre><code>/q-reason we need to add caching to our API.
 Latency matters, team is 3 people, we're on AWS.</code></pre>
 
   <p>
@@ -100,10 +100,10 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
 
   <div class="callout-warn">
     <p>
-      <strong>Honest trade-off:</strong> <code>/h-reason</code> runs the entire cycle in one
+      <strong>Honest trade-off:</strong> <code>/q-reason</code> runs the entire cycle in one
       conversation. With long context, the agent can lose focus — comparison criteria may blur,
       variant generation may become superficial, the verification gate may get rushed. This is
-      not a haft limitation; it's how LLMs work with large prompts. The context fills up,
+      not a quint-code limitation; it's how LLMs work with large prompts. The context fills up,
       and quality at each step can degrade.
     </p>
   </div>
@@ -112,10 +112,10 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
 
   <p>
     For decisions that are hard to reverse, affect the team, or have real consequences if wrong —
-    drive each step yourself through all five modes:
+    drive each step yourself:
   </p>
 
-  <pre><code>/h-frame  → /h-explore → /h-compare → /h-decide → /h-verify</code></pre>
+  <pre><code>/q-frame  → /q-char  → /q-explore → /q-compare → /q-decide</code></pre>
 
   <p>
     Each command loads its own focused prompt with specific guidance for that step. The context
@@ -125,8 +125,8 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
   </p>
 
   <p>
-    This is where haft delivers the best results. Start here for anything that matters.
-    See the <a href="/docs/five-modes">five modes walkthrough</a> for details on each step.
+    This is where quint-code delivers the best results. Start here for anything that matters.
+    See the <a href="/docs/full-cycle">full cycle walkthrough</a> for details on each step.
   </p>
 
   <h2>What happens after a decision?</h2>
@@ -134,35 +134,25 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
   <p>This is the part most people ask about. After the agent records a decision:</p>
 
   <ul>
-    <li><strong>A markdown file appears</strong> in <code>.haft/decisions/</code> — commit it with your code</li>
-    <li><strong>The decision carries claims</strong> — verifiable statements with <code>verify_after</code> dates that can be checked against reality</li>
+    <li><strong>A markdown file appears</strong> in <code>.quint/decisions/</code> — commit it with your code</li>
     <li><strong>The decision tracks affected files</strong> — if those files change later, drift detection flags it</li>
     <li><strong>Evidence can be attached</strong> — test results, benchmarks, user feedback. Evidence has an expiry date.</li>
-    <li><strong>R_eff (trust score) is computed</strong> — based on evidence quality and claim status. Expired evidence and failed claims degrade the score.</li>
-    <li><strong>Stale decisions surface</strong> — <code>/h-status</code> and <code>haft board</code> show what needs review</li>
+    <li><strong>R_eff (trust score) is computed</strong> — based on evidence quality. Expired evidence degrades the score.</li>
+    <li><strong>Stale decisions surface</strong> — <code>/q-status</code> and <code>quint-code board</code> show what needs review</li>
   </ul>
 
   <p>
     You don't need to do anything extra. The system is self-correcting: when decisions go stale,
     they surface. When you work on files covered by a decision, the agent can mention it. The
-    decide, measure, reframe loop runs naturally as part of your workflow.
+    decide → measure → reframe loop runs naturally as part of your workflow.
   </p>
 
   <h2>See your project at a glance</h2>
 
   <p>
-    Run <code>haft board</code> in a side terminal. It shows decision health, module coverage,
+    Run <code>quint-code board</code> in a side terminal. It shows decision health, module coverage,
     problems pipeline, drift alerts — and refreshes automatically every 3 seconds as you work with
     the agent in another terminal. No agent session required.
-  </p>
-
-  <h2>Team workflow</h2>
-
-  <p>
-    Working with other engineers? The <code>.haft/</code> directory is git-tracked — commit it
-    with your code. When teammates pull, they run <code>haft sync</code> to import the latest
-    markdown projections into their local database. No shared database, no merge conflicts on
-    binary files. Each person has a local copy that stays in sync through your normal git workflow.
   </p>
 
   <h2>Day-to-day usage</h2>
@@ -177,7 +167,7 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
     <tbody>
       <tr>
         <td>Big feature, architectural choice</td>
-        <td><code>/h-reason [describe the problem]</code></td>
+        <td><code>/q-reason [describe the problem]</code></td>
       </tr>
       <tr>
         <td>Quick tech choice during coding</td>
@@ -185,23 +175,19 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
       </tr>
       <tr>
         <td>Start of a work session</td>
-        <td><code>haft board</code> or <code>/h-status</code></td>
+        <td><code>quint-code board</code> or <code>/q-status</code></td>
       </tr>
       <tr>
         <td>"Why did we do it this way?"</td>
-        <td><code>/h-search [topic]</code></td>
+        <td><code>/q-search [topic]</code></td>
       </tr>
       <tr>
         <td>Reviewing a PR with decisions</td>
-        <td>Read the <code>.haft/decisions/</code> markdown files in the diff</td>
+        <td>Read the <code>.quint/decisions/</code> markdown files in the diff</td>
       </tr>
       <tr>
         <td>Decision feels outdated</td>
-        <td><code>/h-verify</code> — check claims, waive, reopen, or supersede</td>
-      </tr>
-      <tr>
-        <td>New teammate joins</td>
-        <td><code>haft sync</code> — imports all decisions into their local DB</td>
+        <td><code>/q-refresh</code> — scan, waive, reopen, or supersede</td>
       </tr>
     </tbody>
   </table>
@@ -209,8 +195,8 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
   <h2>Next steps</h2>
 
   <ul>
-    <li><a href="/docs/reasoning">How /h-reason works</a> — the full reasoning workflow</li>
-    <li><a href="/docs/five-modes">The five modes</a> — frame, explore, compare, decide, verify</li>
+    <li><a href="/docs/reasoning">How /q-reason works</a> — the full reasoning workflow</li>
+    <li><a href="/docs/full-cycle">The full decision cycle</a> — frame → char → explore → compare → decide</li>
     <li><a href="/docs/commands">All commands</a> — reference for every slash command</li>
   </ul>
 </DocsLayout>

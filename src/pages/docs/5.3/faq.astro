@@ -1,0 +1,127 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="FAQ" description="Common questions about quint-code.">
+  <h1>FAQ</h1>
+
+  <h2>Is this just ADRs with extra steps?</h2>
+
+  <p>
+    ADRs are static markdown files. Nobody checks if they're still valid. Nobody knows when
+    reality diverged from the decision. quint-code adds: computed trust scores (R_eff), evidence
+    decay, code drift detection, module coverage, cross-project recall, and a verification gate
+    that challenges decisions before recording. ADRs are the starting point; quint-code makes them live.
+  </p>
+
+  <h2>What happens to decisions after they're recorded?</h2>
+
+  <p>
+    A markdown file appears in <code>.quint/decisions/</code> — commit it with your code. The
+    decision tracks affected files: if those files change, drift detection flags it. Evidence can
+    be attached over time (test results, benchmarks). R_eff is computed from evidence quality.
+    When R_eff drops below 0.5, the decision surfaces as stale in <code>/q-status</code>.
+    You review and either waive (still valid), reopen (needs reconsideration), or supersede
+    (replace with new decision).
+  </p>
+
+  <h2>Can I use this on an existing project?</h2>
+
+  <p>
+    Yes. Run <code>quint-code init</code> then <code>/q-onboard</code>. The agent scans your
+    codebase for READMEs, ADRs, architecture docs, and captures what it finds as notes. It also
+    runs module coverage to show which parts of your architecture have no decisions.
+  </p>
+
+  <h2>I have existing specs in a gitignored folder. Can quint-code read them?</h2>
+
+  <p>
+    Yes. Tell the agent: "scan the docs in <code>.specs/</code> and record what you find." The
+    agent can read any file in your project. It's not limited to git-tracked files.
+  </p>
+
+  <h2>My artifacts ended up in a different project</h2>
+
+  <p>
+    This happens when the MCP config points to the wrong project. Common causes:
+  </p>
+
+  <ul>
+    <li>You added quint-code to a global MCP config instead of running <code>init</code> per project — the
+      project path in the config stays fixed to whatever directory you set, regardless of which project
+      is open.</li>
+    <li>In an IDE-based tool (Cursor, Windsurf): you opened a new project window without running
+      <code>init</code>, and the tool reused the MCP connection from a previously opened project.</li>
+  </ul>
+
+  <p>
+    <strong>Fix:</strong> run <code>quint-code init</code> in the correct project directory, then
+    restart your AI tool (or reload the MCP connection). The init command writes a
+    per-project MCP config with the correct path and project ID. This is an inherent constraint of the
+    MCP plugin architecture — quint-code runs inside your tool, not as an independent agent, so it
+    relies on the tool passing the right config.
+  </p>
+
+  <h2>Does this work with Cursor?</h2>
+
+  <p>
+    Yes. Run <code>quint-code init --cursor</code>. This creates <code>.cursor/mcp.json</code>
+    and installs commands in <code>~/.cursor/commands/</code>. After init, enable the MCP server
+    in Cursor Settings → MCP → find <code>quint-code</code> → toggle on.
+  </p>
+
+  <h2>Is this useful for solo developers?</h2>
+
+  <p>
+    Yes — you'll thank yourself in 3 months when you can search "why did I pick PostgreSQL over
+    SQLite?" and find the full reasoning, not a vague memory. Decisions accumulate across projects
+    too: when you frame a similar problem in a new project, decisions from old projects surface
+    automatically.
+  </p>
+
+  <h2>Is this useful for teams?</h2>
+
+  <p>
+    Decision records commit to git — team members see them in PRs. Reviewers can challenge
+    decisions alongside code. Module coverage shows the team which parts of the architecture
+    are governed and which are blind spots. Team collaboration features (shared server, real-time
+    sync) are on the roadmap.
+  </p>
+
+  <h2>What if I just want quick decisions?</h2>
+
+  <p>
+    Use <code>/q-reason</code> — the agent picks tactical mode (frame → explore → decide, no
+    characterization or comparison). Or just code normally — the agent captures micro-decisions
+    as notes automatically. You don't have to use the full cycle for every choice.
+  </p>
+
+  <h2>What's the overhead?</h2>
+
+  <p>
+    A tactical decision takes 30-60 seconds. A standard decision takes 3-5 minutes. The time
+    investment pays back when someone (including future you) asks "why?" and the answer is
+    there, with rationale, alternatives, and evidence.
+  </p>
+
+  <h2>What's FPF?</h2>
+
+  <p>
+    First Principles Framework — a formal specification for engineering reasoning by
+    <a href="https://ailev.livejournal.com" target="_blank" rel="noopener">Anatoly Levenchuk</a>.
+    The <a href="https://github.com/ailev/FPF" target="_blank" rel="noopener">FPF spec is public on GitHub</a>.
+    quint-code implements the practical parts: the ADI reasoning
+    cycle (Abduction-Deduction-Induction), evidence-based trust scoring (R_eff), weakest link
+    aggregation (WLNK), and the decide-measure-reframe loop. You don't need to
+    read the spec to use Quint.
+  </p>
+
+  <h2>Where's the data stored?</h2>
+
+  <p>
+    Database: <code>~/.quint-code/projects/&lt;project-id&gt;/quint.db</code> (SQLite, local,
+    never leaves your machine). Markdown projections: <code>.quint/</code> in your project
+    (git-tracked, for code review). Cross-project index: <code>~/.quint-code/index.db</code>
+    (for cross-project recall).
+  </p>
+</DocsLayout>

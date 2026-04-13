@@ -2,115 +2,159 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Migrating from 5.0" description="How to upgrade from quint-code 5.0 to 5.1.">
-  <h1>Migrating from 5.0 to 5.1</h1>
+<DocsLayout title="Migrating from v5" description="How to upgrade from quint-code 5.x to haft 6.0.">
+  <h1>Migrating from v5 to v6</h1>
 
   <p>
-    Version 5.1 moves the database out of your repository into your home directory. This is a
-    one-time migration — your data is preserved automatically.
+    Version 6.0 renames quint-code to haft, introduces the 5-mode model, and adds claim-aware
+    decisions. Your data is preserved — migration is handled automatically by <code>haft init</code>.
   </p>
 
-  <h2>What changed and why</h2>
+  <h2>What changed</h2>
 
-  <p>
-    In 5.0, the SQLite database lived at <code>.quint/quint.db</code> inside your repo. This caused
-    problems:
-  </p>
+  <h3>Naming</h3>
 
   <ul>
-    <li>Binary SQLite files can't be merged in git — team collaboration was impossible</li>
-    <li>Each project was isolated — no cross-project decision recall</li>
-    <li>The database cluttered git status and diffs</li>
+    <li>Binary: <code>quint-code</code> → <code>haft</code></li>
+    <li>Project directory: <code>.quint/</code> → <code>.haft/</code></li>
+    <li>User home: <code>~/.quint-code/</code> → <code>~/.haft/</code></li>
+    <li>All slash commands: <code>/q-*</code> → <code>/h-*</code></li>
   </ul>
 
-  <p>In 5.1:</p>
+  <h3>Data model</h3>
 
   <ul>
-    <li>Database moves to <code>~/.quint-code/projects/&lt;project-id&gt;/quint.db</code></li>
-    <li>Only markdown projections stay in <code>.quint/</code> — human-readable, git-friendly, designed for code review</li>
-    <li>A new <code>.quint/project.yaml</code> identifies your project with a stable ID</li>
-    <li>Cross-project decision recall works automatically via a shared index</li>
+    <li><strong>Claims</strong> — decisions now carry verifiable claims with <code>verify_after</code> dates. Existing decisions get claims generated from their evidence during migration.</li>
+    <li><strong><code>/h-verify</code> replaces <code>/q-refresh</code></strong> — the fifth cognitive mode actively checks claims against reality, not just evidence age.</li>
+    <li><strong>5-mode model</strong> — Understand, Explore, Choose, Execute, Verify maps to <code>/h-frame</code>, <code>/h-explore</code>, <code>/h-compare</code>, <code>/h-decide</code>, <code>/h-verify</code>.</li>
+  </ul>
+
+  <h3>New features</h3>
+
+  <ul>
+    <li><code>haft sync</code> — team workflow, syncs git-tracked markdown into local DB</li>
+    <li><code>haft agent</code> — standalone TUI runtime, no external AI tool required</li>
+    <li>Knowledge graph — file-to-decision mapping with invariant injection</li>
+    <li>Desktop app (pre-alpha) — visual dashboard</li>
   </ul>
 
   <h2>How to migrate</h2>
 
   <p>Update the binary, then re-run init in each project:</p>
 
-  <pre><code># Update quint-code
+  <pre><code># Install haft (replaces quint-code)
 curl -fsSL https://quint.codes/install.sh | bash
 
 # In each project directory
 cd your-project
-quint-code init</code></pre>
+haft init</code></pre>
 
-  <p>Init will:</p>
+  <p><code>haft init</code> detects your existing <code>.quint/</code> directory and automatically:</p>
 
   <ol>
-    <li>Generate <code>.quint/project.yaml</code> with a unique project ID</li>
-    <li>Copy your existing <code>.quint/quint.db</code> to <code>~/.quint-code/projects/&lt;id&gt;/quint.db</code></li>
-    <li>Add <code>quint.db</code> to <code>.quint/.gitignore</code></li>
-    <li>Populate the cross-project index with your existing decisions</li>
+    <li>Renames <code>.quint/</code> to <code>.haft/</code></li>
+    <li>Migrates the database from <code>~/.quint-code/projects/{'{'}id{'}'}/</code> to <code>~/.haft/projects/{'{'}id{'}'}/</code></li>
+    <li>Runs schema migrations (adds claims table, updates artifact types)</li>
+    <li>Generates claims from existing evidence where possible</li>
+    <li>Updates <code>project.yaml</code> with the new schema version</li>
   </ol>
 
   <p>All your decisions, problems, notes, and evidence are preserved.</p>
 
-  <h2>After migration</h2>
+  <div class="callout">
+    <p>
+      <strong>Safe to run multiple times.</strong> <code>haft init</code> is idempotent — if it
+      detects <code>.haft/</code> already exists, it skips the rename and only runs pending
+      database migrations.
+    </p>
+  </div>
+
+  <h2>Update project prompt files</h2>
 
   <p>
-    Verify it works:
+    If you have a CLAUDE.md (or .cursorrules, AGENTS.md, GEMINI.md) with haft-specific instructions,
+    update the slash commands:
   </p>
 
-  <pre><code>/q-status</code></pre>
+  <pre><code># Download the latest reference prompt
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > CLAUDE.md</code></pre>
+
+  <p>Or manually find-and-replace in your existing file:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>v5 (old)</th>
+        <th>v6 (new)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>quint-code</code></td><td><code>haft</code></td></tr>
+      <tr><td><code>.quint/</code></td><td><code>.haft/</code></td></tr>
+      <tr><td><code>~/.quint-code/</code></td><td><code>~/.haft/</code></td></tr>
+      <tr><td><code>/q-reason</code></td><td><code>/h-reason</code></td></tr>
+      <tr><td><code>/q-frame</code></td><td><code>/h-frame</code></td></tr>
+      <tr><td><code>/q-char</code></td><td><code>/h-char</code></td></tr>
+      <tr><td><code>/q-explore</code></td><td><code>/h-explore</code></td></tr>
+      <tr><td><code>/q-compare</code></td><td><code>/h-compare</code></td></tr>
+      <tr><td><code>/q-decide</code></td><td><code>/h-decide</code></td></tr>
+      <tr><td><code>/q-note</code></td><td><code>/h-note</code></td></tr>
+      <tr><td><code>/q-refresh</code></td><td><code>/h-verify</code></td></tr>
+      <tr><td><code>/q-status</code></td><td><code>/h-status</code></td></tr>
+      <tr><td><code>/q-search</code></td><td><code>/h-search</code></td></tr>
+      <tr><td><code>/q-problems</code></td><td><code>/h-problems</code></td></tr>
+      <tr><td><code>/q-onboard</code></td><td><code>/h-onboard</code></td></tr>
+      <tr><td><code>quint-code init</code></td><td><code>haft init</code></td></tr>
+      <tr><td><code>quint-code board</code></td><td><code>haft board</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Update CI scripts</h2>
 
   <p>
-    You should see your existing decisions and problems. If the MCP connection fails, make sure
-    the new binary is in your PATH and restart your AI tool.
+    If you have CI pipelines that reference <code>quint-code</code>, update them:
   </p>
 
-  <h3>Delete the old database</h3>
+  <ul>
+    <li>Binary name: <code>quint-code</code> → <code>haft</code></li>
+    <li>Directory references: <code>.quint/</code> → <code>.haft/</code></li>
+    <li>Database path: <code>~/.quint-code/</code> → <code>~/.haft/</code></li>
+  </ul>
+
+  <h2>Verify migration</h2>
+
+  <p>After running <code>haft init</code>, verify everything works:</p>
+
+  <pre><code>/h-status</code></pre>
 
   <p>
-    Once you've confirmed everything works, delete the old database from your repo:
+    You should see your existing decisions, problems, and notes. If the MCP connection fails,
+    make sure the new binary is in your PATH and restart your AI tool.
   </p>
 
-  <pre><code>rm .quint/quint.db
-git add .quint/.gitignore
-git commit -m "chore: remove old quint database, now in ~/.quint-code/"</code></pre>
-
-  <h3>Commit .quint/ as your knowledge base</h3>
+  <h2>Git cleanup</h2>
 
   <p>
-    The <code>.quint/</code> directory now contains only markdown files and <code>project.yaml</code>.
-    These are your project's engineering knowledge base — commit them:
+    After confirming migration, commit the renamed directory:
   </p>
 
-  <pre><code>git add .quint/
-git commit -m "chore: add quint knowledge base — decisions, problems, notes"</code></pre>
+  <pre><code>git add .haft/
+git rm -r --cached .quint/   # if .quint/ was tracked
+git commit -m "chore: migrate quint-code to haft v6"</code></pre>
 
-  <p>
-    This is intentional. Decision records, problem cards, and notes in <code>.quint/</code> are
-    designed for code review. When you create a decision, a markdown file appears in your PR diff.
-    Reviewers can see and comment on engineering decisions alongside code changes.
-  </p>
+  <div class="callout-warn">
+    <p>
+      <strong>Coordinate with your team.</strong> If multiple engineers work on the same repo,
+      agree on a migration point. Once <code>.quint/</code> is renamed to <code>.haft/</code>
+      in the main branch, everyone needs to update their binary and run <code>haft init</code>.
+    </p>
+  </div>
 
   <h2>What if I don't migrate?</h2>
 
   <p>
-    The 5.1 MCP server detects old <code>.quint/quint.db</code> files and blocks all tool calls
-    with a message asking you to run <code>quint-code init</code>. Your data is safe — it just
-    won't work until you migrate.
-  </p>
-
-  <h2>Multiple projects</h2>
-
-  <p>
-    Each project gets its own database in <code>~/.quint-code/projects/</code>, identified by
-    the ID in <code>.quint/project.yaml</code>. Run <code>quint-code init</code> in each project
-    separately.
-  </p>
-
-  <p>
-    After migrating multiple projects, cross-project recall kicks in: when you frame a new problem
-    in one project, related decisions from other projects surface automatically.
+    The haft 6.0 MCP server detects old <code>.quint/</code> directories and prompts you to run
+    <code>haft init</code>. Your data is safe — it just won't work until you migrate. The old
+    <code>quint-code</code> binary continues to work with v5 data if you need to roll back.
   </p>
 </DocsLayout>

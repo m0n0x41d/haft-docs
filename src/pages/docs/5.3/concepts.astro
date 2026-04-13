@@ -1,8 +1,8 @@
 ---
-import DocsLayout from '../../layouts/DocsLayout.astro';
+import DocsLayout from '../../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Key Concepts" description="R_eff, congruence levels, weakest link, claims, projections, and other core concepts.">
+<DocsLayout title="Key Concepts" description="R_eff, congruence levels, weakest link, and other core concepts.">
   <h1>Key Concepts</h1>
 
   <h2>R_eff (Effective Reliability)</h2>
@@ -20,7 +20,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   </p>
 
   <ul>
-    <li><strong>R_eff >= 0.5</strong> — healthy, decision is trustworthy</li>
+    <li><strong>R_eff ≥ 0.5</strong> — healthy, decision is trustworthy</li>
     <li><strong>R_eff &lt; 0.5</strong> — degraded, surfaces in stale scan</li>
     <li><strong>R_eff &lt; 0.3</strong> — AT RISK, needs immediate attention</li>
     <li><strong>No evidence</strong> — decision is fresh, not degraded (treated as healthy)</li>
@@ -53,19 +53,19 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <p>
     CL matters for cross-project recall too. When a decision from another project surfaces during
-    <code>/h-frame</code>, it gets tagged CL2 (same language) or CL1 (different language).
+    <code>/q-frame</code>, it gets tagged CL2 (same language) or CL1 (different language).
   </p>
 
   <h2>Weakest Link (WLNK)</h2>
 
   <p>
-    Every variant in <code>/h-explore</code> must identify its weakest link — the single thing that
+    Every variant in <code>/q-explore</code> must identify its weakest link — the single thing that
     bounds its quality. This is not a generic "cons" list. It's the specific mechanism that will
     fail first under stress.
   </p>
 
   <p>
-    WLNK applies everywhere in haft: R_eff is min (not average), gate decisions use worst-wins
+    WLNK applies everywhere in Quint: R_eff is min (not average), gate decisions use worst-wins
     (not voting), evidence chains break at the weakest item.
   </p>
 
@@ -85,7 +85,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Indicator Roles</h2>
 
   <p>
-    When characterizing a problem (<code>/h-char</code>), each comparison dimension gets a role:
+    When characterizing a problem (<code>/q-char</code>), each comparison dimension gets a role:
   </p>
 
   <ul>
@@ -99,20 +99,14 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Pareto Front</h2>
 
   <p>
-    After comparison (<code>/h-compare</code>), variants are plotted on a Pareto front — the set
-    of options where no option is strictly worse than another on all target dimensions.
+    After comparison (<code>/q-compare</code>), variants are plotted on a Pareto front — the set
+    of options where no option is strictly worse than another on all dimensions.
   </p>
 
   <p>
     If variant A is better on latency but worse on cost, and variant B is the reverse — both are
     on the Pareto front. Neither dominates the other. Your job is to make the trade-off
     explicitly, not pretend one is objectively "best."
-  </p>
-
-  <p>
-    In v6, Pareto computation is <strong>constraint-aware</strong>: variants that violate any
-    <code>constraint</code>-role indicator are eliminated before dominance comparison. This
-    prevents infeasible options from cluttering the front.
   </p>
 
   <h2>Parity</h2>
@@ -136,59 +130,19 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     <li>Measurements without independent verification get CL1 (self-evidence), not CL3</li>
   </ul>
 
-  <h2>Claims and Predictions</h2>
-
-  <p>
-    A claim is a structured, falsifiable prediction attached to a decision. It has three
-    components:
-  </p>
-
-  <ul>
-    <li><strong>observable</strong> — what to measure ("p99 latency of /api/search")</li>
-    <li><strong>threshold</strong> — what counts as success ("&lt; 200ms")</li>
-    <li><strong>verify_after</strong> — when to check ("2026-05-15")</li>
-  </ul>
-
-  <p>
-    Claims are falsifiable by design. When <code>verify_after</code> passes and the claim
-    is unverified, <code>/h-verify scan</code> surfaces it. Verification results attach as
-    evidence, pulling R_eff up (claim held) or down (claim falsified). This closes the loop
-    between prediction and reality.
-  </p>
-
-  <h2>Projections</h2>
-
-  <p>
-    The same artifact graph can be rendered for different audiences. A projection is a
-    deterministic transformation — same input always produces the same output, just
-    filtered and formatted for a specific reader:
-  </p>
-
-  <ul>
-    <li><strong>engineer</strong> — invariants, affected files, drift status, WLNK</li>
-    <li><strong>manager</strong> — decision titles, health summary, stale count, coverage</li>
-    <li><strong>audit</strong> — full evidence chain, CL tags, dates, supersession history</li>
-    <li><strong>compare</strong> — side-by-side variant comparison with Pareto front</li>
-  </ul>
-
-  <p>
-    Projections are computed, not stored. There's one source of truth (the artifact graph);
-    projections are views. Use <code>/h-view</code> to select a projection.
-  </p>
-
   <h2>The two cycles</h2>
 
   <p>
-    Decisions don't end at recording. The observation cycle (drift, evidence decay, claim
-    verification) feeds signals back into the decision cycle (frame, explore, compare, decide).
-    Failed measurements create new problems. Stale decisions trigger re-evaluation. See
-    <a href="/docs/lifecycle">Decision Lifecycle</a> for how haft supports each stage.
+    Decisions don't end at recording. The observation cycle (drift, evidence decay, stale scan)
+    feeds signals back into the decision cycle (frame, explore, compare, decide). Failed
+    measurements create new problems. Stale decisions trigger re-evaluation. See
+    <a href="/docs/lifecycle">Decision Lifecycle</a> for how quint-code supports each stage.
   </p>
 
   <h2>Next</h2>
 
   <ul>
-    <li><a href="/docs/faq">FAQ</a> — common questions about haft</li>
+    <li><a href="/docs/faq">FAQ</a> — common questions about quint-code</li>
     <li><a href="/docs/lifecycle">Decision lifecycle</a> — how decisions age and refresh</li>
   </ul>
 </DocsLayout>

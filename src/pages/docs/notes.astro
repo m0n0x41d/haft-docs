@@ -6,41 +6,47 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h1>Notes & Micro-decisions</h1>
 
   <p>
-    Not every decision needs a full reasoning cycle. "We're using RWMutex instead of channels
+    Not every decision needs five modes. "We're using RWMutex instead of channels
     because contention is under 0.1%" is a perfectly valid engineering choice that should be
-    recorded — but doesn't need five steps and a Pareto front.
+    recorded — but doesn't need characterization, Pareto computation, and adversarial verification.
   </p>
 
   <h2>How notes work</h2>
 
-  <pre><code>/q-note</code></pre>
+  <pre><code>/h-note</code></pre>
 
   <p>
-    Record a micro-decision with a title and rationale. The agent validates:
+    Record a micro-decision with a title and rationale. The agent validates before persisting:
   </p>
 
   <ul>
     <li><strong>Rationale required</strong> — why this choice? No rationale, no record.</li>
     <li><strong>Conflict check</strong> — does this contradict an active decision?</li>
-    <li><strong>Overlap check</strong> — does an existing decision already cover this topic? (Rejected if &gt;70% word overlap.)</li>
-    <li><strong>Scope check</strong> — if it affects many files, suggests <code>/q-frame</code> instead.</li>
+    <li><strong>Overlap check</strong> — does an existing decision already cover this topic?
+      <ul>
+        <li>&gt;70% word overlap → rejected outright</li>
+        <li>50-70% overlap → warning, you can proceed</li>
+      </ul>
+    </li>
+    <li><strong>Scope check</strong> — if it affects many files, the agent suggests <code>/h-frame</code> instead.
+      A note that touches half the codebase is not a micro-decision.</li>
   </ul>
 
-  <h2>Auto-capture (when /q-reason is active)</h2>
+  <h2>Auto-capture</h2>
 
   <p>
-    When <code>/q-reason</code> is active in a session, the agent may record notes automatically
-    when it notices decisions in conversation. This is a best-effort behavior, not a guarantee —
-    the auto-capture instructions are part of the <code>/q-reason</code> skill prompt. If
-    <code>/q-reason</code> hasn't been invoked in the current session, the agent won't auto-capture.
+    When <code>/h-reason</code> is active in a session, the agent may record notes automatically
+    when it notices decisions in conversation. This is best-effort — the auto-capture logic is
+    part of the <code>/h-reason</code> skill prompt. If <code>/h-reason</code> hasn't been
+    invoked in the current session, the agent won't auto-capture.
   </p>
 
   <p>
-    For reliable note capture, use <code>/q-note</code> explicitly. It takes seconds and ensures
+    For reliable capture, use <code>/h-note</code> explicitly. It takes seconds and ensures
     the rationale is recorded properly.
   </p>
 
-  <p>When auto-capture is active, it does NOT trigger for:</p>
+  <p>Auto-capture does NOT trigger for:</p>
   <ul>
     <li>Formatting choices, import ordering, variable naming (too trivial)</li>
     <li>Topics already covered by an active decision (overlap check prevents duplicates)</li>
@@ -51,33 +57,42 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <p>
     Notes are observations and micro-decisions. They are NOT architectural decisions.
     If you find yourself writing a note about a fundamental approach or strategy — stop.
-    Use <code>/q-frame</code> → <code>/q-decide</code> instead.
+    Use <code>/h-frame</code> → <code>/h-decide</code> instead.
   </p>
 
   <p>
     Notes auto-expire after 90 days. If the choice is still relevant in 3 months, it deserves
-    a proper decision record.
+    a proper decision record with the <a href="/docs/five-modes">full cycle</a>.
   </p>
 
-  <h2>Notes in /q-status</h2>
+  <h2>Notes in /h-status</h2>
 
   <p>
-    <code>/q-status</code> shows the 5 most recent active notes. Deprecated and superseded notes
+    <code>/h-status</code> shows the 5 most recent active notes. Deprecated and superseded notes
     are filtered out. Notes do not count toward module coverage — only decisions do.
   </p>
 
   <h2>Cleaning up notes</h2>
 
   <p>
-    <code>/q-refresh action="reconcile"</code> scans all active notes against all active decisions.
+    <code>/h-verify action="reconcile"</code> scans all active notes against all active decisions.
     If a note overlaps significantly with a decision, it suggests deprecation. This is a batch
     cleanup — one command, no per-note review needed.
   </p>
 
+  <div class="callout">
+    <p>
+      <strong>When to promote a note:</strong> If you keep referencing a note in conversations,
+      or if the note has survived past its 90-day expiry and been waived, it's a signal that
+      this choice matters enough for a proper decision record. Run <code>/h-frame</code> to
+      start the full cycle.
+    </p>
+  </div>
+
   <h2>Next</h2>
 
   <ul>
-    <li><a href="/docs/lifecycle">Decision lifecycle</a> — staleness, refresh, evidence decay</li>
+    <li><a href="/docs/lifecycle">Decision lifecycle</a> — staleness, evidence decay, drift detection</li>
     <li><a href="/docs/concepts">Key concepts</a> — R_eff, CL, weakest link</li>
   </ul>
 </DocsLayout>

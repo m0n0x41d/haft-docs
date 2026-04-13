@@ -1,0 +1,435 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="The Five Modes" description="Understand, Explore, Choose, Execute, Verify — the core reasoning cycle.">
+  <h1>The Five Modes</h1>
+
+  <p>
+    Every structured decision in haft moves through five modes. Each mode has a clear goal,
+    entry conditions, outputs, and legitimate reroutes back to earlier modes when reality
+    doesn't match expectations. This is not a rigid pipeline — it's a directed graph with
+    well-defined upstream arrows.
+  </p>
+
+  <pre><code>Understand → Explore → Choose → Execute → Verify
+    ↑            ↑         ↑                  |
+    |            |         └──────────────────┘
+    |            └────────────────────────────┘
+    └─────────────────────────────────────────┘</code></pre>
+
+  <p>
+    Forward is the default. Reroutes happen when a later mode reveals that earlier framing
+    was wrong — not because you feel like iterating.
+  </p>
+
+  <h2>Understand</h2>
+
+  <p>
+    <strong>Entry:</strong> <code>/h-frame</code> or <code>/h-reason</code><br>
+    <strong>Goal:</strong> Frame the problem before solving it.<br>
+    <strong>Tool:</strong> <code>haft_problem(action="frame")</code>
+  </p>
+
+  <p>
+    Most engineering mistakes happen because the problem was never properly stated.
+    "We need caching" is not a problem — it's a solution in search of a problem.
+    The actual problem might be "API response time exceeds 500ms on the product listing page."
+  </p>
+
+  <p>The agent creates a <strong>ProblemCard</strong> with:</p>
+
+  <ul>
+    <li><strong>Signal</strong> — the anomalous observation (not the assumed cause)</li>
+    <li><strong>Constraints</strong> — hard limits that any solution must respect</li>
+    <li><strong>Optimization targets</strong> — what to improve (1-3 max)</li>
+    <li><strong>Observation indicators</strong> — what to monitor but NOT optimize (Anti-Goodhart)</li>
+    <li><strong>Acceptance criteria</strong> — how you'll know the problem is solved</li>
+    <li><strong>Blast radius</strong> — what systems/teams are affected</li>
+  </ul>
+
+  <h3>Language precision triggers</h3>
+
+  <p>
+    The Understand mode watches for ambiguous terms and forces you to unpack them before
+    proceeding. When you use words like <code>service</code>, <code>process</code>,
+    <code>quality</code>, or <code>component</code>, the agent asks: "what do you mean
+    by that, specifically?" These words mean different things to different people. A problem
+    framed with ambiguous terms produces ambiguous solutions.
+  </p>
+
+  <h2>Explore</h2>
+
+  <p>
+    <strong>Entry:</strong> <code>/h-explore</code> (or <code>/h-char</code> first for characterization)<br>
+    <strong>Goal:</strong> Generate 2+ genuinely distinct variants — different in kind, not degree.<br>
+    <strong>Tool:</strong> <code>haft_solution(action="explore")</code>
+  </p>
+
+  <h3>Characterization (/h-char)</h3>
+
+  <p>
+    Before generating options, define how you'll compare them. This prevents bias — you can't
+    cherry-pick criteria to favor the option you already like. Run <code>/h-char</code> to
+    define comparison dimensions with roles:
+  </p>
+
+  <ul>
+    <li><strong>constraint</strong> — hard limit, must satisfy (e.g., "latency &lt; 100ms")</li>
+    <li><strong>target</strong> — what you're optimizing (e.g., "throughput")</li>
+    <li><strong>observation</strong> — watch but don't optimize. Anti-Goodhart: if you optimize
+      throughput, you might silently kill reliability. Marking reliability as "observation" means
+      you track it without letting it distort your optimization.</li>
+  </ul>
+
+  <p>
+    Characterization is done BEFORE seeing options. This is deliberate — setting the rules
+    after seeing the candidates is how you get biased comparisons.
+  </p>
+
+  <h3>Variant generation</h3>
+
+  <p>"Different" means different in kind, not degree:</p>
+
+  <ul>
+    <li>Bad: "Redis vs Memcached vs in-memory cache" — three variations of the same approach</li>
+    <li>Good: "Cache layer vs CDN optimization vs query redesign" — three fundamentally different strategies</li>
+  </ul>
+
+  <p>Each variant gets:</p>
+
+  <ul>
+    <li><strong>Description</strong> — what this approach does</li>
+    <li><strong>Strengths</strong> — why it might work</li>
+    <li><strong>Weakest link (WLNK)</strong> — what will break first. Not generic "cons" — the single
+      thing that bounds quality.</li>
+    <li><strong>Risks</strong> — what could go wrong</li>
+    <li><strong>Stepping stone</strong> — does this open future possibilities even if not optimal now?</li>
+  </ul>
+
+  <h3>Diversity check</h3>
+
+  <p>
+    The tool computes word overlap between variants. If two share more than 50% of their words,
+    it warns: "do these differ in kind, not degree?" You can proceed anyway, but the warning is
+    there to prevent degree-variation masquerading as real alternatives.
+  </p>
+
+  <h2>Choose</h2>
+
+  <p>
+    <strong>Entry:</strong> <code>/h-compare</code><br>
+    <strong>Goal:</strong> Fair comparison on declared dimensions, identify the Pareto front.<br>
+    <strong>Tool:</strong> <code>haft_solution(action="compare")</code>
+  </p>
+
+  <h3>Probe-or-commit gate</h3>
+
+  <p>
+    Before running the comparison, the agent checks readiness:
+  </p>
+
+  <ul>
+    <li><strong>Dimension coverage</strong> — are all declared dimensions scored for all variants?</li>
+    <li><strong>Variant diversity</strong> — do variants actually differ?</li>
+    <li><strong>Specific investigation</strong> — could a targeted probe (benchmark, prototype, expert consult) change the ranking?</li>
+  </ul>
+
+  <p>The gate returns one of four verdicts:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Verdict</th>
+        <th>Meaning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>commit</strong></td>
+        <td>Proceed with comparison — evidence is sufficient</td>
+      </tr>
+      <tr>
+        <td><strong>probe</strong></td>
+        <td>Run a specific investigation first (returns what to probe)</td>
+      </tr>
+      <tr>
+        <td><strong>widen</strong></td>
+        <td>Variants are too similar — go back to Explore</td>
+      </tr>
+      <tr>
+        <td><strong>reroute</strong></td>
+        <td>Problem framing is wrong — go back to Understand</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Constraint-aware Pareto</h3>
+
+  <p>
+    Constraints eliminate variants BEFORE dominance computation. If a variant violates a
+    hard constraint, it's out — no matter how good it scores on targets. Only surviving
+    variants enter the Pareto front calculation.
+  </p>
+
+  <p>
+    The result is a set of non-dominated options where no variant is strictly worse than
+    another on all dimensions. This is not "pick the best" — it's "here are the options
+    that trade off differently, each sacrificing something distinct."
+  </p>
+
+  <h3>Parity enforcement</h3>
+
+  <p>
+    Same inputs, same scope, same budget for all variants — or the comparison is junk.
+    The tool checks for parity violations and flags them before producing results.
+  </p>
+
+  <h3>Language precision triggers</h3>
+
+  <p>
+    Subjective dimensions get flagged. If a comparison dimension is "maintainability",
+    "simplicity", or "scalability" without a concrete metric, the agent asks you to
+    operationalize it: "what specific measurement would indicate maintainability?"
+  </p>
+
+  <h2>Execute</h2>
+
+  <p>
+    <strong>Entry:</strong> <code>/h-decide</code><br>
+    <strong>Goal:</strong> Record the decision as a contract with invariants.<br>
+    <strong>Tool:</strong> <code>haft_decision(action="decide")</code>
+  </p>
+
+  <h3>Adversarial verification gate</h3>
+
+  <p>
+    Before recording, the agent challenges the decision:
+  </p>
+
+  <ul>
+    <li><strong>Tactical depth:</strong> one-line counter-argument — "strongest reason this is wrong"</li>
+    <li><strong>Standard/Deep depth:</strong> five adversarial probes —
+      <ol>
+        <li>Strongest counter-argument against the selected variant</li>
+        <li>What would make this decision wrong in 3 months?</li>
+        <li>Is any evidence self-referential (agent's own reasoning as proof)?</li>
+        <li>Does the comparison hold under different load/scale assumptions?</li>
+        <li>What's the cheapest experiment that could refute this?</li>
+      </ol>
+    </li>
+  </ul>
+
+  <p>
+    If the counter-argument survives scrutiny, the decision is recorded.
+  </p>
+
+  <h3>Decision record</h3>
+
+  <p>The record includes:</p>
+
+  <ul>
+    <li><strong>Problem frame</strong> — linked back to the ProblemCard</li>
+    <li><strong>Selected variant</strong> — which option and why</li>
+    <li><strong>Invariants</strong> — what must always be true</li>
+    <li><strong>DO/DON'T rules</strong> — explicit behavioral contract</li>
+    <li><strong>Rollback plan</strong> — how to reverse if it goes wrong</li>
+    <li><strong>Refresh triggers</strong> — conditions that should trigger re-evaluation</li>
+    <li><strong>Affected files</strong> — exact code locations</li>
+    <li><strong>Claims with <code>verify_after</code> dates</strong> — "latency stays under 100ms" verified in 2 weeks</li>
+  </ul>
+
+  <p>
+    After recording, the agent snapshots file hashes as the baseline for
+    <a href="/docs/lifecycle">drift detection</a>.
+  </p>
+
+  <h2>Verify</h2>
+
+  <p>
+    <strong>Entry:</strong> <code>/h-verify</code><br>
+    <strong>Goal:</strong> Check what's stale, measure outcomes, maintain decision health.<br>
+    <strong>Tools:</strong> <code>haft_refresh(...)</code> + <code>haft_decision(action="measure")</code>
+  </p>
+
+  <h3>Discovery</h3>
+
+  <p>
+    <code>/h-verify scan</code> finds everything that needs attention:
+  </p>
+
+  <ul>
+    <li><strong>Stale artifacts</strong> — R_eff &lt; 0.5 or expired evidence</li>
+    <li><strong>Code drift</strong> — files changed since baseline snapshot</li>
+    <li><strong>Pending claims</strong> — <code>verify_after</code> dates that have passed without measurement</li>
+  </ul>
+
+  <h3>Actions</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>What it does</th>
+        <th>When to use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>scan</code></td>
+        <td>Find all stale artifacts + code drift + pending claims</td>
+        <td>Routine health check</td>
+      </tr>
+      <tr>
+        <td><code>measure</code></td>
+        <td>Record evidence for a claim or acceptance criteria</td>
+        <td>Verifying a decision's outcomes</td>
+      </tr>
+      <tr>
+        <td><code>waive</code></td>
+        <td>Extend validity with justification</td>
+        <td>Decision still valid, just expired</td>
+      </tr>
+      <tr>
+        <td><code>reopen</code></td>
+        <td>Start new problem cycle from old decision</td>
+        <td>Conditions changed, need to reconsider</td>
+      </tr>
+      <tr>
+        <td><code>supersede</code></td>
+        <td>Replace with a different artifact</td>
+        <td>New decision replaces old one</td>
+      </tr>
+      <tr>
+        <td><code>deprecate</code></td>
+        <td>Archive as no longer relevant</td>
+        <td>Decision obsolete, nothing replaces it</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Evidence freshness</h3>
+
+  <p>
+    Each evidence item has a <code>valid_until</code> date and a congruence level (CL).
+    As evidence expires, R_eff degrades. New measurements mark old evidence as superseded.
+    See <a href="/docs/lifecycle">Decision Lifecycle</a> for the full model.
+  </p>
+
+  <h2>Reroutes</h2>
+
+  <p>
+    Reroutes are legitimate upstream movements — not iteration for iteration's sake.
+    Each reroute has a specific trigger:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>From</th>
+        <th>To</th>
+        <th>Trigger</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Choose</td>
+        <td>Understand</td>
+        <td>Comparison reveals bad framing — dimensions don't capture what actually matters</td>
+      </tr>
+      <tr>
+        <td>Explore</td>
+        <td>Understand</td>
+        <td>Exploration reveals the wrong problem — you're solving a symptom, not the cause</td>
+      </tr>
+      <tr>
+        <td>Execute</td>
+        <td>Choose</td>
+        <td>Implementation shows chosen option doesn't work — need to pick a different variant</td>
+      </tr>
+      <tr>
+        <td>Verify</td>
+        <td>Any</td>
+        <td>Evidence shows the decision needs reconsideration — measurements failed, context changed</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout-warn">
+    <p>
+      <strong>Reroutes are signals, not workflow buttons.</strong> If you find yourself rerouting
+      frequently, the problem is upstream: either the framing is consistently weak, or the
+      exploration isn't generating genuinely distinct variants.
+    </p>
+  </div>
+
+  <h2>The Note fast path</h2>
+
+  <p>
+    Not every decision needs five modes. <code>/h-note</code> captures micro-decisions that
+    don't warrant the full cycle — "we use RWMutex here because contention is under 0.1%"
+    is a valid engineering choice that should be recorded but doesn't need a Pareto front.
+  </p>
+
+  <p>
+    Notes are validated (rationale required, conflict check, overlap check), auto-expire
+    after 90 days, and are explicitly NOT architectural decisions. If a note keeps getting
+    referenced, it's time to promote it to a proper decision via <code>/h-frame</code>.
+  </p>
+
+  <p>
+    See <a href="/docs/notes">Notes & Micro-decisions</a> for details.
+  </p>
+
+  <h2>Mapping from v5 commands</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>v5 command</th>
+        <th>v6 mode</th>
+        <th>v6 command</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/q-frame</code></td>
+        <td>Understand</td>
+        <td><code>/h-frame</code></td>
+      </tr>
+      <tr>
+        <td><code>/q-char</code></td>
+        <td>Explore (characterization)</td>
+        <td><code>/h-char</code></td>
+      </tr>
+      <tr>
+        <td><code>/q-explore</code></td>
+        <td>Explore</td>
+        <td><code>/h-explore</code></td>
+      </tr>
+      <tr>
+        <td><code>/q-compare</code></td>
+        <td>Choose</td>
+        <td><code>/h-compare</code></td>
+      </tr>
+      <tr>
+        <td><code>/q-decide</code></td>
+        <td>Execute</td>
+        <td><code>/h-decide</code></td>
+      </tr>
+      <tr>
+        <td><code>/q-refresh</code></td>
+        <td>Verify</td>
+        <td><code>/h-verify</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Next</h2>
+
+  <ul>
+    <li><a href="/docs/notes">Notes & micro-decisions</a> — the fast path for small choices</li>
+    <li><a href="/docs/lifecycle">Decision lifecycle</a> — staleness, evidence decay, drift detection</li>
+    <li><a href="/docs/team-sync">Team sync</a> — sharing decisions across the team via git</li>
+  </ul>
+</DocsLayout>

@@ -1,0 +1,159 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Team Sync" description="Share decisions across the team via git — no server required.">
+  <h1>Team Sync</h1>
+
+  <p>
+    In v5, decisions were solo-only. The SQLite database lived on your machine, invisible
+    to everyone else. You could commit the <code>.haft/</code> markdown files, but there was
+    no way to get them back into a teammate's database. Team members were making decisions
+    in parallel with no shared awareness.
+  </p>
+
+  <h2>The solution</h2>
+
+  <p>
+    <code>haft sync</code> bridges git-tracked <code>.haft/*.md</code> files and local
+    SQLite databases. The markdown files are the shared source of truth. Each engineer's
+    local database is a projection of those files.
+  </p>
+
+  <pre><code>$ haft sync</code></pre>
+
+  <h2>How it works</h2>
+
+  <p>The workflow is straightforward:</p>
+
+  <ol>
+    <li>Engineer A creates a decision (<code>/h-decide</code>). haft writes
+      <code>.haft/decisions/dec-001.md</code> automatically.</li>
+    <li>A commits and pushes the <code>.haft/</code> directory to git — alongside the code the decision governs.</li>
+    <li>Engineer B does <code>git pull</code>.</li>
+    <li>B runs <code>haft sync</code>.</li>
+    <li>B's local SQLite database is updated with A's decisions.</li>
+    <li>Both engineers now see the same decisions in <code>/h-status</code> and <code>haft board</code>.</li>
+  </ol>
+
+  <pre><code># Engineer A
+$ /h-decide
+# ... decision recorded, .haft/decisions/dec-001.md created
+$ git add .haft/
+$ git commit -m "dec: caching strategy for product API"
+$ git push
+
+# Engineer B
+$ git pull
+$ haft sync
+# dec-001 now in B's local database</code></pre>
+
+  <h2>Key design</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Aspect</th>
+        <th>How it works</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Source of truth</strong></td>
+        <td><code>.haft/*.md</code> files in git — human-readable, reviewable in PRs</td>
+      </tr>
+      <tr>
+        <td><strong>Local state</strong></td>
+        <td>Each engineer has their own SQLite database (<code>~/.haft/projects/{'{'}id{'}'}/</code>)</td>
+      </tr>
+      <tr>
+        <td><strong>Sync direction</strong></td>
+        <td>Markdown → SQLite (sync reads files, updates database)</td>
+      </tr>
+      <tr>
+        <td><strong>Idempotency</strong></td>
+        <td>Running <code>haft sync</code> multiple times is safe — same result every time</td>
+      </tr>
+      <tr>
+        <td><strong>Race safety</strong></td>
+        <td>No coordination needed — each engineer syncs independently</td>
+      </tr>
+      <tr>
+        <td><strong>Server</strong></td>
+        <td>None. Purely git-based. Works with any git hosting.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>PR review workflow</h2>
+
+  <p>
+    Because decisions live in <code>.haft/</code> as markdown files, they show up in git diffs
+    and pull requests. Reviewers can read the rationale, check the invariants, and evaluate the
+    weakest link — all in the same PR that contains the code change.
+  </p>
+
+  <p>
+    This turns "why did we do it this way?" into a reviewable artifact instead of a Slack
+    conversation that disappears in 3 weeks.
+  </p>
+
+  <pre><code>$ git diff main...feature-branch -- .haft/
+# Shows new/changed decisions in this PR</code></pre>
+
+  <div class="callout">
+    <p>
+      <strong>Tip:</strong> Include <code>.haft/</code> diffs in your PR template or review
+      checklist. When a PR includes both code changes and a decision record, reviewers
+      can verify that the code actually implements what the decision describes.
+    </p>
+  </div>
+
+  <h2>What's shared</h2>
+
+  <ul>
+    <li>Decision records (<code>.haft/decisions/*.md</code>)</li>
+    <li>Problem frames (<code>.haft/problems/*.md</code>)</li>
+    <li>Notes (<code>.haft/notes/*.md</code>)</li>
+    <li>Evidence and measurements (embedded in decision files)</li>
+    <li>Baseline hashes (for drift detection after sync)</li>
+  </ul>
+
+  <h2>What's NOT shared</h2>
+
+  <ul>
+    <li><strong>Local SQLite database</strong> — <code>~/.haft/projects/{'{'}id{'}'}/haft.db</code> stays local</li>
+    <li><strong>Cross-project index</strong> — each engineer's cross-project recall is based on their own projects</li>
+    <li><strong>Personal settings</strong> — depth preferences, default project, etc.</li>
+    <li><strong>Search index</strong> — <code>/h-search</code> queries the local database, not a shared one</li>
+  </ul>
+
+  <h2>Limitations</h2>
+
+  <ul>
+    <li><strong>No real-time collaboration</strong> — sync happens when you run it, not continuously.
+      If two engineers are working on the same decision simultaneously, the last commit wins via git.</li>
+    <li><strong>No conflict resolution</strong> — git handles merge conflicts on the markdown files.
+      If two engineers modify the same decision file, it's a standard git merge conflict.</li>
+    <li><strong>No shared search index</strong> — each engineer searches their own local database.
+      Cross-team search isn't available yet.</li>
+    <li><strong>One-way inference</strong> — <code>haft sync</code> reads markdown and updates SQLite.
+      Manual edits to markdown are picked up on next sync, but the database is never the source of truth
+      for other engineers.</li>
+  </ul>
+
+  <div class="callout-warn">
+    <p>
+      <strong>Don't edit <code>.haft/*.md</code> files by hand</strong> unless you know what you're doing.
+      The markdown format is designed to be readable, but it's also a structured format that
+      <code>haft sync</code> parses. Malformed files will be skipped during sync with a warning.
+    </p>
+  </div>
+
+  <h2>Next</h2>
+
+  <ul>
+    <li><a href="/docs/lifecycle">Decision lifecycle</a> — how decisions age and get verified</li>
+    <li><a href="/docs/commands">All commands</a> — complete reference including <code>haft sync</code></li>
+  </ul>
+</DocsLayout>

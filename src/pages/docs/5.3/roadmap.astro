@@ -1,0 +1,100 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Roadmap" description="Where quint-code is heading — team collaboration, formal specification, standalone agent.">
+  <h1>Roadmap</h1>
+
+  <p>
+    quint-code is actively developed. Here's what's coming — not promises, but directions we're
+    building toward.
+  </p>
+
+  <h2>Recently shipped (5.3)</h2>
+
+  <ul>
+    <li><strong>Interactive terminal dashboard</strong> — <code>quint-code board</code> with four tabs, vim navigation, glamour markdown, live refresh, health checks</li>
+    <li><strong>Context-aware <code>/q-reason</code></strong> — three paths based on intent (think, prepare-and-wait, or full autonomous)</li>
+    <li><strong>Decision mode from artifact chain</strong> — mode reflects actual reasoning depth, not agent's self-report</li>
+    <li><strong>C/C++ language support</strong> — compile_commands.json, header modules, symlink-safe resolution</li>
+    <li><strong>FTS5 search enrichment</strong> — agent-generated keywords at write time</li>
+  </ul>
+
+  <h2>Team collaboration</h2>
+
+  <p>
+    This is the #1 priority. The architecture is already prepared:
+  </p>
+
+  <ul>
+    <li>Database is out of the repo (unified storage in <code>~/.quint-code/</code>)</li>
+    <li>Project identity via <code>.quint/project.yaml</code> — stable across machines</li>
+    <li><code>QUINT_SERVER_ORIGIN</code> env var ready for remote server mode</li>
+    <li>Markdown projections in <code>.quint/</code> — git-mergeable, reviewable in PRs</li>
+    <li><code>quint-code board</code> — the foundation for team-visible dashboards</li>
+  </ul>
+
+  <p>The plan for team mode:</p>
+
+  <p>
+    <strong><code>quint-code server</code></strong> — a new subcommand in the same binary. A thin
+    HTTP server that manages the decision database. For solo advanced use, it runs on localhost and
+    enables features that require a long-running process. For teams, it runs on a shared server.
+  </p>
+
+  <pre><code>Solo:  Agent → MCP → quint-code serve → local SQLite
+Team:  Agent → MCP → quint-code serve → quint-code server (remote) → PostgreSQL</code></pre>
+
+  <p>
+    When team mode exists, <code>quint-code board</code> switches to the remote database automatically.
+    <code>quint-code board --check</code> becomes a real CI command that connects to the server.
+  </p>
+
+  <h2>Formal specification (research)</h2>
+
+  <p>
+    Decision records from the <a href="/docs/full-cycle">full cycle</a> contain invariants,
+    post-conditions, and acceptance criteria — enough structure for any agent to generate
+    property-based tests today. This works without any quint-code changes.
+  </p>
+
+  <p>
+    The research direction: can we go further? Translating decision invariants into
+    <a href="https://quint-lang.org/" target="_blank" rel="noopener">Quint specifications</a>
+    (TLA+ with TypeScript syntax) for model checking — verifying that invariants hold across
+    all reachable states, not just random inputs. This is in research phase.
+  </p>
+
+  <h2>Cognitive review loops</h2>
+
+  <p>
+    Instead of dumb <code>valid_until</code> timers, use
+    <a href="https://github.com/open-spaced-repetition/fsrs4anki" target="_blank" rel="noopener">FSRS</a>
+    (Free Spaced Repetition Scheduler) to schedule decision reviews based on evidence confidence
+    and historical review quality. Requires the server mode (long-running process).
+  </p>
+
+  <h2>Autonomy budgets</h2>
+
+  <p>
+    From FPF E.16: treat agent autonomy as a managed resource (like money or risk), not as
+    "magic of a smart model." Typed budgets with guards, separation of duties, override protocols.
+    This is the team governance layer.
+  </p>
+
+  <h2>What's not on the roadmap</h2>
+
+  <ul>
+    <li><strong>Cloud/SaaS</strong> — quint-code is local-first. If there's ever a hosted version, it'll be a server you run yourself, not a SaaS.</li>
+    <li><strong>AI model lock-in</strong> — quint-code works with any MCP-compatible AI tool. We don't pick your model.</li>
+    <li><strong>Prescriptive methodology</strong> — quint-code provides structure, not opinions. Use as much or as little of the FPF cycle as fits your workflow.</li>
+  </ul>
+
+  <h2>Want to contribute?</h2>
+
+  <p>
+    Check the <a href="https://github.com/m0n0x41d/quint-code/issues" target="_blank" rel="noopener">issues</a>
+    on GitHub. The <a href="https://github.com/m0n0x41d/quint-code/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">contributing guide</a>
+    explains the workflow: issue first, then PR to <code>dev</code>.
+  </p>
+</DocsLayout>

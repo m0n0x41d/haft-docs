@@ -2,25 +2,26 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="FAQ" description="Common questions about quint-code.">
+<DocsLayout title="FAQ" description="Common questions about haft.">
   <h1>FAQ</h1>
 
   <h2>Is this just ADRs with extra steps?</h2>
 
   <p>
     ADRs are static markdown files. Nobody checks if they're still valid. Nobody knows when
-    reality diverged from the decision. quint-code adds: computed trust scores (R_eff), evidence
-    decay, code drift detection, module coverage, cross-project recall, and a verification gate
-    that challenges decisions before recording. ADRs are the starting point; quint-code makes them live.
+    reality diverged from the decision. Haft adds: computed trust scores (R_eff), evidence
+    decay, code drift detection, module coverage, cross-project recall, claim verification,
+    and an adversarial gate that challenges decisions before recording. ADRs are the starting
+    point; haft makes them live.
   </p>
 
   <h2>What happens to decisions after they're recorded?</h2>
 
   <p>
-    A markdown file appears in <code>.quint/decisions/</code> — commit it with your code. The
+    A markdown file appears in <code>.haft/decisions/</code> — commit it with your code. The
     decision tracks affected files: if those files change, drift detection flags it. Evidence can
     be attached over time (test results, benchmarks). R_eff is computed from evidence quality.
-    When R_eff drops below 0.5, the decision surfaces as stale in <code>/q-status</code>.
+    When R_eff drops below 0.5, the decision surfaces as stale in <code>/h-status</code>.
     You review and either waive (still valid), reopen (needs reconsideration), or supersede
     (replace with new decision).
   </p>
@@ -28,46 +29,17 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Can I use this on an existing project?</h2>
 
   <p>
-    Yes. Run <code>quint-code init</code> then <code>/q-onboard</code>. The agent scans your
+    Yes. Run <code>haft init</code> then <code>/h-onboard</code>. The agent scans your
     codebase for READMEs, ADRs, architecture docs, and captures what it finds as notes. It also
     runs module coverage to show which parts of your architecture have no decisions.
-  </p>
-
-  <h2>I have existing specs in a gitignored folder. Can quint-code read them?</h2>
-
-  <p>
-    Yes. Tell the agent: "scan the docs in <code>.specs/</code> and record what you find." The
-    agent can read any file in your project. It's not limited to git-tracked files.
-  </p>
-
-  <h2>My artifacts ended up in a different project</h2>
-
-  <p>
-    This happens when the MCP config points to the wrong project. Common causes:
-  </p>
-
-  <ul>
-    <li>You added quint-code to a global MCP config instead of running <code>init</code> per project — the
-      project path in the config stays fixed to whatever directory you set, regardless of which project
-      is open.</li>
-    <li>In an IDE-based tool (Cursor, Windsurf): you opened a new project window without running
-      <code>init</code>, and the tool reused the MCP connection from a previously opened project.</li>
-  </ul>
-
-  <p>
-    <strong>Fix:</strong> run <code>quint-code init</code> in the correct project directory, then
-    restart your AI tool (or reload the MCP connection). The init command writes a
-    per-project MCP config with the correct path and project ID. This is an inherent constraint of the
-    MCP plugin architecture — quint-code runs inside your tool, not as an independent agent, so it
-    relies on the tool passing the right config.
   </p>
 
   <h2>Does this work with Cursor?</h2>
 
   <p>
-    Yes. Run <code>quint-code init --cursor</code>. This creates <code>.cursor/mcp.json</code>
+    Yes. Run <code>haft init --cursor</code>. This creates <code>.cursor/mcp.json</code>
     and installs commands in <code>~/.cursor/commands/</code>. After init, enable the MCP server
-    in Cursor Settings → MCP → find <code>quint-code</code> → toggle on.
+    in Cursor Settings, find <code>haft</code>, and toggle on.
   </p>
 
   <h2>Is this useful for solo developers?</h2>
@@ -76,24 +48,30 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     Yes — you'll thank yourself in 3 months when you can search "why did I pick PostgreSQL over
     SQLite?" and find the full reasoning, not a vague memory. Decisions accumulate across projects
     too: when you frame a similar problem in a new project, decisions from old projects surface
-    automatically.
+    automatically via <a href="/docs/cross-project">cross-project recall</a>.
   </p>
 
   <h2>Is this useful for teams?</h2>
 
   <p>
-    Decision records commit to git — team members see them in PRs. Reviewers can challenge
+    Yes. Decision records commit to git — team members see them in PRs. Reviewers can challenge
     decisions alongside code. Module coverage shows the team which parts of the architecture
-    are governed and which are blind spots. Team collaboration features (shared server, real-time
-    sync) are on the roadmap.
+    are governed and which are blind spots.
+  </p>
+
+  <p>
+    In v6, <code>haft sync</code> enables the team workflow: each engineer pulls the repo, runs
+    <code>haft sync</code>, and the markdown projections in <code>.haft/</code> are imported into
+    their local database. Decisions are reviewable in PRs, searchable locally, and stay in sync
+    across the team through git.
   </p>
 
   <h2>What if I just want quick decisions?</h2>
 
   <p>
-    Use <code>/q-reason</code> — the agent picks tactical mode (frame → explore → decide, no
-    characterization or comparison). Or just code normally — the agent captures micro-decisions
-    as notes automatically. You don't have to use the full cycle for every choice.
+    Use <code>/h-reason</code> — the agent picks tactical mode (frame, explore, decide — no
+    characterization or comparison). Or use <code>/h-note</code> to capture a micro-decision
+    with rationale validation. You don't have to use the full cycle for every choice.
   </p>
 
   <h2>What's the overhead?</h2>
@@ -110,18 +88,47 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     First Principles Framework — a formal specification for engineering reasoning by
     <a href="https://ailev.livejournal.com" target="_blank" rel="noopener">Anatoly Levenchuk</a>.
     The <a href="https://github.com/ailev/FPF" target="_blank" rel="noopener">FPF spec is public on GitHub</a>.
-    quint-code implements the practical parts: the ADI reasoning
+    Haft implements the practical parts: the ADI reasoning
     cycle (Abduction-Deduction-Induction), evidence-based trust scoring (R_eff), weakest link
     aggregation (WLNK), and the decide-measure-reframe loop. You don't need to
-    read the spec to use Quint.
+    read the spec to use haft.
   </p>
 
   <h2>Where's the data stored?</h2>
 
   <p>
-    Database: <code>~/.quint-code/projects/&lt;project-id&gt;/quint.db</code> (SQLite, local,
-    never leaves your machine). Markdown projections: <code>.quint/</code> in your project
-    (git-tracked, for code review). Cross-project index: <code>~/.quint-code/index.db</code>
+    Database: <code>~/.haft/projects/&lt;project-id&gt;/haft.db</code> (SQLite, local,
+    never leaves your machine). Markdown projections: <code>.haft/</code> in your project
+    (git-tracked, for code review). Cross-project index: <code>~/.haft/index.db</code>
     (for cross-project recall).
+  </p>
+
+  <h2>Is haft good for vibe coding?</h2>
+
+  <p>
+    Vibe coding is coding without thinking about structure. Haft is a tool for thinking about
+    structure. They solve different problems. That said, you can vibe-code all day and use
+    <code>/h-note</code> to capture the interesting choices along the way — no ceremony needed.
+    When you hit a real decision (database choice, auth strategy, deployment model), switch to
+    <code>/h-reason</code> for 60 seconds of structured thought. Then go back to vibing.
+  </p>
+
+  <h2>What happened to quint-code?</h2>
+
+  <p>
+    Haft is quint-code, rebranded in v6.0. Same tool, same team, new name. The
+    <a href="https://github.com/m0n0x41d/quint-code" target="_blank" rel="noopener">GitHub repository</a>
+    keeps the original URL. Internal directories changed from <code>.quint/</code> to
+    <code>.haft/</code> and commands from <code>/q-*</code> to <code>/h-*</code>. If you're
+    upgrading from v5, see the <a href="/docs/migration">migration guide</a>.
+  </p>
+
+  <h2>How does haft compare to SDD frameworks?</h2>
+
+  <p>
+    SDD (Specification-Driven Development) frameworks prescribe a methodology. Haft provides
+    structure without prescribing process. You can use as much or as little of the FPF cycle
+    as fits your workflow. The key difference: haft decisions are living artifacts with computed
+    trust scores and drift detection, not static specs that rot in a wiki.
   </p>
 </DocsLayout>

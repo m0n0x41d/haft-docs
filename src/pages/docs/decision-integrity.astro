@@ -2,12 +2,13 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Decision Integrity" description="How quint-code ensures decisions are honest — verification, evidence quality, and deduplication.">
+<DocsLayout title="Decision Integrity" description="How haft ensures decisions are honest — verification, evidence quality, claims, and deduplication.">
   <h1>Decision Integrity</h1>
 
   <p>
-    A decision record is only valuable if you can trust it. quint-code has multiple mechanisms
-    to ensure decisions are honest, evidence is real, and the knowledge base stays clean.
+    A decision record is only valuable if you can trust it. Haft has multiple mechanisms
+    to ensure decisions are honest, evidence is real, claims are falsifiable, and the
+    knowledge base stays clean.
   </p>
 
   <h2>Adversarial verification gate</h2>
@@ -22,7 +23,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 
   <ul>
     <li>One-line counter-argument: "The strongest argument against this decision is..."</li>
-    <li>If the counter-argument kills the decision → back to exploring</li>
+    <li>If the counter-argument kills the decision — back to exploring</li>
   </ul>
 
   <p>For <strong>standard/deep</strong> decisions:</p>
@@ -38,7 +39,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Inductive measurement gate</h2>
 
   <p>
-    When recording a measurement (<code>verdict: accepted/partial/failed</code>), quint-code checks
+    When recording a measurement (<code>verdict: accepted/partial/failed</code>), haft checks
     whether the decision has a baseline (file hashes were snapshotted). If not:
   </p>
 
@@ -71,15 +72,15 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <p>
     Notes and decisions serve different purposes. Notes are observations ("we use Redis here").
     Decisions are contracts ("we chose Redis because X, with invariants Y and rollback Z").
-    When someone tries to record a note that duplicates an existing decision, quint-code catches it.
+    When someone tries to record a note that duplicates an existing decision, haft catches it.
   </p>
 
   <p>The check uses <strong>containment</strong> (not Jaccard similarity):</p>
 
   <ul>
-    <li><strong>>70% of note's words in a decision title</strong> → rejected with explanation</li>
-    <li><strong>50-70%</strong> → warning, note still recorded</li>
-    <li><strong>&lt;50%</strong> → pass silently</li>
+    <li><strong>>70% of note's words in a decision title</strong> — rejected with explanation</li>
+    <li><strong>50-70%</strong> — warning, note still recorded</li>
+    <li><strong>&lt;50%</strong> — pass silently</li>
   </ul>
 
   <p>
@@ -87,29 +88,81 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   </p>
 
   <p>
-    Batch cleanup: <code>/q-refresh action="reconcile"</code> scans all active notes against all
+    Batch cleanup: <code>/h-verify action="reconcile"</code> scans all active notes against all
     active decisions in one pass and reports overlaps.
   </p>
 
-  <h2>From decisions to machine-verified evidence</h2>
+  <h2>Claims with verify_after</h2>
 
   <p>
-    The integrity mechanisms above ensure decisions are honest at recording time. But the strongest
-    evidence comes from machine verification — tests that prove invariants hold against real code.
+    Decisions often contain predictions: "this cache will reduce p99 latency by 40%" or
+    "migration will complete within 2 sprints." In v6, these are structured as
+    <strong>claims</strong> — falsifiable predictions attached to a decision.
   </p>
 
-  <p>
-    Decision records from the <a href="/docs/full-cycle">full cycle</a> contain enough structure
-    to serve as test specifications: invariants, post-conditions, admissibility constraints,
-    and affected file paths. Any coding agent can translate these into property-based tests
-    and attach the results as CL3 evidence — the highest confidence level in the R_eff model.
-  </p>
+  <p>A claim has three components:</p>
+
+  <ul>
+    <li><strong>observable</strong> — what to measure ("p99 latency of /api/search")</li>
+    <li><strong>threshold</strong> — what counts as success ("&lt; 200ms")</li>
+    <li><strong>verify_after</strong> — when to check ("2026-05-15")</li>
+  </ul>
+
+  <pre><code>Claims:
+  - observable: "p99 latency of /api/search"
+    threshold: "< 200ms"
+    verify_after: 2026-05-15
+
+  - observable: "cache hit rate"
+    threshold: "> 85%"
+    verify_after: 2026-05-01</code></pre>
 
   <p>
+    When a <code>verify_after</code> date passes and the claim remains unverified,
+    <code>/h-verify scan</code> surfaces it as "pending verification." The agent prompts
+    you to collect evidence: did the prediction hold? The result attaches as CL3 evidence
+    if verified against production data, pulling R_eff up or down based on reality.
+  </p>
+
+  <div class="callout">
+    <p>
+      Claims are falsifiable by design. A claim without a concrete observable and threshold
+      is not a claim — it's a hope. Haft rejects claims that lack these fields.
+    </p>
+  </div>
+
+  <h2>Decisions as test specs</h2>
+
+  <p>
+    Full-cycle decisions contain enough structure to serve as test specifications:
+    invariants, post-conditions, admissibility constraints, and affected file paths.
+    Any coding agent can translate these into property-based tests.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Language</th>
+        <th>Property-based testing library</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Go</td><td><code>rapid</code>, <code>gopter</code></td></tr>
+      <tr><td>Python</td><td><code>hypothesis</code></td></tr>
+      <tr><td>Rust</td><td><code>proptest</code></td></tr>
+      <tr><td>TypeScript</td><td><code>fast-check</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    Test results attach as CL3 evidence — the highest confidence level in the R_eff model.
     This creates a closed loop: decisions define what must hold, tests verify that it holds,
-    evidence records the verification, and R_eff reflects the trust level. When code drifts
-    (files change after baseline), R_eff drops, and the tests need to re-run. The integrity
-    system doesn't just check that decisions were made honestly — it checks that reality still
-    matches the decision.
+    evidence records the verification, and R_eff reflects the trust level.
+  </p>
+
+  <p>
+    When code drifts (files change after baseline), R_eff drops, and the tests need to re-run.
+    The integrity system doesn't just check that decisions were made honestly — it checks that
+    reality still matches the decision.
   </p>
 </DocsLayout>

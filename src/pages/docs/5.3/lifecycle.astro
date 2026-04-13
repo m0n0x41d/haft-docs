@@ -1,14 +1,13 @@
 ---
-import DocsLayout from '../../layouts/DocsLayout.astro';
+import DocsLayout from '../../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Decision Lifecycle" description="How decisions age, go stale, and get verified.">
+<DocsLayout title="Decision Lifecycle" description="How decisions age, go stale, and get refreshed.">
   <h1>Decision Lifecycle</h1>
 
   <p>
-    Decisions are not permanent. Requirements shift, load increases, teams grow,
-    dependencies update. haft treats every decision as having a shelf life — and provides
-    the machinery to detect when that shelf life has expired.
+    Decisions are not permanent. The world changes — requirements shift, load increases, team grows,
+    dependencies update. quint-code treats every decision as having a shelf life.
   </p>
 
   <h2>The lifecycle</h2>
@@ -16,21 +15,17 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <ul>
     <li><strong>Pending</strong> — decision recorded, not yet implemented (no measurement)</li>
     <li><strong>Shipped</strong> — implemented and measured (verdict: accepted/partial/failed)</li>
-    <li><strong>Active</strong> — shipped, R_eff &ge; 0.5, not expired</li>
+    <li><strong>Active</strong> — shipped, R_eff ≥ 0.5, not expired</li>
     <li><strong>Stale</strong> — R_eff &lt; 0.5, or valid_until expired, or code drift detected</li>
     <li><strong>Superseded</strong> — replaced by a newer decision</li>
     <li><strong>Deprecated</strong> — no longer relevant (archived)</li>
   </ul>
 
-  <pre><code>Pending → Shipped → Active → Stale
-                                ↓
-                      Superseded / Deprecated</code></pre>
-
   <h2>Evidence and R_eff</h2>
 
   <p>
-    Every decision can have evidence attached — test results, benchmarks, user feedback,
-    measurements. Each evidence item has:
+    Every decision can have evidence attached — test results, benchmarks, user feedback, measurements.
+    Each evidence item has:
   </p>
 
   <ul>
@@ -43,53 +38,27 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
         <li>CL0: Opposed context — 0.9 penalty</li>
       </ul>
     </li>
-    <li><strong>Expiry date (<code>valid_until</code>)</strong> — when this evidence is no longer trustworthy.
-      Expired evidence scores 0.1 (weak, not absent).</li>
+    <li><strong>Expiry date</strong> — when this evidence is no longer trustworthy</li>
   </ul>
 
   <p>
     <strong>R_eff</strong> (effective reliability) is computed as the minimum across all evidence
     scores, with CL penalties applied. This is the weakest link principle: the chain is as strong
-    as its weakest link. Never averaged — always <code>min()</code>.
+    as its weakest link.
   </p>
 
   <ul>
-    <li>R_eff &ge; 0.5 — healthy, decision is trustworthy</li>
+    <li>R_eff ≥ 0.5 — healthy, decision is trustworthy</li>
     <li>R_eff &lt; 0.5 — degraded, needs review</li>
     <li>R_eff &lt; 0.3 — AT RISK, needs immediate attention</li>
   </ul>
 
-  <h2>Claims with verify_after</h2>
-
-  <p>
-    Decisions can include claims — testable assertions about expected outcomes.
-    Each claim has a <code>verify_after</code> date: the point at which the claim
-    should be measured against reality.
-  </p>
-
-  <pre><code>Claim: "P95 latency stays under 100ms"
-verify_after: 2026-05-01</code></pre>
-
-  <p>
-    When the date passes and the claim remains unverified, <code>/h-verify scan</code>
-    surfaces it. You then either measure it (attach evidence) or waive it (extend with
-    justification). Unverified claims degrade R_eff over time.
-  </p>
-
-  <h2>Evidence supersession</h2>
-
-  <p>
-    When you run a new measurement for a claim or acceptance criterion, the new evidence
-    automatically marks the old evidence for the same claim as superseded. R_eff reflects
-    the current state, not historical measurements. This prevents stale evidence from
-    artificially propping up a decision.
-  </p>
-
   <h2>Code drift detection</h2>
 
   <p>
-    After a decision is implemented, haft snapshots affected file hashes as a baseline.
-    On every <code>/h-verify scan</code>, it recomputes hashes and detects changes:
+    After a decision is implemented, the agent snapshots affected file hashes. quint-code then
+    snapshots the file hashes. On every <code>/q-refresh scan</code>, it recomputes hashes and
+    detects changes:
   </p>
 
   <ul>
@@ -100,33 +69,30 @@ verify_after: 2026-05-01</code></pre>
 
   <p>
     Drift is a signal, not an automatic invalidation. The agent reads the diff and judges whether
-    the change is material (broke an invariant) or cosmetic (comments, formatting, unrelated edits).
+    the change is material (broke an invariant) or cosmetic (comments, formatting).
   </p>
 
   <h2>Module coverage</h2>
 
   <p>
-    <code>/h-status</code> shows module coverage — which parts of your codebase are governed by
+    <code>/q-status</code> shows module coverage — which parts of your codebase are governed by
     decisions and which are blind spots:
   </p>
 
   <pre><code>## Module Coverage (9 modules, 77% governed)
-  governed  src/internal/artifact — 3 decisions
-  governed  src/internal/codebase — 2 decisions
-  partial   src/cmd/serve         — 1 decision (stale)
-  blind     src/assurance         — no decisions
-  blind     src/cmd/indexer       — no decisions</code></pre>
+  ✓ src/internal/artifact — 3 decisions
+  ✓ src/internal/codebase — 2 decisions
+  ✗ src/assurance          — no decisions (blind)
+  ✗ src/cmd/indexer        — no decisions (blind)</code></pre>
 
   <p>
-    Three states: <strong>governed</strong> (active decisions), <strong>partial</strong>
-    (only stale or expired decisions), <strong>blind</strong> (no decisions at all).
-    Blind modules are parts of your architecture with no formal engineering decisions — not
-    necessarily bad, but worth knowing about.
+    Blind modules are parts of your architecture with no formal engineering decisions. Not necessarily
+    bad — but worth knowing about.
   </p>
 
-  <h2>Verifying decisions</h2>
+  <h2>Refreshing decisions</h2>
 
-  <pre><code>/h-verify</code></pre>
+  <pre><code>/q-refresh</code></pre>
 
   <p>Actions:</p>
 
@@ -141,13 +107,8 @@ verify_after: 2026-05-01</code></pre>
     <tbody>
       <tr>
         <td><code>scan</code></td>
-        <td>Find stale artifacts + code drift + pending verify_after claims</td>
+        <td>Find all stale artifacts + code drift</td>
         <td>Routine health check</td>
-      </tr>
-      <tr>
-        <td><code>measure</code></td>
-        <td>Record evidence for a claim or acceptance criteria</td>
-        <td>Verifying outcomes after implementation</td>
       </tr>
       <tr>
         <td><code>waive</code></td>
@@ -177,10 +138,10 @@ verify_after: 2026-05-01</code></pre>
     </tbody>
   </table>
 
-  <h2>The two FPF cycles</h2>
+  <h2>The two cycles</h2>
 
   <p>
-    The systems engineering methodology behind haft describes two interconnected cycles
+    Anatoly Levenchuk's systems engineering methodology describes two interconnected cycles
     that feed into each other:
   </p>
 
@@ -191,14 +152,14 @@ verify_after: 2026-05-01</code></pre>
     pick the right problem to work on.
   </p>
 
-  <p>haft supports this with:</p>
+  <p>quint-code supports this with:</p>
 
   <ul>
     <li><strong>Drift detection</strong> — watches for code changes under existing decisions</li>
     <li><strong>R_eff degradation</strong> — evidence expires, trust scores drop, stale decisions surface</li>
-    <li><strong>Claim verification</strong> — <code>verify_after</code> dates trigger measurement prompts</li>
     <li><strong>Module coverage</strong> — shows which parts of the architecture have no decisions (blind spots)</li>
     <li><strong>Cross-project recall</strong> — surfaces related decisions from other projects when framing new problems</li>
+    <li><strong>Goldilocks problem selection</strong> — <code>/q-problems</code> shows readiness signals to help pick the right problem</li>
   </ul>
 
   <h3>The decision cycle</h3>
@@ -208,10 +169,10 @@ verify_after: 2026-05-01</code></pre>
     measure impact → feed results back into the observation cycle.
   </p>
 
-  <p>haft supports this with:</p>
+  <p>quint-code supports this with:</p>
 
   <ul>
-    <li><strong>Understand → Explore → Choose → Execute → Verify</strong> — the <a href="/docs/five-modes">five modes</a> with focused prompts at each step</li>
+    <li><strong>Frame → Char → Explore → Compare → Decide</strong> — the full command cycle with focused prompts at each step</li>
     <li><strong>Adversarial verification</strong> — challenges decisions before recording</li>
     <li><strong>Baseline + Measure</strong> — snapshots implementation, records whether acceptance criteria were met</li>
     <li><strong>Evidence supersession</strong> — newer measurements replace older ones, R_eff reflects current state</li>
@@ -221,28 +182,21 @@ verify_after: 2026-05-01</code></pre>
   <h3>Closing the loop</h3>
 
   <p>
-    The two cycles connect: results of implementing a decision (measurements, evidence,
+    The two cycles are connected: the results of implementing a decision (measurements, evidence,
     drift) become inputs to the observation cycle. Stale decisions trigger re-evaluation. Failed
     implementations create new problems. The goal is that this happens naturally — you don't need to
     remember to check, the system surfaces what needs attention.
   </p>
 
-  <h2>Team workflow</h2>
-
   <p>
-    Decision lifecycle isn't solo-only in v6. With <code>haft sync</code>, decisions are
-    shared across the team via git-tracked <code>.haft/*.md</code> files. Every team member
-    sees the same decisions in <code>/h-status</code> and <code>haft board</code> after syncing.
-  </p>
-
-  <p>
-    See <a href="/docs/team-sync">Team Sync</a> for the full workflow.
+    This isn't fully automatic today. Some steps require the agent to be proactive,
+    and some require your judgment. But each release adds more mechanisms to close the loop
+    tighter.
   </p>
 
   <h2>Next</h2>
 
   <ul>
-    <li><a href="/docs/team-sync">Team sync</a> — sharing decisions across the team</li>
     <li><a href="/docs/commands">All commands</a> — complete reference</li>
     <li><a href="/docs/concepts">Key concepts</a> — R_eff, CL, WLNK explained</li>
   </ul>
