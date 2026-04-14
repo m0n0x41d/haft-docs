@@ -18,6 +18,15 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     heavy lifting; you make the calls.
   </p>
 
+  <div class="callout">
+    <p>
+      <strong>Surface status.</strong> The MCP plugin and CLI/runtime are the stable surfaces:
+      <code>haft init</code>, <code>haft serve</code>, <code>haft agent</code>,
+      <code>haft sync</code>, and <code>haft check</code>. The desktop app is still
+      <strong>pre-alpha</strong> — useful for exploration, but not the primary production path.
+    </p>
+  </div>
+
   <h2>The five modes</h2>
 
   <p>
@@ -134,6 +143,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     <li><strong>Claim-aware decisions</strong> — decisions now carry verifiable claims with <code>verify_after</code> dates. Not just "evidence expires" — specific statements that can be checked against reality.</li>
     <li><strong><code>/h-verify</code> replaces <code>/h-refresh</code></strong> — actively checks claims, not just evidence age. Verify mode is the fifth cognitive mode.</li>
     <li><strong>Team sync</strong> — <code>haft sync</code> lets each engineer sync git-tracked markdown projections into their local database. No shared database, no merge conflicts on binary files.</li>
+    <li><strong>CI governance gate</strong> — <code>haft check</code> gives a deterministic pass/fail signal for stale, drifted, unassessed, and coverage-gap findings.</li>
     <li><strong>Desktop app (pre-alpha)</strong> — visual dashboard for decision health, module coverage, and knowledge graph. Early access.</li>
     <li><strong>Standalone runtime</strong> — <code>haft agent</code> runs as a TUI without requiring an external AI tool. Bring your own model.</li>
     <li><strong>Knowledge graph</strong> — file-to-decision mapping with invariant injection. When you touch files covered by a decision, the agent knows.</li>

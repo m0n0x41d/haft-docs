@@ -205,6 +205,10 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
         <td>Diagnose project setup issues — MCP config, database, permissions</td>
       </tr>
       <tr>
+        <td><code>haft check</code></td>
+        <td>CI-friendly governance scan — stale, drifted, unassessed, and coverage-gap findings</td>
+      </tr>
+      <tr>
         <td><code>haft fpf search [query]</code></td>
         <td>Search the embedded FPF specification</td>
       </tr>
@@ -223,8 +227,20 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   </p>
 
   <p>
-    Use <code>haft board --check</code> for CI/hooks — exits with code 1 if critical issues
-    exist (R_eff &lt; 0.3, decisions expired > 30 days).
+    Use <code>haft board</code> for a live operator view. For CI or hooks, prefer
+    <code>haft check</code> — it produces a deterministic pass/fail result and optional JSON.
+  </p>
+
+  <h3>haft check</h3>
+
+  <pre><code>$ haft sync
+$ haft check
+$ haft check --json</code></pre>
+
+  <p>
+    CI-friendly governance gate. It scans stale artifacts, drifted decisions, unassessed
+    decisions, and coverage gaps. Exit <code>0</code> means clean; exit <code>1</code> means
+    findings were detected.
   </p>
 
   <h3>haft sync</h3>

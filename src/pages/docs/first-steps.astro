@@ -156,6 +156,21 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
     the agent in another terminal. No agent session required.
   </p>
 
+  <h2>Add a CI gate</h2>
+
+  <p>
+    When the repo already tracks <code>.haft/</code> artifacts, add a lightweight CI step:
+  </p>
+
+  <pre><code>./haft sync
+./haft check</code></pre>
+
+  <p>
+    <code>haft sync</code> imports the tracked markdown projections into the local SQLite state.
+    <code>haft check</code> then fails the build on stale, drifted, unassessed, or coverage-gap
+    findings. Use <code>--json</code> if you need machine-readable output.
+  </p>
+
   <h2>Team workflow</h2>
 
   <p>

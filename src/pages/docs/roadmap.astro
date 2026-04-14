@@ -40,7 +40,8 @@ Team:  Agent → MCP → haft serve → haft server (remote) → PostgreSQL</cod
 
   <p>
     When server mode exists, <code>haft board</code> switches to the remote database automatically.
-    <code>haft board --check</code> becomes a real CI command that connects to the server.
+    CI should still use <code>haft sync && haft check</code> as the governance gate. Server mode
+    can later enrich shared state and search, but it does not replace the check command.
     This enables real-time collaboration and a shared search index across the team.
   </p>
 
