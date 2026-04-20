@@ -18,7 +18,7 @@
           Docs
         </a>
         <a
-          href="https://github.com/m0n0x41d/quint-code"
+          href="https://github.com/m0n0x41d/haft"
           target="_blank"
           rel="noopener noreferrer"
           class="flex items-center justify-center gap-2 min-h-[44px] px-2 text-sm text-text-secondary transition-colors hover:text-text-primary"
@@ -44,7 +44,7 @@
 <script>
   async function fetchHeaderStars() {
     try {
-      const res = await fetch('https://api.github.com/repos/m0n0x41d/quint-code');
+      const res = await fetch('https://api.github.com/repos/m0n0x41d/haft');
       if (!res.ok) return;
       const data = await res.json();
       const stars = data.stargazers_count;
