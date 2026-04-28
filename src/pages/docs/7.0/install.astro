@@ -1,0 +1,106 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Install haft v7" description="Install haft and initialize a v7 project ready for spec-driven onboarding.">
+  <h1>Install &amp; init (v7)</h1>
+
+  <h2>Install</h2>
+
+  <p>One-line installer:</p>
+
+  <pre><code>curl -fsSL https://quint.codes/install.sh | bash</code></pre>
+
+  <p>
+    The installer fetches the latest tagged release for your platform, places the
+    binary at <code>~/.haft/bin/haft</code>, and links it onto your PATH. It also
+    installs the packaged Open-Sleigh runtime under
+    <code>~/.haft/runtimes/open-sleigh/current</code> so <code>haft harness run</code>
+    works without a local Open-Sleigh checkout.
+  </p>
+
+  <p>From source (Go ≥ 1.23):</p>
+
+  <pre><code>git clone https://github.com/m0n0x41d/haft
+cd haft
+task install</code></pre>
+
+  <h2>Initialize a project</h2>
+
+  <p>
+    Inside the repository you want to onboard:
+  </p>
+
+  <pre><code>cd path/to/your/project
+haft init</code></pre>
+
+  <p>This creates:</p>
+
+  <ul>
+    <li><code>.haft/</code> directory with project identity (<code>.haft/project.yaml</code>),
+      workflow policy (<code>.haft/workflow.md</code>), and placeholder spec carriers.</li>
+    <li><code>.haft/specs/target-system.md</code> — placeholder TargetSystemSpec with
+      one parseable draft section.</li>
+    <li><code>.haft/specs/enabling-system.md</code> — placeholder EnablingSystemSpec.</li>
+    <li><code>.haft/specs/term-map.md</code> — empty TermMap awaiting load-bearing terms.</li>
+    <li>MCP server config for the chosen host agent (default: Claude Code in
+      <code>.mcp.json</code>; <code>--codex</code> for Codex; <code>--all</code> for
+      both).</li>
+  </ul>
+
+  <p>The placeholders are intentionally <code>status: draft</code>. They reserve a parseable
+    structure without claiming active product authority. Onboarding promotes them as
+    the human approves load-bearing claims.</p>
+
+  <h2>Init flags</h2>
+
+  <pre><code>haft init                    # Claude Code, global commands (~/.claude/commands/)
+haft init --local            # Claude Code, project-local commands (.claude/commands/)
+haft init --codex            # Codex skills under ~/.agents/skills/
+haft init --codex --local    # Codex skills under .agents/skills/ in this project
+haft init --all              # All supported hosts</code></pre>
+
+  <h2>Verify readiness</h2>
+
+  <p>
+    Right after init the project is <code>needs_onboard</code> — the harness will refuse
+    broad runtime execution until you produce active spec sections.
+  </p>
+
+  <pre><code>haft spec check
+# spec_sections: 2
+# active_spec_sections: 0
+# term_map_entries: 0
+# Findings: spec_carrier_no_active_sections (target + enabling),
+#           term_map_missing_term</code></pre>
+
+  <p>That's expected. Drive onboarding next:</p>
+
+  <pre><code>haft spec onboard --json     # see the next typed phase
+# In Claude Code / Codex with the haft MCP plugin loaded:
+/h-onboard</code></pre>
+
+  <p>See <a href="/docs/7.0/spec-onboarding">Spec onboarding</a> for the typed flow.</p>
+
+  <h2>Supported host agents</h2>
+
+  <p>
+    v7 product support targets Claude Code and Codex. Cursor, Gemini CLI, JetBrains
+    Air, and generic MCP clients remain protocol-compatible carriers — they will
+    receive tool calls, but the bundled prompts and skills are tested against Claude
+    Code and Codex specifically.
+  </p>
+
+  <h2>Upgrade from v6</h2>
+
+  <p>
+    Existing v6 <code>.haft/</code> data is forward-compatible. Re-run <code>haft init</code>
+    in your existing project to pick up the new prompt files in
+    <code>~/.claude/commands/</code> (or <code>.claude/commands/</code> if you used
+    <code>--local</code>) and to add the placeholder spec carriers if absent.
+    Existing <code>.haft/decisions/*</code>, <code>problems/*</code>, and <code>notes/*</code>
+    survive untouched.
+  </p>
+
+  <p>After re-init, restart your host agent so it re-reads the MCP tools/list response.</p>
+</DocsLayout>

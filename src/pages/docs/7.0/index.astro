@@ -1,0 +1,137 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="haft v7" description="Spec-driven engineering for AI coding tools — three surfaces over one Haft Core.">
+  <h1>haft v7</h1>
+
+  <p>
+    haft v7 reorders the priorities. In v5 and v6 the artifacts were decisions; specs
+    were a "later" concern. In v7 <strong>specs come first</strong>. Decisions, work
+    commissions, runtime runs, and evidence are downstream consequences of an explicit,
+    parseable specification — they do not invent meaning by themselves.
+  </p>
+
+  <p>
+    The product line is also clearer. v7 ships <strong>one Haft Core</strong> (the
+    semantic authority for the project) under <strong>three surfaces</strong> that all
+    speak the same typed contract:
+  </p>
+
+  <ul>
+    <li><strong>Desktop Cockpit</strong> — the primary human surface for onboarding, runtime,
+      and triage. Tauri v2 + React.</li>
+    <li><strong>MCP Plugin</strong> — the embedded host-agent surface for Claude Code and
+      Codex. Same typed tools (haft_problem, haft_decision, haft_commission,
+      haft_spec_section, haft_query, haft_refresh, haft_solution, haft_note).</li>
+    <li><strong>CLI Harness</strong> — the operator/runtime surface for init, spec checks,
+      decisions, commissions, and harness execution. CI-friendly.</li>
+  </ul>
+
+  <p>
+    Surfaces dispatch typed actions to Core. They do not invent semantics. If
+    Desktop wants to advance the onboarding flow, it asks Core; if Claude Code wants
+    to know what's actionable, it asks Core; if CI wants the gate, it runs the same
+    Core helpers.
+  </p>
+
+  <h2>The shift in priority</h2>
+
+  <p>
+    A repository becomes "harnessable" only after it carries a parseable
+    ProjectSpecificationSet — TargetSystemSpec, EnablingSystemSpec, TermMap. The CLI
+    knows the difference between <code>ready</code>, <code>needs_init</code>,
+    <code>needs_onboard</code>, and <code>missing</code>. The harness refuses to run broad
+    work on a project that is not ready, except behind an explicit
+    <code>--tactical-override-reason</code>.
+  </p>
+
+  <p>
+    Specs in v7 are not BDD wishlists. They are SoTA system-engineering artifacts:
+    every load-bearing claim carries a <code>statement_type</code>, a <code>claim_layer</code>,
+    a <code>valid_until</code>, and (where the section calls for it) named boundary
+    perspectives or guard locations. FPF and slideument patterns shape the agent's
+    reasoning when drafting; they never appear inside the YAML carrier.
+  </p>
+
+  <h2>The onboarding loop</h2>
+
+  <pre><code>repository
+  → .haft initialized
+  → TargetSystemSpec
+  → EnablingSystemSpec
+  → TermMap
+  → SpecCoverage gaps
+  → DecisionRecords (one per coherent architectural choice)
+  → WorkCommissions (bounded execution authority)
+  → Harness runtime executes commissioned work
+  → Evidence flows back; SpecCoverage advances</code></pre>
+
+  <p>
+    Haft Core ships a typed <strong>SpecOnboardingMethod</strong> that walks an operator
+    (with help from the host agent) through the target-system spine first, then the
+    enabling-system spine. Each phase declares which YAML fields the resulting section
+    must carry and which structural Checks it must pass. The host agent applies FPF
+    patterns named in the phase's <code>context_for_agent</code>; the carrier carries the
+    resolved claim, not the citation.
+  </p>
+
+  <p>See <a href="/docs/7.0/spec-onboarding">Spec onboarding</a> for the flow in detail.</p>
+
+  <h2>Drift and staleness</h2>
+
+  <p>
+    Hand-edited <code>.haft/specs/*.md</code> stay primary — operators write specs in
+    their editor of choice. Haft mirrors a SHA-256 baseline of every approved
+    SpecSection in SQLite. Carrier edits surface as
+    <code>spec_section_drifted</code>; <code>valid_until</code> expiry surfaces as
+    <code>spec_section_stale</code>. The operator triages: rebaseline (intentional
+    evolution), reopen (needs review), or rollback the carrier edit.
+  </p>
+
+  <p>
+    <code>haft check</code> rolls drift, staleness, decision drift, evidence decay, and
+    coverage gaps into a single CI exit code. <code>haft_query(action="check")</code>
+    is the plugin-mode parity for the same JSON shape.
+  </p>
+
+  <p>See <a href="/docs/7.0/check">Enforcement check</a>.</p>
+
+  <h2>What's new since v6</h2>
+
+  <ul>
+    <li>SpecOnboardingMethod with target + enabling spines (10 phases)</li>
+    <li>SpecSectionBaseline + drift + staleness as first-class enforcement</li>
+    <li>WorkCommission as bounded execution authority distinct from DecisionRecord and RuntimeRun</li>
+    <li>ImplementationPlan DAG with dependency and lockset enforcement</li>
+    <li>AutonomyEnvelope core for explicit autonomy bounds</li>
+    <li>ProjectionPolicy and projection debt — local execution evidence is independent of external tracker publishing</li>
+    <li>Open-Sleigh as the first runtime implementation; pre-mutation scope guards</li>
+    <li>Three-surface model documented and contract-tested</li>
+  </ul>
+
+  <p>
+    Migration from v6: existing <code>.haft/</code> artifacts (decisions, problems, notes)
+    are forward-compatible. Add <code>.haft/specs/*.md</code> via <code>haft init</code>
+    on a fresh checkout, then drive <code>/h-onboard</code> through the typed flow.
+  </p>
+
+  <h2>Supported host agents</h2>
+
+  <p>
+    v7 product support targets <strong>Claude Code</strong> and <strong>Codex</strong> as
+    embedded host-agent surfaces. Cursor, Gemini CLI, JetBrains Air, and other generic
+    MCP clients remain protocol-compatible carriers; their tooling may not match every
+    contract this guide describes.
+  </p>
+
+  <h2>Where to next</h2>
+
+  <ul>
+    <li><a href="/docs/7.0/install">Install &amp; init</a> — get a v7 project to <code>ready</code>.</li>
+    <li><a href="/docs/7.0/spec-onboarding">Spec onboarding</a> — the typed flow from
+      <code>needs_onboard</code> to verified coverage.</li>
+    <li><a href="/docs/7.0/check">Enforcement check</a> — <code>haft check</code>,
+      <code>haft_query(action="check")</code>, and CI exit codes.</li>
+  </ul>
+</DocsLayout>
