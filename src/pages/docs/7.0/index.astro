@@ -14,13 +14,11 @@ import DocsLayout from '../../../layouts/DocsLayout.astro';
 
   <p>
     The product line is also clearer. v7 ships <strong>one Haft Core</strong> (the
-    semantic authority for the project) under <strong>three surfaces</strong> that all
-    speak the same typed contract:
+    semantic authority for the project) under <strong>two production surfaces</strong>
+    that speak the same typed contract:
   </p>
 
   <ul>
-    <li><strong>Desktop Cockpit</strong> — the primary human surface for onboarding, runtime,
-      and triage. Tauri v2 + React.</li>
     <li><strong>MCP Plugin</strong> — the embedded host-agent surface for Claude Code and
       Codex. Same typed tools (haft_problem, haft_decision, haft_commission,
       haft_spec_section, haft_query, haft_refresh, haft_solution, haft_note).</li>
@@ -29,10 +27,15 @@ import DocsLayout from '../../../layouts/DocsLayout.astro';
   </ul>
 
   <p>
+    A Tauri-based desktop app exists as an <strong>alpha track</strong> outside the
+    v7 production envelope. It is not extensively tested and is not the canonical
+    operator surface; the v7 production surfaces are MCP and CLI.
+  </p>
+
+  <p>
     Surfaces dispatch typed actions to Core. They do not invent semantics. If
-    Desktop wants to advance the onboarding flow, it asks Core; if Claude Code wants
-    to know what's actionable, it asks Core; if CI wants the gate, it runs the same
-    Core helpers.
+    Claude Code wants to know what's actionable, it asks Core; if CI wants the
+    gate, it runs the same Core helpers.
   </p>
 
   <h2>The shift in priority</h2>

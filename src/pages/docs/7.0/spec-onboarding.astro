@@ -8,9 +8,10 @@ import DocsLayout from '../../../layouts/DocsLayout.astro';
   <p>
     v7 ships a typed <strong>SpecOnboardingMethod</strong> in Haft Core. The method
     is product knowledge: it declares which YAML fields a SpecSection must carry, in
-    which order, with which structural Checks. Surfaces (Desktop wizard, MCP plugin,
-    CLI subcommand) all consume the same <code>WorkflowIntent</code> shape — they
-    render and dispatch, they do not invent semantics.
+    which order, with which structural Checks. Surfaces (MCP plugin and CLI
+    subcommand; an alpha desktop wizard exists outside the production envelope) all
+    consume the same <code>WorkflowIntent</code> shape — they render and dispatch,
+    they do not invent semantics.
   </p>
 
   <p>
