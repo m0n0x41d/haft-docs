@@ -15,6 +15,16 @@ const currentDocsVersion = 'v7.0';
 
 const nav = [
   {
+    title: 'v7 — Spec-First',
+    items: [
+      { href: '/docs/7.0', label: 'v7 Overview' },
+      { href: '/docs/7.0/install', label: 'Install & init' },
+      { href: '/docs/7.0/spec-onboarding', label: 'Spec onboarding' },
+      { href: '/docs/7.0/check', label: 'Enforcement check' },
+      { href: '/docs/7.0/harness-batch', label: 'Batch harness (Beta)' },
+    ]
+  },
+  {
     title: 'Getting Started',
     items: [
       { href: '/docs', label: 'Introduction' },
@@ -54,8 +64,9 @@ const nav = [
 ];
 
 function isActive(href: string): boolean {
-  if (href === '/docs') return currentPath === '/docs' || currentPath === '/docs/';
-  return currentPath.startsWith(href);
+  const path = currentPath.replace(/\/$/, '');
+  const target = href.replace(/\/$/, '');
+  return path === target;
 }
 ---
 
