@@ -11,7 +11,7 @@ interface Props {
 const { title, description } = Astro.props;
 
 const currentPath = Astro.url.pathname;
-const currentDocsVersion = 'v6.2';
+const currentDocsVersion = 'v7.0';
 
 const nav = [
   {
@@ -82,8 +82,8 @@ function isActive(href: string): boolean {
               id="version-dropdown"
               class="hidden absolute top-6 left-0 z-50 bg-bg-secondary border border-border-subtle rounded shadow-lg py-1 min-w-[100px]"
             >
-              <span class="block px-3 py-1.5 text-xs font-mono text-accent-green bg-bg-tertiary">{currentDocsVersion} (latest)</span>
-              <a href="/docs/7.0" class="block px-3 py-1.5 text-xs font-mono text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors">v7.0 preview</a>
+              <a href="/docs/7.0" class="block px-3 py-1.5 text-xs font-mono text-accent-green bg-bg-tertiary hover:text-text-primary transition-colors">v7.0 (latest)</a>
+              <a href="/docs" class="block px-3 py-1.5 text-xs font-mono text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors">v6.2</a>
               <a href="/docs/5.3" class="block px-3 py-1.5 text-xs font-mono text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors">v5.3</a>
               <a href="/docs/5.0" class="block px-3 py-1.5 text-xs font-mono text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors">v5.0</a>
             </div>
