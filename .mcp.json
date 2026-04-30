@@ -1,13 +1,20 @@
 {
   "mcpServers": {
-    "quint-code": {
-      "command": "/Users/ivanzakutnii/.local/bin/quint-code",
+    "haft": {
+      "command": "haft",
       "args": [
         "serve"
       ],
       "env": {
-        "QUINT_PROJECT_ROOT": "/Users/ivanzakutnii/Repos/projects/qc-landing"
+        "HAFT_PROJECT_ROOT": "${PWD:-.}"
       }
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
     }
   }
 }

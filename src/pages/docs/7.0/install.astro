@@ -58,7 +58,9 @@ haft init</code></pre>
 haft init --local            # Claude Code, project-local commands (.claude/commands/)
 haft init --codex            # Codex skills under ~/.agents/skills/
 haft init --codex --local    # Codex skills under .agents/skills/ in this project
-haft init --all              # All supported hosts</code></pre>
+haft init --all              # All supported hosts
+haft init --opencode         # Experimental: OpenCode (sst/opencode), opencode.json + ~/.config/opencode/
+haft init --opencode --local # Experimental: OpenCode under .opencode/ in this project</code></pre>
 
   <h2>Verify readiness</h2>
 
@@ -85,10 +87,12 @@ haft init --all              # All supported hosts</code></pre>
   <h2>Supported host agents</h2>
 
   <p>
-    v7 product support targets Claude Code and Codex. Cursor, Gemini CLI, JetBrains
-    Air, and generic MCP clients remain protocol-compatible carriers — they will
-    receive tool calls, but the bundled prompts and skills are tested against Claude
-    Code and Codex specifically.
+    v7 product support targets Claude Code and Codex. Cursor, Gemini CLI, OpenCode
+    (sst/opencode), JetBrains Air, and generic MCP clients remain protocol-compatible
+    carriers — they will receive tool calls, but the bundled prompts and skills are
+    tested against Claude Code and Codex specifically. <code>haft init --opencode</code>
+    writes <code>opencode.json</code> with an <code>mcp.haft</code> block and installs
+    the same command/skill files used by Claude Code.
   </p>
 
   <h2>Upgrade from v6</h2>
