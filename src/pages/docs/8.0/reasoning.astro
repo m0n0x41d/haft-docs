@@ -1,0 +1,105 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Reasoning & FPF (v8)" description="The FPF skill set, the seven MCP tools, and hybrid semantic search over the FPF specification.">
+  <h1>Reasoning &amp; FPF</h1>
+
+  <p>
+    Haft is built on the <a href="https://github.com/ailev/FPF">First Principles
+    Framework</a> (FPF) by
+    <a href="https://www.linkedin.com/in/ailev/">Anatoly Levenchuk</a> — a rigorous,
+    transdisciplinary architecture for thinking. The skill set gives your coding agent
+    an FPF-native operating system for engineering decisions: framing before solutions,
+    characterization before comparison, parity enforcement, evidence with congruence
+    penalties, weakest-link assurance, and a cycle that reopens itself when evidence
+    ages or a measurement fails.
+  </p>
+
+  <h2>Seven MCP tools</h2>
+
+  <table>
+    <thead>
+      <tr><th>Tool</th><th>What it does</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>haft_note</code></td><td>Micro-decisions — atomic facts with typed anchors, validation, auto-expiry</td></tr>
+      <tr><td><code>haft_problem</code></td><td>Frame problems, declare comparison dimensions with indicator roles</td></tr>
+      <tr><td><code>haft_solution</code></td><td>Explore variants with diversity check, compare under parity</td></tr>
+      <tr><td><code>haft_decision</code></td><td>Decision contracts: invariants, claims, evidence, baseline lifecycle</td></tr>
+      <tr><td><code>haft_commission</code></td><td>WorkCommission lifecycle for execution harnesses</td></tr>
+      <tr><td><code>haft_refresh</code></td><td>Lifecycle management for every artifact kind</td></tr>
+      <tr><td><code>haft_query</code></td><td>Search, status dashboard, code graph (callers / callees / impact / explore, each reached symbol fused with the decisions governing it), FPF spec search</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Fifteen skills installed by <code>haft init</code></h2>
+
+  <table>
+    <thead>
+      <tr><th>Skill</th><th>Mode</th><th>What it does</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>h-reason</strong></td><td>auto (umbrella)</td><td>Full FPF reasoning palette — framing, exploration, comparison, verification, notes, plus slideument patterns (Goldilocks, NQD, BLP, Scaling-Law Lens). Manual <code>/h-reason</code> always works.</td></tr>
+      <tr><td><strong>h-frame</strong></td><td>auto</td><td>Frame a problem with stabilize + problem typing + umbrella-word repair</td></tr>
+      <tr><td><strong>h-diagnose</strong></td><td>auto</td><td>Diagnose a failure with parallel hypothesis testing (one subagent per hypothesis to prevent anchoring)</td></tr>
+      <tr><td><strong>h-explore</strong></td><td>auto</td><td>Generate distinct candidate variants with NQD diversity discipline</td></tr>
+      <tr><td><strong>h-compare</strong></td><td>auto</td><td>Fair comparison with dim-wise parallel scoring + Pareto front (not a scalar winner)</td></tr>
+      <tr><td><strong>h-decide</strong></td><td><strong>manual</strong></td><td>Record a binding DecisionRecord with full DRR — Transformer Mandate</td></tr>
+      <tr><td><strong>h-verify</strong></td><td>auto</td><td>Baseline → measure → evidence loop with drift detection</td></tr>
+      <tr><td><strong>h-status</strong></td><td>auto</td><td>Read-only project FPF state dashboard</td></tr>
+      <tr><td><strong>h-onboard</strong></td><td>auto</td><td>First-frame ceremony for projects new to haft</td></tr>
+      <tr><td><strong>h-spec-cover</strong></td><td>auto</td><td>Spec-coverage check with blind/stale module triage</td></tr>
+      <tr><td><strong>h-note</strong></td><td>auto</td><td>Lightweight micro-decision recording</td></tr>
+      <tr><td><strong>h-commission</strong></td><td><strong>manual</strong></td><td>WorkCommission lifecycle — manual per Transformer Mandate</td></tr>
+      <tr><td><strong>h-abduct</strong></td><td>subroutine</td><td>Pure B.5.2 abductive four-step (frame → ≥3 rivals → filters → prime)</td></tr>
+      <tr><td><strong>h-boundary-unpack</strong></td><td>subroutine</td><td>A.6.B decomposition of boundary statements</td></tr>
+      <tr><td><strong>h-semio-review</strong></td><td>subroutine</td><td>Concept-rename / spec-consistency audit (X-FANOUT-AUDIT)</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    Auto-triggering skills fire when their description matches operator context.
+    Manual-only skills (<code>h-decide</code>, <code>h-commission</code>) require
+    explicit invocation per the Transformer Mandate — binding artifacts come from the
+    human principal, not the agent. Subroutines are called from other skills or invoked
+    explicitly when working a specific FPF sub-discipline.
+  </p>
+
+  <p>
+    Routing reliability is testable: <code>haft check routing</code> runs 40 golden
+    prompts (current pass rate 82.5%).
+  </p>
+
+  <h2>Semantic FPF spec search</h2>
+
+  <p>
+    <code>haft fpf search</code> (and <code>haft_query(action="fpf")</code> from MCP)
+    searches the indexed FPF specification. Retrieval is hybrid: exact pattern id first,
+    then keyword (FTS5) fused with semantic recall over baked section vectors. A reworded
+    "how do I think about X" finds the pattern that answers it, even when it shares no
+    keywords with the pattern's own heading.
+  </p>
+
+  <p>
+    The vectors are baked into the binary at build time, so end users never embed the
+    spec themselves. Query embedding runs through the optional local
+    <code>haft-embed</code> sidecar; when the sidecar is absent, semantic recall
+    degrades cleanly to keyword search — it never hard-fails.
+  </p>
+
+  <pre><code>haft fpf search "how do I find the part of a design that breaks first"
+# → X-WLNK (Weakest-Link analysis), by meaning, not keyword</code></pre>
+
+  <h2>Evidence workflow</h2>
+
+  <p>
+    Attach evidence with <code>haft_decision(action="evidence", ...)</code>. Evidence
+    carries formality levels (F0–F3), congruence levels (CL0–CL3), and expiry dates.
+    Trust scores (R_eff) degrade as evidence ages; stale evidence triggers refresh. Use
+    <code>haft_decision(action="measure", ...)</code> for post-implementation
+    verification, or the <code>/h-verify</code> skill from the host agent.
+  </p>
+
+  <p>See also <a href="/docs/8.0/check">Enforcement check</a> for how drift, staleness, and evidence decay roll into one CI gate.</p>
+</DocsLayout>

@@ -1,0 +1,142 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Install haft v8" description="Install haft and initialize a project for a supported host agent.">
+  <h1>Install &amp; init (v8)</h1>
+
+  <h2>Install</h2>
+
+  <p>One-line installer:</p>
+
+  <pre><code>curl -fsSL https://quint.codes/install.sh | bash</code></pre>
+
+  <p>
+    The installer fetches the latest tagged release for your platform, places the
+    binary at <code>~/.haft/bin/haft</code>, and links it onto your PATH. It also
+    installs the packaged Open-Sleigh runtime under
+    <code>~/.haft/runtimes/open-sleigh/current</code> so <code>haft harness run</code>
+    works without a local Open-Sleigh checkout, and (where available) the optional
+    embedding sidecar under <code>~/.haft/runtimes/haft-embed/current</code> for
+    semantic FPF spec search.
+  </p>
+
+  <p>From source (Go ≥ 1.25):</p>
+
+  <pre><code>git clone https://github.com/m0n0x41d/haft
+cd haft
+task install</code></pre>
+
+  <h2>Initialize a project</h2>
+
+  <p>Inside the repository you want to onboard:</p>
+
+  <pre><code>cd path/to/your/project
+haft init</code></pre>
+
+  <p>This creates:</p>
+
+  <ul>
+    <li><code>.haft/</code> with project identity (<code>.haft/project.yaml</code>),
+      workflow policy (<code>.haft/workflow.md</code>), and placeholder spec carriers.</li>
+    <li><code>.haft/specs/target-system.md</code> — placeholder TargetSystemSpec with one parseable draft section.</li>
+    <li><code>.haft/specs/enabling-system.md</code> — placeholder EnablingSystemSpec.</li>
+    <li><code>.haft/specs/term-map.md</code> — empty TermMap awaiting load-bearing terms.</li>
+    <li>MCP server config + the 15 skills and slash commands for the chosen host agent.</li>
+  </ul>
+
+  <p>
+    The placeholders are intentionally <code>status: draft</code>. They reserve a
+    parseable structure without claiming active product authority; onboarding promotes
+    them as the human approves load-bearing claims.
+  </p>
+
+  <h2>Init flags</h2>
+
+  <pre><code>haft init            # Claude Code (default), global commands (~/.claude/commands/)
+haft init --local    # Claude Code, project-local commands (.claude/commands/)
+haft init --codex    # Codex CLI / Codex App
+haft init --all      # Claude Code + Codex
+
+# Experimental hosts (config flags exist while runtime + docs converge):
+haft init --cursor
+haft init --gemini
+haft init --opencode</code></pre>
+
+  <h2>What init does per tool</h2>
+
+  <p>The binary is the same; only the MCP config and command/skill install locations differ.</p>
+
+  <table>
+    <thead>
+      <tr><th>Tool</th><th>MCP config</th><th>Commands / prompts</th><th>Skills</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Claude Code</td>
+        <td><code>.mcp.json</code> (project root)</td>
+        <td><code>~/.claude/commands/</code> (or <code>.claude/commands/</code> with <code>--local</code>)</td>
+        <td><code>~/.claude/skills/</code> (15 skills)</td>
+      </tr>
+      <tr>
+        <td>Codex CLI / App</td>
+        <td><code>.codex/config.toml</code></td>
+        <td><code>~/.codex/prompts/</code> (or <code>.codex/prompts/</code> with <code>--local</code>)</td>
+        <td><code>~/.agents/skills/</code> (15 skills)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Project-scoped configs (<code>.mcp.json</code>, <code>.codex/config.toml</code>) use
+    portable project-root paths, so they are safe to commit for shared repositories.
+  </p>
+
+  <p class="callout">
+    <strong>Cursor:</strong> after init, open Settings → MCP → find <code>haft</code> →
+    enable the toggle. Cursor adds MCP servers disabled by default.
+  </p>
+
+  <h2>Verify readiness</h2>
+
+  <p>
+    Right after init the project is <code>needs_onboard</code> — the harness refuses
+    broad runtime execution until you produce active spec sections.
+  </p>
+
+  <pre><code>haft spec check
+# spec_sections: 2
+# active_spec_sections: 0
+# term_map_entries: 0
+# Findings: spec_carrier_no_active_sections (target + enabling),
+#           term_map_missing_term</code></pre>
+
+  <p>That is expected. Drive onboarding next:</p>
+
+  <pre><code>haft spec onboard --json     # see the next typed phase
+# In Claude Code / Codex with the haft MCP plugin loaded:
+/h-onboard</code></pre>
+
+  <p>See <a href="/docs/8.0/spec-onboarding">Spec onboarding</a> for the typed flow.</p>
+
+  <h2>Supported host agents</h2>
+
+  <p>
+    Claude Code and Codex are the supported hosts — the bundled prompts and skills are
+    tested against them. Cursor, Gemini CLI, and OpenCode have experimental config flags
+    while their runtime and docs converge; they receive tool calls, but contracts may
+    not match every detail this guide describes.
+  </p>
+
+  <h2>Upgrade from v7</h2>
+
+  <p>
+    Existing <code>.haft/</code> data is forward-compatible. Re-run <code>haft init</code>
+    in your project to pick up the v8 skills and command files; your
+    <code>.haft/decisions/*</code>, <code>problems/*</code>, <code>notes/*</code>, and
+    <code>specs/*</code> survive untouched. After re-init, restart your host agent so it
+    re-reads the MCP tools/list response. See
+    <a href="https://github.com/m0n0x41d/haft/blob/main/MIGRATION-v8.md">MIGRATION-v8.md</a>
+    for what was dropped.
+  </p>
+</DocsLayout>

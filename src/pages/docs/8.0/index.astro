@@ -1,0 +1,101 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="haft v8" description="Governance substrate pivot — kernel + CLI + MCP server + skills, plugged into your coding agent.">
+  <h1>haft v8</h1>
+
+  <p>
+    v8 is a pivot. Earlier versions tried to be a place you worked — a standalone
+    interactive agent, a TUI, a desktop app over Haft Core. v8 drops all three.
+    Haft no longer competes with general coding agents on the runtime surface. It
+    becomes a <strong>governance substrate</strong> that adds FPF discipline on top of
+    whichever coding agent you already use.
+  </p>
+
+  <p>
+    The rationale, with parity-compared variants, a rollback plan, and falsifiable
+    predictions, is recorded as a DecisionRecord in the repo:
+    <code>dec-20260525-v8-architecture-pivot-...</code>. The FPF reasoner critique
+    confirmed a Bitter-Lesson-Preference violation in the old standalone direction.
+  </p>
+
+  <h2>Three surfaces, one artifact graph</h2>
+
+  <p>
+    Haft is one kernel consumed through three surfaces over one <code>.haft/</code>
+    artifact graph. The surfaces dispatch typed actions to the kernel; they do not
+    invent semantics.
+  </p>
+
+  <ul>
+    <li><strong>Skills + slash commands</strong> in your coding agent (Claude Code,
+      Codex, OpenCode, Cursor) — workflow skills auto-trigger;
+      <code>/h-frame /h-decide /h-verify ...</code> run manually.</li>
+    <li><strong>CLI</strong> (<code>haft problem</code>, <code>haft decision</code>,
+      <code>haft commission</code>, ...) — manual access, no LLM in the loop, CI-friendly.</li>
+    <li><strong>MCP server</strong> (<code>haft serve</code>) — programmatic access for
+      any LLM agent over the Model Context Protocol.</li>
+  </ul>
+
+  <p>
+    The kernel MCP server is the cross-host enforcement surface. It validates arguments
+    server-side and returns structured errors for FPF violations — missing required
+    fields, parity gaps, weakest-link omissions, predictions without a verify step.
+    Skills carry the procedure; the kernel carries the gates.
+  </p>
+
+  <h2>What was dropped</h2>
+
+  <ul>
+    <li><code>haft agent</code> — the standalone interactive agent</li>
+    <li>The TUI (the Bun / OpenTUI / SolidJS bundle from the prior 8.0 release)</li>
+    <li>The desktop wrappers (Tauri / Wails) — no desktop app in v8</li>
+    <li>v7 helper commands that only made sense for the standalone runtime</li>
+  </ul>
+
+  <p>
+    Existing <code>.haft/</code> artifacts (decisions, problems, notes, specs) are
+    forward-compatible. Upgrading from v7? See
+    <a href="https://github.com/m0n0x41d/haft/blob/main/MIGRATION-v8.md">MIGRATION-v8.md</a>.
+  </p>
+
+  <h2>The loop: Specify → Think → Run → Govern</h2>
+
+  <p>
+    The governance model from v7 carries over intact — the pivot changed the surfaces,
+    not the discipline. A repository becomes harnessable only after it carries a
+    parseable ProjectSpecificationSet (TargetSystemSpec, EnablingSystemSpec, TermMap).
+    Decisions, commissions, runtime runs, and evidence are downstream consequences of
+    that spec, not free-floating prompts.
+  </p>
+
+  <pre><code>repository
+  → .haft initialized
+  → TargetSystemSpec + EnablingSystemSpec + TermMap   (Specify)
+  → h-frame / h-explore / h-compare / h-decide        (Think)
+  → WorkCommission → Open-Sleigh runtime              (Run, beta, Codex only)
+  → Evidence flows back; haft check rolls the gate    (Govern)</code></pre>
+
+  <h2>What's new in v8</h2>
+
+  <ul>
+    <li>The three-surface model — skills + CLI + MCP — replaces the standalone runtime.</li>
+    <li>15 skills installed by <code>haft init</code>, with manual-only
+      <code>h-decide</code> / <code>h-commission</code> per the Transformer Mandate.</li>
+    <li>FPF spec search is hybrid: exact pattern id, then keyword fused with semantic
+      recall over baked section vectors. A reworded "how do I think about X" finds the
+      pattern that answers it. See <a href="/docs/8.0/reasoning">Reasoning &amp; FPF</a>.</li>
+    <li>The kernel MCP returns structured errors as hard enforcement gates.</li>
+  </ul>
+
+  <h2>Where to next</h2>
+
+  <ul>
+    <li><a href="/docs/8.0/install">Install &amp; init</a> — get a project onboarded for a supported host.</li>
+    <li><a href="/docs/8.0/reasoning">Reasoning &amp; FPF</a> — the skills, the seven MCP tools, and semantic spec search.</li>
+    <li><a href="/docs/8.0/spec-onboarding">Spec onboarding</a> — the typed flow from <code>needs_onboard</code> to verified coverage.</li>
+    <li><a href="/docs/8.0/harness-batch">Harness</a> — the execution engine (beta, Codex only).</li>
+    <li><a href="/docs/8.0/check">Enforcement check</a> — <code>haft check</code> and CI exit codes.</li>
+  </ul>
+</DocsLayout>

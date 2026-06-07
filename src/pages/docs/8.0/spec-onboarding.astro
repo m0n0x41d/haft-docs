@@ -1,0 +1,166 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Spec onboarding (v8)" description="The typed SpecOnboardingMethod that walks a project from needs_onboard to verified coverage.">
+  <h1>Spec onboarding</h1>
+
+  <p>
+    Haft ships a typed <strong>SpecOnboardingMethod</strong> in Haft Core. The method
+    is product knowledge: it declares which YAML fields a SpecSection must carry, in
+    which order, with which structural Checks. Both surfaces (MCP plugin and CLI
+    subcommand) consume the same <code>WorkflowIntent</code> shape — they render and
+    dispatch, they do not invent semantics.
+  </p>
+
+  <p>
+    The method is implemented in <code>internal/project/specflow/</code>. Phases are
+    declarative Go values composed from a reusable vocabulary of typed Checks
+    (<code>RequireField</code>, <code>RequireStatementType</code>,
+    <code>RequireClaimLayer</code>, <code>RequireValidUntil</code>,
+    <code>RequireTermDefined</code>, <code>RequireGuardLocation</code>,
+    <code>RequireBoundaryPerspectives</code>). The same Check vocabulary feeds the
+    parser-level <code>haft spec check</code>, so forward (method) and backward
+    (validator) directions never drift.
+  </p>
+
+  <h2>The typed flow</h2>
+
+  <p>Surfaces ask Core for the next step:</p>
+
+  <pre><code>haft_spec_section(action="next_step")    # MCP plugin
+haft spec onboard --json                  # CLI</code></pre>
+
+  <p>The response is a <code>WorkflowIntent</code>:</p>
+
+  <table>
+    <thead>
+      <tr><th>Field</th><th>Meaning</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>phase</code></td><td>Stable id, e.g. <code>target.environment.draft</code>. Do not skip ahead.</td></tr>
+      <tr><td><code>prompt_for_user</code></td><td>Question the operator answers verbatim.</td></tr>
+      <tr><td><code>context_for_agent</code></td><td>Reasoning context for the host agent. Names which FPF patterns to apply.</td></tr>
+      <tr><td><code>expected_fields</code></td><td>YAML keys the new SpecSection MUST carry.</td></tr>
+      <tr><td><code>checks</code></td><td>Structural validators that will run on the result.</td></tr>
+      <tr><td><code>blocking_findings</code></td><td>Non-empty when an existing section fails validation. Resolve before drafting.</td></tr>
+      <tr><td><code>terminal</code></td><td><code>true</code> when every registered phase is satisfied.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Phase registry</h2>
+
+  <p>Haft ships ten phases: three target-system, seven enabling-system. Order matters —
+    each phase declares its <code>depends_on</code>, and Core advances only when
+    dependencies are satisfied with active baselined sections.</p>
+
+  <h3>Target-system spine</h3>
+
+  <ul>
+    <li><code>target.environment.draft</code> — what changes in the world when the
+      target system runs. Apply FRAME-09 + CHR-12 in reasoning.</li>
+    <li><code>target.role.draft</code> — what role the target plays in producing the
+      environment change. FRAME-09 strict distinction quad.</li>
+    <li><code>target.boundary.draft</code> — in-scope vs out-of-scope, plus four CHR-10
+      boundary perspectives (Law / Admissibility / Deontics / Evidence) named in
+      <code>target_refs</code>.</li>
+  </ul>
+
+  <h3>Enabling-system spine</h3>
+
+  <ul>
+    <li><code>enabling.architecture.draft</code> — layered architecture of the team /
+      code / infra that builds and operates the target. Apply FPF Signature Stack.</li>
+    <li><code>enabling.work_methods.draft</code> — how each load-bearing artifact is
+      produced. FRAME-09 + X-STATEMENT-TYPE.</li>
+    <li><code>enabling.effect_boundaries.draft</code> — which actors and surfaces may
+      mutate what. CHR-10 boundary corners.</li>
+    <li><code>enabling.agent_policy.draft</code> — supported host agents and autonomy
+      bounds.</li>
+    <li><code>enabling.commission_policy.draft</code> — how WorkCommissions are
+      authorized, scoped, retired.</li>
+    <li><code>enabling.runtime_policy.draft</code> — which surface owns runtime
+      lifecycle, isolation, observability.</li>
+    <li><code>enabling.evidence_policy.draft</code> — admissible evidence kinds,
+      minimum congruence level, refresh triggers. <code>evidence_required[].kind</code>
+      names a guard location.</li>
+  </ul>
+
+  <h2>The phase loop</h2>
+
+  <ol>
+    <li>Call <code>haft_spec_section(action="next_step")</code>.</li>
+    <li>Read <code>prompt_for_user</code> verbatim to the operator.</li>
+    <li>Read <code>context_for_agent</code>. Retrieve every named FPF pattern via
+      <code>haft_query(action="fpf", query="FRAME-09")</code> etc. Apply them in your
+      reasoning — never inside the YAML.</li>
+    <li>Read repo carriers (README, manifests, source structure) to ground the
+      section in reality.</li>
+    <li>Draft the YAML <code>spec-section</code> block in the carrier file named by
+      <code>document_kind</code>. Populate every field in <code>expected_fields</code>,
+      including the SoTA fields below.</li>
+    <li>Run <code>haft spec check</code>. Resolve any structural finding.</li>
+    <li>Promote to active: flip <code>status: draft → active</code> after the operator
+      approves the load-bearing claims.</li>
+    <li>Record the baseline:
+      <code>haft_spec_section(action="approve", section_id=&lt;id&gt;)</code>. Without
+      a baseline the section reports <code>spec_section_needs_baseline</code> and the
+      next phase stays blocked.</li>
+    <li>Repeat from step 1 until <code>terminal: true</code>.</li>
+  </ol>
+
+  <h2>SoTA fields on every claim</h2>
+
+  <ul>
+    <li><code>statement_type</code> — one of <code>definition</code>,
+      <code>admissibility</code>, <code>duty</code>, <code>evidence</code>,
+      <code>explanation</code>. Mixed types are an L1 error per X-STATEMENT-TYPE;
+      decompose.</li>
+    <li><code>claim_layer</code> — one of <code>object</code>, <code>description</code>,
+      <code>carrier</code>, <code>work</code>, <code>evidence</code>.</li>
+    <li><code>valid_until</code> — RFC3339 or YYYY-MM-DD. Refresh discipline lives at
+      the claim level, not only at evidence.</li>
+    <li><code>target_refs</code> — for boundary sections, enumerate at least four
+      stakeholder perspectives (CHR-10 corners).</li>
+    <li><code>evidence_required[].kind</code> — for invariants and illegal states,
+      declare guard location: <code>type</code>, <code>L1</code>..<code>L4</code>,
+      <code>DB</code>, <code>E2E</code>, <code>manual</code>.</li>
+  </ul>
+
+  <h2>Drift, staleness, and triage</h2>
+
+  <p>
+    Once a section is approved (baseline recorded), hand-edits to the carrier surface
+    as <code>spec_section_drifted</code> in <code>haft spec check</code>. An active
+    section whose <code>valid_until</code> is past today surfaces as
+    <code>spec_section_stale</code>. The operator picks one of three actions:
+  </p>
+
+  <pre><code># Intentional evolution: lock the new hash with a recorded reason
+haft_spec_section(action="rebaseline", section_id="TS.role.001",
+                  reason="role narrowed after stakeholder review")
+
+# Section needs review: drop the baseline, return to the onboarding loop
+haft_spec_section(action="reopen", section_id="TS.role.001",
+                  reason="external dependency changed")
+
+# Mistaken edit: revert the YAML in the carrier; haft spec check goes clean</code></pre>
+
+  <h2>What never goes into the carrier</h2>
+
+  <ul>
+    <li>FPF citations (<code>FRAME-XX</code>, <code>CHR-XX</code>, <code>X-XXX</code>).
+      Patterns shape your reasoning; the carrier records the resolved claim only.</li>
+    <li>Speculative fields the phase did not request.</li>
+    <li>Active status without an explicit operator approval.</li>
+  </ul>
+
+  <h2>Plugin-mode parity</h2>
+
+  <p>
+    The CLI <code>haft spec onboard --json</code> output and the MCP
+    <code>haft_spec_section(action="next_step")</code> response share an identical
+    <code>WorkflowIntent</code> shape. A contract test asserts field-by-field parity.
+    Whatever the host agent sees in plugin mode, the operator sees in the CLI.
+  </p>
+</DocsLayout>

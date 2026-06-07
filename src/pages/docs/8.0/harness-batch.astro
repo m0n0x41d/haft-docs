@@ -1,0 +1,332 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Harness — drain mode (v8, beta)" description="Drain a queue of WorkCommissions with per-commission delivery policy and discrete revertable apply commits. Beta, Codex only.">
+  <h1>Harness — drain mode</h1>
+
+  <p class="callout-warn">
+    <strong>Status: Beta, Codex only.</strong> The execution agent is Codex — there is
+    no Claude execution path. Single-commission <code>haft harness run</code> is the
+    trustworthy operator path. Drain mode (<code>--drain --concurrency N</code>) and
+    <code>workspace_patch_auto_on_pass</code> auto-apply are validated end-to-end on
+    docs-class commissions. Treat them as Beta on production-code commissions; review
+    the diff or use <code>workspace_patch_manual</code> when in doubt.
+  </p>
+
+  <h2>What this is</h2>
+
+  <p>
+    The harness lets you commission work from <code>DecisionRecord</code> artifacts
+    and run it under a real codex agent in an isolated workspace. Drain mode keeps
+    the runtime alive while runnable commissions remain, runs up to N agents in
+    parallel, blocks lockset-overlapping claims, and exits cleanly when the queue is
+    empty.
+  </p>
+
+  <p>
+    Per-commission <strong>delivery policy</strong> is the apply-authority gate.
+    Commissions tagged <code>workspace_patch_auto_on_pass</code> get their workspace
+    diff auto-applied to the project checkout as a discrete revertable commit when
+    they reach <code>terminal+pass</code>. Manual commissions (default) leave the
+    diff in the workspace clone awaiting <code>haft harness apply</code>.
+  </p>
+
+  <h2>Why batch instead of one-shot</h2>
+
+  <p>
+    A planning session typically produces 10–50 commissions. Running them
+    sequentially with manual approval each time is the same friction as the
+    self-written Ralph loop people resort to. Drain mode is the canonical
+    operator path: queue the batch, walk away, wake up to terminal commissions
+    with their per-policy outcomes already applied or held for review.
+  </p>
+
+  <h2>The workflow</h2>
+
+  <pre><code>DecisionRecord
+  &darr; (operator decides via /h-decide or haft_decision MCP)
+WorkCommission                       &lt;-- delivery_policy declared here
+  &darr; (haft commission create-from-decision OR haft harness run --decision)
+Drain                                 &lt;-- haft harness run --drain --concurrency N
+  &darr; (parallel codex sessions; lockset enforcement, AutonomyEnvelope at create/preflight/execute)
+Terminal verdict
+  &darr;
+  &mdash; pass + workspace_patch_auto_on_pass &rarr; auto-applied to checkout
+  &mdash; pass + workspace_patch_manual       &rarr; diff in workspace, awaits haft harness apply
+  &mdash; blocked / failed                    &rarr; stays for operator decision (requeue / cancel)
+</code></pre>
+
+  <h2>Quickstart</h2>
+
+  <p>Assumes you already have one or more active <code>DecisionRecord</code>s.</p>
+
+  <h3>1. Create commissions</h3>
+
+  <p>
+    Auto-select all active decisions that don't already have commissions and
+    inspect the generated plan:
+  </p>
+
+  <pre><code>haft harness run --prepare-only
+# Reads .haft/decisions/*.md, writes .haft/plans/&lt;auto-id&gt;.yaml,
+# creates one WorkCommission per decision, stops before runtime starts.
+</code></pre>
+
+  <p>
+    Or commission a specific decision with an explicit policy override:
+  </p>
+
+  <pre><code>haft commission create-from-decision dec-20260428-issue-66-rest-105a0416 \
+  --delivery-policy workspace_patch_auto_on_pass
+</code></pre>
+
+  <p>
+    For low-level / scripted workflows, the same surface is reachable through
+    the MCP <code>haft_commission</code> tool:
+  </p>
+
+  <pre><code>haft_commission(
+  action="create_from_decision",
+  decision_ref="dec-...",
+  repo_ref="local:myproject",
+  base_sha="...",
+  target_branch="dev",
+  allowed_paths=["internal/cli/", "internal/artifact/note.go"],
+  forbidden_paths=[".haft/", "go.mod"],
+  delivery_policy="workspace_patch_auto_on_pass"
+)
+</code></pre>
+
+  <h3>2. Drain the queue</h3>
+
+  <pre><code>haft harness run --drain --concurrency 4 \
+  --force-skip-specs "overnight: docs polish + small refactors"
+</code></pre>
+
+  <p>
+    Drain reads the haft store every poll cycle. While runnable commissions exist
+    it claims up to <code>N</code> of them in parallel under independent
+    <code>codex app-server</code> sessions. When all observed commissions reach a
+    terminal state, drain exits with status 0. <code>--drain</code> requires the
+    operator stream — do not combine with <code>--detach</code>.
+  </p>
+
+  <p>
+    Operator stdout receives one line per terminal auto-apply attempt:
+  </p>
+
+  <pre><code>auto_apply_succeeded: commission=wc-20260429-61c7a2ee files=1
+auto_apply_failed: commission=wc-... reason="..."
+</code></pre>
+
+  <p>
+    Manual commissions and blocked/failed ones stay queued for operator review.
+  </p>
+
+  <h3>3. Inspect what landed</h3>
+
+  <pre><code>haft commission list --selector all      # everything, including terminals
+haft harness result wc-...               # per-commission verdict + diff stat + next action
+haft harness tail wc-... --follow        # stream the tail of an active or recently-terminal run
+</code></pre>
+
+  <h3>4. Operator recovery</h3>
+
+  <p>
+    The harness never deletes a commission. Stale, blocked, or no-longer-relevant
+    commissions move via:
+  </p>
+
+  <pre><code>haft commission requeue wc-... --reason "&lt;why this is still wanted&gt;"
+haft commission cancel  wc-... --reason "&lt;why this is no longer wanted&gt;"
+</code></pre>
+
+  <h2>Use cases</h2>
+
+  <h3>Use case A: Overnight docs &amp; mechanical refactors</h3>
+
+  <p>
+    Tag every commission <code>workspace_patch_auto_on_pass</code>. Cover all
+    docs files, formatting, comment cleanups, mechanical lint fixes,
+    test-coverage padding, etc. Wake up to a stack of small commits, each tied
+    to a specific <code>DecisionRecord</code> for traceability.
+  </p>
+
+  <pre><code>haft commission create-from-decision dec-docs-cleanup-... \
+  --delivery-policy workspace_patch_auto_on_pass \
+  --allowed-path docs/ --allowed-path README.md
+
+haft commission create-from-decision dec-formatter-pass-... \
+  --delivery-policy workspace_patch_auto_on_pass \
+  --allowed-path internal/
+
+haft harness run --drain --concurrency 4
+</code></pre>
+
+  <h3>Use case B: Mixed batch with human-in-loop on risky paths</h3>
+
+  <p>
+    Default to <code>workspace_patch_manual</code>. Opt-in to auto-apply only
+    for low-risk commissions:
+  </p>
+
+  <pre><code>haft commission create-from-decision dec-trivial-cleanup-... \
+  --delivery-policy workspace_patch_auto_on_pass
+
+haft commission create-from-decision dec-touches-payment-flow-... \
+  # default workspace_patch_manual
+
+haft harness run --drain --concurrency 2
+# Auto-applies first commission, holds the second for review.
+</code></pre>
+
+  <h3>Use case C: Single commission baseline (no drain)</h3>
+
+  <p>
+    Sometimes you just want one commission to run end-to-end and stop. Drain is
+    opt-in:
+  </p>
+
+  <pre><code>haft harness run dec-...
+# Streams progress, exits when the commission reaches terminal,
+# leaves the diff in the workspace clone for `haft harness apply`.
+</code></pre>
+
+  <h2>Invariants and guard surfaces</h2>
+
+  <ul>
+    <li>
+      <strong>Lockset overlap blocks parallel claims.</strong> Two commissions
+      that touch overlapping <code>allowed_paths</code> cannot run in parallel.
+      Open-Sleigh intake silently skips conflicting candidates and returns to
+      them on the next poll cycle.
+    </li>
+    <li>
+      <strong>AutonomyEnvelope evaluates at create / preflight / execute,
+      NOT at apply.</strong> A missing envelope snapshot does not block
+      auto-apply on terminal+pass. An <em>explicitly</em> blocked envelope
+      decision still keeps the manual path even on
+      <code>workspace_patch_auto_on_pass</code>, because that represents a
+      concrete operator decision rather than a missing snapshot.
+    </li>
+    <li>
+      <strong>Per-commission apply is a discrete revertable git operation.</strong>
+      No batch squash, no force-push, no merge automation. Each
+      <code>auto_apply_succeeded</code> line corresponds to exactly one commit
+      affecting only declared <code>allowed_paths</code>.
+    </li>
+    <li>
+      <strong>No remote operations from drain.</strong> No <code>git push</code>,
+      no PR creation, no comments, no external webhooks. Drain stays local.
+    </li>
+    <li>
+      <strong>Stale-lease age cap.</strong> Claims older than the configured cap
+      (default 24h, override via <code>OPEN_SLEIGH_STALE_LEASE_MAX_AGE_S</code>)
+      are skipped at intake with typed <code>lease_too_old</code> reason and
+      surfaced in <code>haft harness status</code> for explicit operator action.
+    </li>
+    <li>
+      <strong>Default policy stays manual.</strong>
+      <code>workspace_patch_auto_on_pass</code> is per-commission opt-in only.
+      There is no global toggle that flips every commission to auto-apply.
+    </li>
+    <li>
+      <strong>Single-commission behavior is unchanged.</strong> Running
+      <code>haft harness run</code> without <code>--drain</code> behaves as the
+      single-commission path always has.
+    </li>
+  </ul>
+
+  <h2>Known rough edges (Beta caveats)</h2>
+
+  <ul>
+    <li>
+      Codex workspace clones do not pre-cache Elixir Hex deps
+      (<code>deps/</code>, <code>_build/</code>). Cross-language commissions
+      that include <code>cd open-sleigh &amp;&amp; mix test</code> in their
+      <code>evidence_requirements</code> will skip that step inside the agent's
+      measure phase. Operators should re-run mix tests on the project checkout
+      after apply.
+    </li>
+    <li>
+      <code>haft commission list</code> defaults to <code>--selector runnable</code>;
+      use <code>--selector all</code> to see terminal commissions for audit.
+    </li>
+    <li>
+      Open-Sleigh resumes claimed leases on runtime restart with no age cap on the
+      runtime side; the intake-level cap is the only stale-lease boundary today.
+    </li>
+    <li>
+      <code>auto_apply</code> is wired into drain mode only. Single-commission
+      runs (<code>haft harness run</code> without <code>--drain</code>) still
+      require manual <code>haft harness apply</code> even on
+      <code>workspace_patch_auto_on_pass</code>; this is a deliberate
+      conservative choice and may change in a later v7.x slice.
+    </li>
+  </ul>
+
+  <h2>Troubleshooting</h2>
+
+  <h3>"no runnable WorkCommissions" on a fresh drain start</h3>
+
+  <p>
+    Open-Sleigh's commission-source intake claims runnable commissions on its
+    own poll loop. If the runtime was already running and immediately consumed
+    the queue, your CLI invocation may race with it and report empty. Check
+    <code>haft harness status</code> — if the runtime is <code>active</code>
+    with non-zero <code>claimed</code>, your commissions are running.
+  </p>
+
+  <h3>Commission terminal but checkout unchanged</h3>
+
+  <p>
+    Three common reasons:
+  </p>
+
+  <ol>
+    <li>
+      <code>delivery_policy</code> is <code>workspace_patch_manual</code>
+      (default). The diff is held in the workspace clone — apply with
+      <code>haft harness apply &lt;commission-id&gt;</code>.
+    </li>
+    <li>
+      <code>delivery_policy</code> is <code>workspace_patch_auto_on_pass</code>
+      but the commission was run under single-commission mode (no
+      <code>--drain</code>). Auto-apply is wired into drain only today; same
+      remedy — <code>haft harness apply</code>.
+    </li>
+    <li>
+      AutonomyEnvelope explicitly blocked the apply gate. Inspect with
+      <code>haft commission show &lt;id&gt;</code> and look for
+      <code>delivery_decision.reason=autonomy_envelope_blocked</code>. Resolve
+      by updating the envelope, or apply manually after operator review.
+    </li>
+  </ol>
+
+  <h3>Commission ended in <code>blocked_policy</code> with <code>no_commission_mutation</code></h3>
+
+  <p>
+    The agent passed evidence but produced an empty diff in the execute phase.
+    Open-Sleigh's pre-mutation scope guard catches this: a passing measure
+    without product-file edits implies the commission either had no real work
+    to do, or the agent misunderstood the frame. Inspect the workspace clone:
+  </p>
+
+  <pre><code>cd ~/.open-sleigh/workspaces/&lt;commission-id&gt; &amp;&amp; git status
+</code></pre>
+
+  <p>
+    Decide between <code>haft commission cancel</code> (truly nothing to do) or
+    <code>haft commission requeue</code> after sharpening the
+    <code>DecisionRecord</code>'s frame.
+  </p>
+
+  <h2>Related docs</h2>
+
+  <ul>
+    <li><a href="/docs/8.0/spec-onboarding">Spec onboarding (v7)</a> — required state before non-tactical commissions are allowed</li>
+    <li><a href="/docs/8.0/check"><code>haft check</code></a> — CI-facing rollup that includes commission readiness</li>
+    <li><a href="/docs/8.0/install">Installation</a> — Open-Sleigh runtime + codex prerequisites</li>
+  </ul>
+</DocsLayout>

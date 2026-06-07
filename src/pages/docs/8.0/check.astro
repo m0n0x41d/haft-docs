@@ -1,0 +1,125 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Enforcement check (v8)" description="haft check and haft_query(action=check) — the unified CI-actionable enforcement surface.">
+  <h1>Enforcement check</h1>
+
+  <p>
+    Haft unifies enforcement into one report. The CLI <code>haft check</code> is the
+    CI-friendly entry point; <code>haft_query(action="check")</code> is the
+    plugin-mode parity for embedded host agents. Both consume the same Go helpers and
+    produce JSON with identical fields — a contract test asserts the shape.
+  </p>
+
+  <h2>What the report covers</h2>
+
+  <ul>
+    <li><strong>Stale</strong> — decisions and artifacts whose <code>valid_until</code>
+      is past, or whose evidence has decayed (R_eff &lt; 0.5; AT-RISK at &lt; 0.3).</li>
+    <li><strong>Drifted</strong> — decisions with file drift on baselined paths.</li>
+    <li><strong>Unassessed</strong> — active decisions with no measurement yet.</li>
+    <li><strong>Coverage gaps</strong> — claims with no satisfying evidence.</li>
+    <li><strong>Spec health</strong> — drift on approved SpecSections
+      (<code>spec_section_drifted</code>), missing baselines on active sections
+      (<code>spec_section_needs_baseline</code>), time-based staleness
+      (<code>spec_section_stale</code> for active sections whose <code>valid_until</code>
+      is past today), and L0/L1/L1.5 structural carrier findings from
+      <code>haft spec check</code>.</li>
+  </ul>
+
+  <h2>CLI: haft check</h2>
+
+  <pre><code>cd path/to/your/project
+haft check          # human-readable summary
+haft check --json   # structured JSON for CI</code></pre>
+
+  <p>Exit code:</p>
+  <ul>
+    <li><strong>0</strong> — clean. No stale, no drift, no coverage gaps, no spec
+      issues.</li>
+    <li><strong>1</strong> — at least one finding. CI gates can branch on this.</li>
+  </ul>
+
+  <p>Sample human output on a project with a stale section:</p>
+
+  <pre><code>haft check: governance debt found (2 finding(s))
+stale: 0
+drifted: 0
+unassessed: 0
+coverage gaps: 0
+spec health: 2
+
+Spec Health
+- [error/spec_section_needs_baseline] TS.role.001 — section "TS.role.001" is active
+  but has no baseline; the operator has not yet approved it through the onboarding
+  method
+  next_action: haft_spec_section(action="approve", section_id="TS.role.001") to
+  record a baseline
+- [error/spec_section_stale] TS.role.001 — section "TS.role.001" is active but
+  valid_until 2025-01-01 expired 482 day(s) ago
+  next_action: triage staleness on "TS.role.001": rebaseline if the claim is still
+  current (extend valid_until in the carrier and run haft_spec_section
+  action=rebaseline), reopen if the claim needs review, or deprecate the section</code></pre>
+
+  <h2>MCP: haft_query(action="check")</h2>
+
+  <p>
+    Embedded host agents in plugin mode call the same machinery through MCP:
+  </p>
+
+  <pre><code>haft_query(action="check")</code></pre>
+
+  <p>
+    Returns a JSON object with the same field layout as <code>haft check --json</code>.
+    The host agent reads <code>spec_health</code>, sees a typed
+    <code>spec_section_drifted</code> finding, and proposes the next action directly:
+  </p>
+
+  <pre><code>haft_spec_section(action="rebaseline",
+                  section_id="TS.role.001",
+                  reason="role narrowed after stakeholder review")</code></pre>
+
+  <p>
+    Without typed access the host agent would be parsing CLI prose. With it, the
+    triage loop is fully structured.
+  </p>
+
+  <h2>When to use which</h2>
+
+  <ul>
+    <li><strong>CI pipelines</strong> — <code>haft check</code> in a pre-merge check.
+      Exit-code gates the merge.</li>
+    <li><strong>Pre-commit hook</strong> — same command. Optionally narrow to
+      <code>haft spec check</code> for spec-only feedback.</li>
+    <li><strong>/h-verify</strong> in plugin mode — automatically calls
+      <code>haft_query(action="check")</code> as discovery, then walks the operator
+      through triage.</li>
+  </ul>
+
+  <h2>Distinguishing status from check</h2>
+
+  <p>
+    <code>haft_query(action="status")</code> is the at-a-glance overview — counts,
+    recent activity, readiness state. <code>haft_query(action="check")</code> is the
+    CI-actionable enforcement view — every individual finding with code, level, and
+    next-action hint. Use <code>status</code> when reporting; use <code>check</code>
+    when acting.
+  </p>
+
+  <h2>Schema parity guarantee</h2>
+
+  <p>
+    The contract is enforced by tests:
+  </p>
+
+  <ul>
+    <li><code>TestHandleQuintQuery_CheckMatchesCLIJSON</code> decodes both MCP and
+      CLI <code>--json</code> into the same Go struct and asserts field-by-field
+      equality.</li>
+    <li><code>TestHandleToolsList_NoToolDeclaresTopLevelCompositors</code> iterates
+      every advertised tool and rejects top-level <code>allOf</code>/<code>oneOf</code>/
+      <code>anyOf</code> in input schemas (a regression that previously took the
+      whole haft MCP server offline at the host LLM API boundary).</li>
+  </ul>
+</DocsLayout>
