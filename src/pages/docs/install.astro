@@ -17,23 +17,25 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   </div>
 
   <p>
-    This downloads the latest release for your platform (macOS/Linux, arm64/amd64) and places it
-    in <code>~/.local/bin/</code>. Make sure this directory is in your <code>PATH</code>.
+    This downloads the tagged release for your platform (macOS/Linux, arm64/amd64)
+    and places it in <code>~/.local/bin/</code>. Make sure this directory is in
+    your <code>PATH</code>.
   </p>
 
   <h2>Initialize in your project</h2>
 
   <div class="callout-warn">
     <p>
-      <strong>You must run init in every project.</strong> haft runs as an MCP plugin inside
-      your AI tool — not as a standalone agent. Each project needs its own MCP config with a unique
-      project ID and path. A global MCP config pointing to a single project will silently send all
-      artifacts to that project, even when you're working in a different directory.
+      <strong>You must run init in every project.</strong> haft runs through your
+      AI tool's MCP integration. Each project needs its own MCP config with a
+      unique project ID and path. A global MCP config pointing to a single
+      project will silently send all artifacts to that project, even when you're
+      working in a different directory.
     </p>
     <p style="margin-top: 0.75rem;">
-      CLI tools (Claude Code, Gemini CLI, Codex CLI) always launch from the current directory, so
-      this mostly works transparently. IDE-based tools (Cursor, Windsurf) may behave differently —
-      if something goes wrong, run init in the correct directory and restart the tool.
+      Claude Code and Codex are the supported hosts in v8. Cursor, Gemini CLI, and
+      OpenCode configs are experimental; if something goes wrong, run init in the
+      correct directory and restart the tool.
     </p>
   </div>
 
@@ -55,9 +57,6 @@ haft init --codex
 
 # OpenCode (sst/opencode)
 haft init --opencode
-
-# JetBrains Air
-haft init --air
 
 # All tools at once
 haft init --all</code></pre>
@@ -106,7 +105,7 @@ haft init --all</code></pre>
         <td>Global config</td>
       </tr>
       <tr>
-        <td>Codex / Air</td>
+        <td>Codex</td>
         <td><code>.codex/config.toml</code></td>
         <td><code>~/.codex/prompts/</code></td>
         <td>Trust project in Codex</td>

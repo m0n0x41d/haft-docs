@@ -61,17 +61,18 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>Explore</h2>
 
   <p>
-    <strong>Entry:</strong> <code>/h-explore</code> (or <code>/h-char</code> first for characterization)<br>
+    <strong>Entry:</strong> <code>/h-explore</code><br>
     <strong>Goal:</strong> Generate 2+ genuinely distinct variants — different in kind, not degree.<br>
     <strong>Tool:</strong> <code>haft_solution(action="explore")</code>
   </p>
 
-  <h3>Characterization (/h-char)</h3>
+  <h3>Characterization</h3>
 
   <p>
-    Before generating options, define how you'll compare them. This prevents bias — you can't
-    cherry-pick criteria to favor the option you already like. Run <code>/h-char</code> to
-    define comparison dimensions with roles:
+    Before comparing options, define how you'll compare them. This prevents bias —
+    you can't cherry-pick criteria to favor the option you already like. Capture
+    comparison dimensions on the problem frame and use <code>/h-compare</code> to
+    score them under parity:
   </p>
 
   <ul>
@@ -387,8 +388,8 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     <thead>
       <tr>
         <th>v5 command</th>
-        <th>v6 mode</th>
-        <th>v6 command</th>
+        <th>v8 mode</th>
+        <th>v8 command</th>
       </tr>
     </thead>
     <tbody>
@@ -399,8 +400,8 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
       </tr>
       <tr>
         <td><code>/q-char</code></td>
-        <td>Explore (characterization)</td>
-        <td><code>/h-char</code></td>
+        <td>Folded into problem framing and comparison</td>
+        <td><code>/h-frame</code> / <code>/h-compare</code></td>
       </tr>
       <tr>
         <td><code>/q-explore</code></td>

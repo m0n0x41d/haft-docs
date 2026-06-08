@@ -2,12 +2,14 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Migrating from v5" description="How to upgrade from quint-code 5.x to haft 6.0.">
-  <h1>Migrating from v5 to v6</h1>
+<DocsLayout title="Migrating from older releases" description="How to upgrade from quint-code 5.x or older haft releases to haft v8.">
+  <h1>Migrating to v8</h1>
 
   <p>
-    Version 6.0 renames quint-code to haft, introduces the 5-mode model, and adds claim-aware
-    decisions. Your data is preserved — migration is handled automatically by <code>haft init</code>.
+    v8 keeps the v5-to-v6 rename from quint-code to haft, keeps the v7
+    spec-first governance model, and removes the standalone agent, TUI, and
+    desktop wrappers. Your existing artifacts are preserved; migration runs
+    through <code>haft init</code>.
   </p>
 
   <div class="callout">
@@ -15,7 +17,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
       <strong>Why the rename?</strong> The name "quint" conflicts with
       <a href="https://github.com/informalsystems/quint" target="_blank" rel="noopener">Quint</a> —
       a formal specification language by Informal Systems. To avoid confusion between the two
-      projects, v6 adopts a new name: <strong>haft</strong> (the handle of an axe — the part you
+      projects, haft adopted a new name in v6: <strong>haft</strong> (the handle of an axe — the part you
       actually grip when doing the work).
     </p>
   </div>
@@ -37,20 +39,22 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     <li><strong>Claims</strong> — decisions now carry verifiable claims with <code>verify_after</code> dates. Existing decisions get claims generated from their evidence during migration.</li>
     <li><strong><code>/h-verify</code> replaces <code>/q-refresh</code></strong> — the fifth cognitive mode actively checks claims against reality, not just evidence age.</li>
     <li><strong>5-mode model</strong> — Understand, Explore, Choose, Execute, Verify maps to <code>/h-frame</code>, <code>/h-explore</code>, <code>/h-compare</code>, <code>/h-decide</code>, <code>/h-verify</code>.</li>
+    <li><strong>Spec-first readiness</strong> — v8 expects TargetSystemSpec, EnablingSystemSpec, and TermMap carriers before broad governed work.</li>
   </ul>
 
-  <h3>New features</h3>
+  <h3>v8 surface changes</h3>
 
   <ul>
-    <li><code>haft sync</code> — team workflow, syncs git-tracked markdown into local DB</li>
-    <li><code>haft agent</code> — standalone TUI runtime, no external AI tool required</li>
-    <li>Knowledge graph — file-to-decision mapping with invariant injection</li>
-    <li>Desktop app (pre-alpha) — visual dashboard</li>
+    <li><code>haft init</code> installs host skills and MCP config for supported agents.</li>
+    <li><code>haft serve</code> is the MCP surface used by Claude Code and Codex.</li>
+    <li><code>haft_query</code> exposes search, status, and the fused code graph.</li>
+    <li><code>haft check</code> is the deterministic CI governance gate.</li>
+    <li>The optional execution harness is alpha and Codex-only; learn the reasoning and governance loop first.</li>
   </ul>
 
   <h2>How to migrate</h2>
 
-  <p>Update the binary, then re-run init in each project:</p>
+  <p>Update the binary, then re-run init in each project for your host:</p>
 
   <pre><code># Install haft (replaces quint-code)
 curl -fsSL https://quint.codes/install.sh | bash
@@ -86,8 +90,8 @@ haft init</code></pre>
     update the slash commands:
   </p>
 
-  <pre><code># Download the latest reference prompt
-curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > CLAUDE.md</code></pre>
+  <pre><code># Download the current reference prompt
+curl -fsSL https://raw.githubusercontent.com/m0n0x41d/haft/main/CLAUDE.md > CLAUDE.md</code></pre>
 
   <p>Or manually find-and-replace in your existing file:</p>
 
@@ -95,7 +99,7 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
     <thead>
       <tr>
         <th>v5 (old)</th>
-        <th>v6 (new)</th>
+        <th>v8</th>
       </tr>
     </thead>
     <tbody>
@@ -104,7 +108,7 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
       <tr><td><code>~/.quint-code/</code></td><td><code>~/.haft/</code></td></tr>
       <tr><td><code>/q-reason</code></td><td><code>/h-reason</code></td></tr>
       <tr><td><code>/q-frame</code></td><td><code>/h-frame</code></td></tr>
-      <tr><td><code>/q-char</code></td><td><code>/h-char</code></td></tr>
+      <tr><td><code>/q-char</code></td><td><code>/h-frame</code> / <code>/h-compare</code></td></tr>
       <tr><td><code>/q-explore</code></td><td><code>/h-explore</code></td></tr>
       <tr><td><code>/q-compare</code></td><td><code>/h-compare</code></td></tr>
       <tr><td><code>/q-decide</code></td><td><code>/h-decide</code></td></tr>
@@ -115,7 +119,7 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
       <tr><td><code>/q-problems</code></td><td><code>/h-problems</code></td></tr>
       <tr><td><code>/q-onboard</code></td><td><code>/h-onboard</code></td></tr>
       <tr><td><code>quint-code init</code></td><td><code>haft init</code></td></tr>
-      <tr><td><code>quint-code board</code></td><td><code>haft board</code></td></tr>
+      <tr><td><code>quint-code board</code></td><td><code>/h-status</code> / <code>haft check</code></td></tr>
     </tbody>
   </table>
 
@@ -151,7 +155,7 @@ curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md 
 
   <pre><code>git add .haft/
 git rm -r --cached .quint/   # if .quint/ was tracked
-git commit -m "chore: migrate quint-code to haft v6"</code></pre>
+git commit -m "chore: migrate quint-code to haft v8"</code></pre>
 
   <div class="callout-warn">
     <p>
@@ -164,7 +168,7 @@ git commit -m "chore: migrate quint-code to haft v6"</code></pre>
   <h2>What if I don't migrate?</h2>
 
   <p>
-    The haft 6.0 MCP server detects old <code>.quint/</code> directories and prompts you to run
+    Haft detects old <code>.quint/</code> directories and prompts you to run
     <code>haft init</code>. Your data is safe — it just won't work until you migrate. The old
     <code>quint-code</code> binary continues to work with v5 data if you need to roll back.
   </p>

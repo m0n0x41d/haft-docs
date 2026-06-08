@@ -13,12 +13,17 @@ import DocsLayout from '../../../layouts/DocsLayout.astro';
 
   <p>
     The installer fetches the latest tagged release for your platform, places the
-    binary at <code>~/.haft/bin/haft</code>, and links it onto your PATH. It also
-    installs the packaged Open-Sleigh runtime under
-    <code>~/.haft/runtimes/open-sleigh/current</code> so <code>haft harness run</code>
-    works without a local Open-Sleigh checkout, and (where available) the optional
-    embedding sidecar under <code>~/.haft/runtimes/haft-embed/current</code> for
-    semantic FPF spec search.
+    binary in a writable bin directory, usually <code>~/.local/bin</code>, and links
+    it onto your PATH. Where available, it also installs the optional
+    <code>haft-embed</code> sidecar under
+    <code>~/.haft/runtimes/haft-embed/current</code> for local semantic recall.
+  </p>
+
+  <p class="callout">
+    The installer may also unpack the Open-Sleigh runtime used by
+    <code>haft harness run</code>. Treat that as the optional alpha execution track.
+    You do not need it to use the v8 reasoning, spec, MCP, or <code>haft check</code>
+    workflows.
   </p>
 
   <p>From source (Go ≥ 1.25):</p>
@@ -100,8 +105,8 @@ haft init --opencode</code></pre>
   <h2>Verify readiness</h2>
 
   <p>
-    Right after init the project is <code>needs_onboard</code> — the harness refuses
-    broad runtime execution until you produce active spec sections.
+    Right after init the project is <code>needs_onboard</code>. That is expected:
+    the placeholder specs are parseable but not authoritative yet.
   </p>
 
   <pre><code>haft spec check

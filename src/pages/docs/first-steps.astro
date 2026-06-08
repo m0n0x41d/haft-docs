@@ -66,14 +66,15 @@ each one, and what's the recommended workflow</code></pre>
   </p>
 
   <pre><code># Claude Code
-curl -fsSL https://raw.githubusercontent.com/m0n0x41d/quint-code/main/CLAUDE.md > CLAUDE.md
+haft init
 
-# Cursor → .cursorrules, Codex → AGENTS.md (same content, different filename)</code></pre>
+# Codex CLI / App
+haft init --codex</code></pre>
 
   <p>
-    This file teaches the agent: communication style (direct, no cheerleading), thinking principles
-    (weakest link analysis, reversibility checks), the FPF decision workflow, and key concepts like
-    R_eff and evidence decay.
+    <code>haft init</code> installs the host skills and project MCP config. If your
+    project also has <code>CLAUDE.md</code> or <code>AGENTS.md</code>, keep the
+    haft instructions there aligned with the installed skills.
   </p>
 
   <p>
@@ -139,7 +140,7 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
     <li><strong>The decision tracks affected files</strong> — if those files change later, drift detection flags it</li>
     <li><strong>Evidence can be attached</strong> — test results, benchmarks, user feedback. Evidence has an expiry date.</li>
     <li><strong>R_eff (trust score) is computed</strong> — based on evidence quality and claim status. Expired evidence and failed claims degrade the score.</li>
-    <li><strong>Stale decisions surface</strong> — <code>/h-status</code> and <code>haft board</code> show what needs review</li>
+    <li><strong>Stale decisions surface</strong> — <code>/h-status</code> and <code>haft check</code> show what needs review</li>
   </ul>
 
   <p>
@@ -148,12 +149,12 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
     decide, measure, reframe loop runs naturally as part of your workflow.
   </p>
 
-  <h2>See your project at a glance</h2>
+  <h2>See your project state</h2>
 
   <p>
-    Run <code>haft board</code> in a side terminal. It shows decision health, module coverage,
-    problems pipeline, drift alerts — and refreshes automatically every 3 seconds as you work with
-    the agent in another terminal. No agent session required.
+    Run <code>/h-status</code> inside the host agent for a read-only project state
+    dashboard. Run <code>haft check</code> in the terminal when you need a
+    deterministic pass/fail gate for CI or local preflight.
   </p>
 
   <h2>Add a CI gate</h2>
@@ -200,7 +201,7 @@ Latency matters, team is 3 people, we're on AWS.</code></pre>
       </tr>
       <tr>
         <td>Start of a work session</td>
-        <td><code>haft board</code> or <code>/h-status</code></td>
+        <td><code>/h-status</code></td>
       </tr>
       <tr>
         <td>"Why did we do it this way?"</td>

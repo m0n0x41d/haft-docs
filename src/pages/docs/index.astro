@@ -11,34 +11,31 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   </p>
 
   <p>
-    It works as an <a href="https://modelcontextprotocol.io">MCP server</a> and as a
-    <a href="/docs/commands">standalone agent runtime</a> (<code>haft agent</code>).
-    Your AI tool (Claude Code, Cursor, Gemini CLI, Codex) connects to haft's MCP backend.
-    You interact through slash commands in your AI tool's chat interface. The agent does the
-    heavy lifting; you make the calls.
+    In v8, haft runs as a <a href="https://modelcontextprotocol.io">MCP server</a>
+    plus local CLI. Your coding agent connects to <code>haft serve</code>; the
+    installed skills and slash commands guide the reasoning loop. Claude Code and
+    Codex are the supported hosts. Cursor, Gemini CLI, and OpenCode are experimental
+    host configs.
   </p>
 
   <div class="callout">
     <p>
-      <strong>v7 is now the latest release.</strong> v7 promotes specifications to authoritative
-      artifacts: a repository becomes harnessable only after it carries a parseable
-      ProjectSpecificationSet (TargetSystemSpec, EnablingSystemSpec, TermMap), and decisions /
-      commissions / runtime runs / evidence flow downstream as consequences. The harness blocks
-      broad work on a project that is not <code>ready</code>, except behind an explicit
-      <code>--force-skip-specs "&lt;reason&gt;"</code> audit-only escape.
-      New users on v7 should start with <a href="/docs/7.0">the v7 overview</a> and walk through
-      <a href="/docs/7.0/spec-onboarding">spec onboarding</a> first; the older pages below
-      describe the legacy v6.2 decision-only flow.
+      <strong>v8 is the current track.</strong> The standalone agent, TUI, and
+      desktop wrappers were removed. Haft is now a governance substrate: one artifact
+      graph, one kernel, reached through MCP tools, CLI commands, and host-agent
+      skills. New projects should start with
+      <a href="/docs/8.0">the v8 overview</a> and then run
+      <a href="/docs/8.0/install">Install &amp; init</a>.
     </p>
   </div>
 
   <div class="callout">
     <p>
-      <strong>Surface status.</strong> The two production surfaces in v7 are the MCP plugin
-      (<code>haft serve</code> for Claude Code and Codex) and the CLI Harness (<code>haft init</code>,
-      <code>haft spec ...</code>, <code>haft harness ...</code>, <code>haft check</code>). The
-      desktop app exists as an <strong>alpha track</strong> outside the v7 production envelope —
-      useful for exploration, not load-bearing for any v7 acceptance criteria.
+      <strong>Start here.</strong> Use <code>haft init</code>, <code>/h-status</code>,
+      <code>/h-frame</code>, <code>/h-explore</code>, <code>/h-compare</code>,
+      <code>/h-decide</code>, and <code>/h-verify</code>. The execution harness is an
+      alpha Codex-only path for isolated WorkCommission runs; it is not the first
+      thing to learn.
     </p>
   </div>
 
@@ -142,33 +139,39 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
       </tr>
     </thead>
     <tbody>
-      <tr><td>Claude Code</td><td>Full support (default)</td></tr>
-      <tr><td>Cursor</td><td>Full support</td></tr>
-      <tr><td>Gemini CLI</td><td>Supported</td></tr>
-      <tr><td>Codex CLI / Codex App</td><td>Supported</td></tr>
-      <tr><td>OpenCode (sst/opencode)</td><td>Experimental</td></tr>
-      <tr><td>JetBrains Air</td><td>Supported</td></tr>
+      <tr><td>Claude Code</td><td>Supported host (default)</td></tr>
+      <tr><td>Codex CLI / Codex App</td><td>Supported host</td></tr>
+      <tr><td>Cursor</td><td>Experimental MCP config</td></tr>
+      <tr><td>Gemini CLI</td><td>Experimental MCP config</td></tr>
+      <tr><td>OpenCode (sst/opencode)</td><td>Experimental MCP config</td></tr>
+      <tr><td>JetBrains Air</td><td>Experimental / pending docs</td></tr>
     </tbody>
   </table>
 
-  <h2>What's new in 6.0</h2>
+  <h2>What's new in v8</h2>
 
   <ul>
-    <li><strong>Renamed to haft</strong> — quint-code is now haft. All <code>/q-*</code> commands become <code>/h-*</code>. The <code>.quint/</code> directory becomes <code>.haft/</code>. Migration is automatic — <code>haft init</code> handles it.</li>
-    <li><strong>5-mode model</strong> — Understand, Explore, Choose, Execute, Verify. Maps directly to <code>/h-frame</code>, <code>/h-explore</code>, <code>/h-compare</code>, <code>/h-decide</code>, <code>/h-verify</code>.</li>
-    <li><strong>Claim-aware decisions</strong> — decisions now carry verifiable claims with <code>verify_after</code> dates. Not just "evidence expires" — specific statements that can be checked against reality.</li>
-    <li><strong><code>/h-verify</code> replaces <code>/h-refresh</code></strong> — actively checks claims, not just evidence age. Verify mode is the fifth cognitive mode.</li>
-    <li><strong>Team sync</strong> — <code>haft sync</code> lets each engineer sync git-tracked markdown projections into their local database. No shared database, no merge conflicts on binary files.</li>
-    <li><strong>CI governance gate</strong> — <code>haft check</code> gives a deterministic pass/fail signal for stale, drifted, unassessed, and coverage-gap findings.</li>
-    <li><strong>Desktop app (pre-alpha)</strong> — visual dashboard for decision health, module coverage, and knowledge graph. Early access.</li>
-    <li><strong>Standalone runtime</strong> — <code>haft agent</code> runs as a TUI without requiring an external AI tool. Bring your own model.</li>
-    <li><strong>Knowledge graph</strong> — file-to-decision mapping with invariant injection. When you touch files covered by a decision, the agent knows.</li>
+    <li><strong>Governance substrate pivot</strong> — skills + CLI + MCP replace the standalone runtime.</li>
+    <li><strong>15 installed skills</strong> — <code>h-reason</code>, <code>h-frame</code>,
+      <code>h-diagnose</code>, <code>h-explore</code>, <code>h-compare</code>,
+      <code>h-decide</code>, <code>h-verify</code>, and the supporting workflow skills.</li>
+    <li><strong>Fused code graph</strong> — <code>haft_query</code> can show callers,
+      callees, impact, source, and the decisions governing each symbol.</li>
+    <li><strong>Hybrid FPF search</strong> — exact pattern lookup plus keyword and local
+      semantic recall over baked FPF section vectors.</li>
+    <li><strong>Spec-first governance kept</strong> — active TargetSystemSpec,
+      EnablingSystemSpec, and TermMap sections still define what the project claims to be.</li>
+    <li><strong>Shared embedding sidecar</strong> — v8.1 shares one local
+      <code>haft-embed</code> model process across live <code>haft serve</code> sessions.</li>
+    <li><strong>CI governance gate</strong> — <code>haft check</code> gives a deterministic
+      pass/fail signal for stale, drifted, unassessed, and coverage-gap findings.</li>
   </ul>
 
   <h2>Next step</h2>
 
   <p>
-    <a href="/docs/install">Install haft</a> — takes about 30 seconds.
-    Already on 5.x? <a href="/docs/migration">Migration guide</a>.
+    <a href="/docs/8.0/install">Install haft v8</a> and initialize one project.
+    Already on 5.x or 6.x? Read the older <a href="/docs/migration">migration guide</a>,
+    then re-run <code>haft init</code> to install the v8 skills.
   </p>
 </DocsLayout>

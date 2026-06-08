@@ -6,43 +6,43 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h1>Roadmap</h1>
 
   <p>
-    Haft is actively developed. Here's what's shipped and what's coming — not promises,
-    but directions we're building toward.
+    Haft is actively developed. This page separates shipped v8 work from research
+    directions; treat the latter as direction, not a promise.
   </p>
 
-  <h2>Recently shipped (6.0)</h2>
+  <h2>Recently shipped (v8 / v8.1)</h2>
 
   <ul>
-    <li><strong>Haft rename</strong> — quint-code is now haft. <code>.quint/</code> becomes <code>.haft/</code>, <code>/q-*</code> becomes <code>/h-*</code></li>
-    <li><strong>5-mode model</strong> — Understand, Explore, Choose, Execute, Verify (+ Note fast path)</li>
-    <li><strong>Claim-aware decisions</strong> — structured predictions with <code>verify_after</code> dates, observable, threshold. <code>/h-verify scan</code> surfaces unverified claims</li>
-    <li><strong>Team sync</strong> — <code>haft sync</code> imports <code>.haft/*.md</code> from git into local database. Decisions flow through PRs</li>
-    <li><strong>Desktop app</strong> — pre-alpha native app for browsing decisions, problems, and coverage outside the terminal</li>
-    <li><strong>Standalone agent runtime</strong> — <code>haft agent [goal]</code> runs reasoning with TUI, independent of external AI tools</li>
-    <li><strong>Knowledge graph</strong> — <code>FindDecisionsForFile</code>, <code>FindInvariantsForFile</code>, <code>ComputeImpactSet</code> queries across the file-module-decision graph</li>
-    <li><strong>Invariant injection</strong> — when implementing a decision, agents receive invariants from all decisions governing affected files</li>
-    <li><strong>Invariant verification</strong> — structural invariants ("no dependency from X to Y", "no circular dependencies") verified against the live dependency graph</li>
-    <li><strong>Constraint-aware Pareto</strong> — variants violating constraint-role indicators are eliminated before dominance comparison</li>
-    <li><strong>Deterministic projections</strong> — <code>/h-view</code> renders artifacts for engineer, manager, audit, compare, delegated-agent, and change-rationale audiences</li>
-    <li><strong>Expanded integrations</strong> — <code>haft init</code> supports <code>--claude</code>, <code>--cursor</code>, <code>--gemini</code>, <code>--codex</code>, <code>--air</code>, <code>--all</code></li>
+    <li><strong>Governance substrate pivot</strong> — skills + CLI + MCP replaced
+      the standalone agent, TUI, and desktop wrappers.</li>
+    <li><strong>15-skill catalog</strong> — <code>haft init</code> installs the
+      FPF workflow skills for Claude Code and Codex.</li>
+    <li><strong>Fused code graph</strong> — code symbols, callers, callees, impact,
+      source, and governing decisions surface through <code>haft_query</code>.</li>
+    <li><strong>Spec-first onboarding</strong> — active TargetSystemSpec,
+      EnablingSystemSpec, and TermMap sections define project readiness.</li>
+    <li><strong>Hybrid FPF search</strong> — keyword search fused with local semantic
+      recall over baked FPF section vectors.</li>
+    <li><strong>Shared embedding runtime</strong> — v8.1 reuses one local
+      <code>haft-embed</code> sidecar across live <code>haft serve</code> sessions.</li>
+    <li><strong>CI governance gate</strong> — <code>haft check</code> reports stale,
+      drifted, unassessed, and coverage-gap findings.</li>
   </ul>
 
-  <h2>Server mode (next priority)</h2>
+  <h2>Shared team state</h2>
 
   <p>
-    <strong><code>haft server</code></strong> — a new subcommand in the same binary. A thin
-    HTTP server that manages the decision database. For solo advanced use, it runs on localhost and
-    enables features that require a long-running process. For teams, it runs on a shared server.
+    A future shared server would manage the decision database for teams. Solo use
+    stays local-first: MCP clients talk to <code>haft serve</code>, and
+    <code>haft check</code> remains the CI gate.
   </p>
 
   <pre><code>Solo:  Agent → MCP → haft serve → local SQLite
 Team:  Agent → MCP → haft serve → haft server (remote) → PostgreSQL</code></pre>
 
   <p>
-    When server mode exists, <code>haft board</code> switches to the remote database automatically.
-    CI should still use <code>haft sync && haft check</code> as the governance gate. Server mode
-    can later enrich shared state and search, but it does not replace the check command.
-    This enables real-time collaboration and a shared search index across the team.
+    A server can later add real-time collaboration and shared search. It does not
+    replace the local artifact graph or the deterministic check command.
   </p>
 
   <h2>Formal specification (research)</h2>
@@ -81,14 +81,16 @@ Team:  Agent → MCP → haft serve → haft server (remote) → PostgreSQL</cod
 
   <ul>
     <li><strong>AI model lock-in</strong> — haft works with any MCP-compatible AI tool. We don't pick your model.</li>
+    <li><strong>A replacement coding agent</strong> — v8 plugs into Claude Code,
+      Codex, and other MCP hosts instead of shipping its own agent runtime.</li>
     <li><strong>Prescriptive methodology</strong> — haft provides structure, not opinions. Use as much or as little of the FPF cycle as fits your workflow.</li>
   </ul>
 
   <h2>Want to contribute?</h2>
 
   <p>
-    Check the <a href="https://github.com/m0n0x41d/quint-code/issues" target="_blank" rel="noopener">issues</a>
-    on GitHub. The <a href="https://github.com/m0n0x41d/quint-code/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">contributing guide</a>
+    Check the <a href="https://github.com/m0n0x41d/haft/issues" target="_blank" rel="noopener">issues</a>
+    on GitHub. The <a href="https://github.com/m0n0x41d/haft/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">contributing guide</a>
     explains the workflow: issue first, then PR to <code>dev</code>.
   </p>
 </DocsLayout>

@@ -53,12 +53,6 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
         <td>ProblemCard</td>
       </tr>
       <tr>
-        <td><code>/h-char</code></td>
-        <td>Explore (prep)</td>
-        <td>Define comparison dimensions with indicator roles</td>
-        <td>Characterization on ProblemCard</td>
-      </tr>
-      <tr>
         <td><code>/h-explore</code></td>
         <td>Explore</td>
         <td>Generate genuinely distinct variants with weakest link</td>
@@ -182,23 +176,15 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     <tbody>
       <tr>
         <td><code>haft init</code></td>
-        <td>Initialize project. Flags: <code>--claude</code>, <code>--cursor</code>, <code>--gemini</code>, <code>--codex</code>, <code>--air</code>, <code>--all</code></td>
+        <td>Initialize project. Flags: <code>--codex</code>, <code>--all</code>, and experimental host flags such as <code>--cursor</code>, <code>--gemini</code>, <code>--opencode</code></td>
       </tr>
       <tr>
         <td><code>haft serve</code></td>
         <td>Start MCP server (used by AI tools to communicate with haft)</td>
       </tr>
       <tr>
-        <td><code>haft agent [goal]</code></td>
-        <td>Standalone agent with TUI runtime — runs reasoning without an external AI tool</td>
-      </tr>
-      <tr>
         <td><code>haft sync</code></td>
         <td>Sync <code>.haft/*.md</code> markdown projections into local database (team workflow)</td>
-      </tr>
-      <tr>
-        <td><code>haft board</code></td>
-        <td>Interactive TUI dashboard with four tabs, vim navigation, live refresh</td>
       </tr>
       <tr>
         <td><code>haft doctor</code></td>
@@ -214,22 +200,6 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
       </tr>
     </tbody>
   </table>
-
-  <h3>haft board</h3>
-
-  <pre><code>$ haft board</code></pre>
-
-  <p>
-    Interactive TUI with four tabs: Overview (health, activity, depth distribution, coverage),
-    Problems (backlog with drill-in), Decisions (R_eff, drift, glamour markdown detail view),
-    Modules (coverage tree). Live refresh every 3 seconds — run it in a side terminal and it
-    stays current as you work with the agent in another.
-  </p>
-
-  <p>
-    Use <code>haft board</code> for a live operator view. For CI or hooks, prefer
-    <code>haft check</code> — it produces a deterministic pass/fail result and optional JSON.
-  </p>
 
   <h3>haft check</h3>
 
@@ -256,15 +226,16 @@ $ haft check --json</code></pre>
 
   <h2>Recommended protocol</h2>
 
-  <pre><code>/h-frame  → /h-char  → /h-explore → /h-compare → /h-decide
-  what's      what       genuinely     fair         engineering
-  broken?     matters?   different     comparison   contract
-                         options</code></pre>
+  <pre><code>/h-frame  → /h-explore → /h-compare → /h-decide → /h-verify
+  what's      genuinely     fair         engineering   still true?
+  broken?     different     comparison   contract
+              options</code></pre>
 
   <p>
-    You can enter at any step, but the protocol works best in order. <code>/h-char</code> before
-    <code>/h-explore</code> prevents bias (criteria defined before options). <code>/h-compare</code>
-    before <code>/h-decide</code> ensures fair evaluation.
+    You can enter at any step, but the protocol works best in order.
+    <code>/h-frame</code> names the problem before the agent explores solutions.
+    <code>/h-compare</code> runs before <code>/h-decide</code> so the decision has
+    a declared comparison, not a post-hoc rationale.
   </p>
 
   <h2>Next</h2>

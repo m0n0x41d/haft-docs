@@ -2,16 +2,15 @@
 import DocsLayout from '../../../layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Harness — drain mode (v8, beta)" description="Drain a queue of WorkCommissions with per-commission delivery policy and discrete revertable apply commits. Beta, Codex only.">
+<DocsLayout title="Harness — drain mode (v8, alpha)" description="Optional alpha execution engine for Codex-only WorkCommission runs with per-commission delivery policy.">
   <h1>Harness — drain mode</h1>
 
   <p class="callout-warn">
-    <strong>Status: Beta, Codex only.</strong> The execution agent is Codex — there is
-    no Claude execution path. Single-commission <code>haft harness run</code> is the
-    trustworthy operator path. Drain mode (<code>--drain --concurrency N</code>) and
-    <code>workspace_patch_auto_on_pass</code> auto-apply are validated end-to-end on
-    docs-class commissions. Treat them as Beta on production-code commissions; review
-    the diff or use <code>workspace_patch_manual</code> when in doubt.
+    <strong>Status: Alpha, Codex only.</strong> Learn the v8 reasoning and governance
+    loop first. The harness is an execution experiment for WorkCommissions, not the
+    main onboarding path. There is no Claude execution path. Use
+    <code>workspace_patch_manual</code> unless you have already reviewed the failure
+    modes on low-risk commissions.
   </p>
 
   <h2>What this is</h2>
@@ -238,7 +237,7 @@ haft harness run --drain --concurrency 2
     </li>
   </ul>
 
-  <h2>Known rough edges (Beta caveats)</h2>
+  <h2>Known rough edges (alpha caveats)</h2>
 
   <ul>
     <li>

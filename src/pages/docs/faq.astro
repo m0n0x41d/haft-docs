@@ -60,10 +60,9 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   </p>
 
   <p>
-    In v6, <code>haft sync</code> enables the team workflow: each engineer pulls the repo, runs
-    <code>haft sync</code>, and the markdown projections in <code>.haft/</code> are imported into
-    their local database. Decisions are reviewable in PRs, searchable locally, and stay in sync
-    across the team through git.
+    In v8, <code>haft sync</code> keeps the git-tracked markdown projections in
+    <code>.haft/</code> aligned with each engineer's local database. Decisions are
+    reviewable in PRs, searchable locally, and checked by <code>haft check</code>.
   </p>
 
   <h2>What if I just want quick decisions?</h2>
@@ -116,9 +115,9 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
   <h2>What happened to quint-code?</h2>
 
   <p>
-    Haft is quint-code, rebranded in v6.0. Same tool, same team, new name. The
-    <a href="https://github.com/m0n0x41d/quint-code" target="_blank" rel="noopener">GitHub repository</a>
-    keeps the original URL. Internal directories changed from <code>.quint/</code> to
+    Haft is quint-code, rebranded in v6.0. Same project, new name. The
+    <a href="https://github.com/m0n0x41d/haft" target="_blank" rel="noopener">GitHub repository</a>
+    now lives under the haft name. Internal directories changed from <code>.quint/</code> to
     <code>.haft/</code> and commands from <code>/q-*</code> to <code>/h-*</code>. If you're
     upgrading from v5, see the <a href="/docs/migration">migration guide</a>.
   </p>
