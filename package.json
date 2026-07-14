@@ -29,6 +29,7 @@
     "@astrojs/tailwind": "^6.0.2",
     "@astrojs/vue": "^5.1.4",
     "@fontsource/inter": "^5.2.8",
+    "@fontsource/jersey-10": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "astro": "^5.16.6",
     "ogl": "^1.0.11",

@@ -459,8 +459,6 @@ const rouletteWords = [
 </Layout>
 
 <style is:global>
-  @import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
-
   .haft-hero {
     position: relative;
     isolation: isolate;
@@ -703,8 +701,10 @@ const rouletteWords = [
   }
 
   .scramble-hero {
-    font-family: 'Jersey 10', cursive;
+    font-family: 'Jersey 10', 'JetBrains Mono', monospace;
     font-weight: 400;
+    font-style: normal;
+    font-synthesis: none;
     filter: drop-shadow(0 0 1px rgba(255, 135, 0, 0.72)) drop-shadow(0 0 18px rgba(255, 68, 68, 0.22));
     font-size: clamp(1.3rem, 7vw, 1.8rem);
     line-height: 1.4;
