@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Button from '../components/Button.astro';
+import Dither from '../components/Dither.vue';
 const rouletteWords = [
   'PROBLEM-OPS ENGINE',
   'EPISTEMIC DEBT CATCHER',
@@ -22,10 +23,29 @@ const rouletteWords = [
 
   <main class="flex-1">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden py-16 sm:py-24 lg:py-32">
-      <div class="hero-glow"></div>
-      <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col items-center text-center">
+    <section class="haft-hero">
+      <div class="hero-dither" aria-hidden="true">
+        <div class="hero-dither-fallback"></div>
+        <Dither
+          client:load
+          waveColor={[1, 0.8, 0]}
+          waveMidColor={[1, 0.529, 0]}
+          waveShadowColor={[1, 0.267, 0.267]}
+          disableAnimation={false}
+          enableMouseInteraction={true}
+          mouseRadius={0.3}
+          colorNum={4}
+          waveAmplitude={0.3}
+          waveFrequency={3}
+          waveSpeed={0.05}
+        />
+      </div>
+      <div class="hero-contrast" aria-hidden="true"></div>
+
+      <div class="hero-shell mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto flex w-full min-w-0 max-w-4xl flex-col items-center text-center">
+          <p class="hero-kicker">Governance substrate for AI coding agents</p>
+
           <!-- ASCII Logo - Desktop -->
 <pre class="ascii-logo hidden md:block" aria-hidden="true"><span class="ascii-1">██╗  ██╗ █████╗ ███████╗████████╗</span>
 <span class="ascii-2">██║  ██║██╔══██╗██╔════╝╚══██╔══╝</span>
@@ -35,39 +55,41 @@ const rouletteWords = [
 <span class="ascii-6">╚═╝  ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝   </span></pre>
           <!-- Text Logo - Mobile -->
           <h1
-            class="gradient-text-glow font-mono text-5xl font-bold md:hidden"
+            class="gradient-text-glow font-mono text-6xl font-bold leading-none md:hidden"
           >
-            haft
+            HAFT
           </h1>
           <span class="sr-only">haft</span>
 
           <!-- Scramble Roulette -->
-          <div class="mt-6 w-full max-w-2xl" aria-label="ProblemOps for AI coding tools">
+          <div class="mt-5 w-full max-w-3xl" aria-label="What haft does">
             <div class="scramble-hero" data-words={JSON.stringify(rouletteWords)}>
               <span class="scramble-text gradient-text">PROBLEM-OPS ENGINE</span>
             </div>
           </div>
 
-          <p class="mt-4 text-lg text-text-muted">
+          <p class="hero-promise mt-3 max-w-2xl text-lg text-text-primary sm:text-xl">
             Make better decisions. Remember why you made them.
-          </p>
-          <p class="mt-2 text-sm text-text-muted/50">
-            formerly <a href="https://github.com/m0n0x41d/quint-code" class="underline decoration-border-hover underline-offset-2 hover:text-text-muted transition-colors">quint-code</a>
           </p>
 
           <!-- Install Command -->
-          <div class="mt-10 w-full max-w-2xl">
+          <div class="mt-8 w-full min-w-0 max-w-2xl">
             <div
-              class="group relative overflow-hidden rounded-lg border border-border-subtle bg-bg-secondary"
+              class="hero-install group relative overflow-hidden rounded-lg border border-border-subtle"
             >
-              <div class="flex items-center justify-center gap-2 sm:gap-4 px-3 sm:px-4 py-3 overflow-x-auto">
-                <code class="text-xs sm:text-base text-text-secondary font-mono whitespace-nowrap">
+              <div class="flex min-w-0 items-stretch">
+                <div class="min-w-0 flex-1 overflow-x-auto px-3 py-3 text-left sm:px-4">
+                  <code class="whitespace-nowrap font-mono text-xs text-text-secondary sm:text-base">
                   <span class="text-accent-green">$</span>
-                  curl -fsSL https://quint.codes/install.sh | bash
-                </code>
+                  curl -fsSL https://haft.tools/install.sh | bash
+                  </code>
+                </div>
                 <button
                   id="copy-btn"
-                  class="rounded px-3 py-2 min-h-[44px] min-w-[44px] text-xs text-text-muted transition-colors hover:bg-bg-tertiary hover:text-text-primary shrink-0"
+                  class="min-h-[44px] shrink-0 border-l border-border-subtle px-4 text-xs font-semibold text-text-muted transition-colors hover:bg-bg-tertiary hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-amber-400"
+                  type="button"
+                  aria-label="Copy the haft installation command"
+                  aria-live="polite"
                 >
                   Copy
                 </button>
@@ -76,19 +98,14 @@ const rouletteWords = [
           </div>
 
           <!-- CTA Buttons -->
-          <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md sm:max-w-none mx-auto">
-            <Button href="/docs" class="w-full sm:w-auto">Get Started</Button>
+          <div class="mx-auto mt-6 flex w-full max-w-md flex-col items-center justify-center gap-3 sm:max-w-none sm:flex-row">
+            <Button href="/docs" class="w-full sm:w-auto">Read the docs</Button>
             <Button
-              href="https://github.com/m0n0x41d/quint-code"
+              href="https://github.com/m0n0x41d/haft"
               variant="secondary"
               external
               class="w-full sm:w-auto"
             >
-              <svg class="h-4 w-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
-              </svg>
-              <span id="hero-stars" class="font-mono text-amber-400">--</span>
-              <span class="mx-1 text-border-hover">|</span>
               <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
@@ -97,216 +114,179 @@ const rouletteWords = [
               GitHub
             </Button>
           </div>
+        </div>
+      </div>
 
-          <!-- Platform Badges -->
-          <div class="platform-badges-container mt-10 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2">
-            <span class="platform-badge text-center">Claude Code</span>
-            <span class="text-text-muted/30 hidden sm:inline">•</span>
-            <span class="platform-badge text-center">Cursor</span>
-            <span class="text-text-muted/30 hidden sm:inline">•</span>
-            <span class="platform-badge text-center">Gemini CLI</span>
-            <span class="text-text-muted/30 hidden sm:inline">•</span>
-            <span class="platform-badge text-center">Codex CLI</span>
-            <span class="text-text-muted/30 hidden sm:inline">•</span>
-            <span class="platform-badge text-center">Codex App</span>
-            <span class="text-text-muted/30 hidden sm:inline">•</span>
-            <span class="platform-badge text-center">OpenCode</span>
-            <span class="text-text-muted/30 hidden sm:inline">•</span>
-            <span class="platform-badge text-center">Air</span>
+      <a class="hero-scroll-cue" href="#problem">
+        <span>See the failure mode</span>
+        <span aria-hidden="true">↓</span>
+      </a>
+    </section>
+
+    <!-- Compatibility and provenance -->
+    <section class="compatibility-strip" aria-label="Supported coding agents">
+      <div class="mx-auto grid max-w-6xl gap-5 px-4 py-8 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-center lg:px-8">
+        <div class="min-w-0">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+            One project graph, across the tools you already use
+          </p>
+          <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+            <span class="platform-badge">Codex</span>
+            <span class="platform-badge">Claude Code</span>
+            <span class="platform-badge">Cursor</span>
+            <span class="platform-badge">Gemini CLI</span>
+            <span class="platform-badge">OpenCode</span>
+            <span class="platform-badge">Pi</span>
           </div>
         </div>
+        <p class="text-sm text-text-muted md:text-right">
+          Formerly <a href="/docs/migration" class="font-medium text-text-secondary underline decoration-border-hover underline-offset-4 transition-colors hover:text-text-primary">quint-code</a>
+        </p>
       </div>
     </section>
 
     <!-- Pain Section -->
-    <section class="border-t border-border-subtle py-20">
+    <section id="problem" class="border-t border-border-subtle py-20 sm:py-24">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold sm:text-3xl">The problem</h2>
-        <div class="mt-8 max-w-2xl">
-          <p class="text-lg leading-relaxed text-text-secondary">
-            You and your AI make important decisions every day.
-            You pick solutions confidently, intuitively, and even explain them clearly.
-          </p>
-          <p class="mt-4 text-lg text-text-secondary">
-            <span class="text-text-primary font-semibold">But</span> there are many things silently going wrong:
+        <div class="grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(22rem,1.2fr)] lg:items-end">
+          <div>
+            <p class="section-kicker">The problem</p>
+            <h2 class="mt-3 text-3xl font-bold sm:text-4xl">Plausible output is not a durable engineering decision.</h2>
+          </div>
+          <p class="max-w-2xl text-lg leading-relaxed text-text-secondary lg:justify-self-end">
+            You and your AI make consequential choices every day. The answer can look
+            confident and still lack a frame, a fair comparison, recoverable rationale,
+            or evidence that survives changing conditions.
           </p>
         </div>
 
-        <div class="mt-12 space-y-4">
-          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
-            <h3 class="shrink-0 sm:w-64 font-mono text-sm font-semibold text-text-primary uppercase tracking-wider">The problem was never framed</h3>
-            <p class="text-base text-text-secondary">
-              You go straight to "use Kafka" before asking what's actually broken.
-              Intuitive decisions feel fast and right — but intuition optimizes for familiarity, not for the problem at hand.
-              Without a frame, you're solving something you never defined.
-            </p>
-          </div>
-          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
-            <h3 class="shrink-0 sm:w-64 font-mono text-sm font-semibold text-text-primary uppercase tracking-wider">Comparison doesn't happen</h3>
-            <p class="text-base text-text-secondary">
-              You and your AI settle on the first reasonable, intuitive option. No alternatives explored, no tradeoffs weighed.
-              What looks like a "decision" is actually an approximation — the average, the familiar, the first thing that fits.
-              Not the best. Just the first.
-            </p>
-          </div>
-          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
-            <h3 class="shrink-0 sm:w-64 font-mono text-sm font-semibold text-text-primary uppercase tracking-wider">"Why did we make that?"</h3>
-            <p class="text-base text-text-secondary">
-              Three months later, nobody remembers. The rationale disappeared into a chat thread you'll never find.
-              Now you're reverse-engineering a decision from code comments and git blame.
-            </p>
-          </div>
-          <div class="border border-border-subtle bg-bg-secondary p-6 flex flex-col sm:flex-row sm:items-center gap-4">
-            <h3 class="shrink-0 sm:w-64 font-mono text-sm font-semibold text-text-primary uppercase tracking-wider">"Is this still the right call?"</h3>
-            <p class="text-base text-text-secondary">
-              Traffic tripled. Team doubled. Requirements shifted. But the architecture decision from 8 months ago is frozen in time.
-              Nobody tracks when assumptions go stale.
-            </p>
-          </div>
-        </div>
+        <ol class="pain-ledger mt-12 border-y border-border-subtle">
+          <li class="pain-row">
+            <span>01</span>
+            <h3>The problem was never framed</h3>
+            <p>You reach for Kafka before naming what is broken. Familiarity wins before the actual constraints enter the room.</p>
+          </li>
+          <li class="pain-row">
+            <span>02</span>
+            <h3>Comparison never happened</h3>
+            <p>The first plausible option becomes the answer. Alternatives, parity, trade-offs, and weakest links stay invisible.</p>
+          </li>
+          <li class="pain-row">
+            <span>03</span>
+            <h3>“Why did we make that?”</h3>
+            <p>The rationale disappears into chat history. Months later, the team reconstructs intent from code comments and git blame.</p>
+          </li>
+          <li class="pain-row">
+            <span>04</span>
+            <h3>“Is this still the right call?”</h3>
+            <p>Traffic, team, and requirements change while the old decision remains frozen and its supporting evidence quietly expires.</p>
+          </li>
+        </ol>
       </div>
     </section>
 
-    <!-- How It Works — Tabbed -->
-    <section class="border-t border-border-subtle py-20">
+    <!-- How It Works — independent capabilities over one graph -->
+    <section class="border-t border-border-subtle py-20 sm:py-24">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold sm:text-3xl">How it works</h2>
-
-        <!-- Tabs -->
-        <div class="mt-10 flex gap-0 border border-border-subtle w-fit">
-          <button data-tab="auto" class="tab-btn tab-active px-5 py-3 font-mono text-sm uppercase tracking-wider transition-colors">/h-reason</button>
-          <button data-tab="full" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Five modes</button>
-          <button data-tab="tactical" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Quick cycle</button>
-          <button data-tab="note" class="tab-btn px-5 py-3 font-mono text-sm uppercase tracking-wider border-l border-border-subtle transition-colors">Micro-note</button>
+        <div class="grid gap-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(22rem,1.2fr)] lg:items-end">
+          <div>
+            <p class="section-kicker">How it works</p>
+            <h2 class="mt-3 text-3xl font-bold sm:text-4xl">Use only the rigor the current question needs.</h2>
+          </div>
+          <p class="max-w-2xl text-base leading-relaxed text-text-secondary lg:justify-self-end">
+            Haft brings the pinned FPF source into your coding agent and keeps a
+            typed project graph only when later work needs to rely on the result.
+            The skills are independent capabilities, not stages in a mandatory funnel.
+          </p>
         </div>
 
-        <!-- Tab content — grid overlay keeps tallest height -->
-        <div class="mt-0 border border-t-0 border-border-subtle bg-bg-secondary p-8 sm:p-10 grid [&>*]:col-start-1 [&>*]:row-start-1">
+        <div class="mt-10 overflow-x-auto">
+          <div class="flex min-w-max border border-border-subtle" role="tablist" aria-label="How haft works">
+            <button id="tab-reason" data-tab="reason" role="tab" aria-controls="panel-reason" aria-selected="true" tabindex="0" class="tab-btn tab-active px-5 py-3 font-mono text-xs uppercase tracking-wider transition-colors sm:text-sm">/h-reason</button>
+            <button id="tab-capabilities" data-tab="capabilities" role="tab" aria-controls="panel-capabilities" aria-selected="false" tabindex="-1" class="tab-btn border-l border-border-subtle px-5 py-3 font-mono text-xs uppercase tracking-wider transition-colors sm:text-sm">Capabilities</button>
+            <button id="tab-authority" data-tab="authority" role="tab" aria-controls="panel-authority" aria-selected="false" tabindex="-1" class="tab-btn border-l border-border-subtle px-5 py-3 font-mono text-xs uppercase tracking-wider transition-colors sm:text-sm">Human gates</button>
+            <button id="tab-graph" data-tab="graph" role="tab" aria-controls="panel-graph" aria-selected="false" tabindex="-1" class="tab-btn border-l border-border-subtle px-5 py-3 font-mono text-xs uppercase tracking-wider transition-colors sm:text-sm">One graph</button>
+          </div>
+        </div>
 
-          <!-- /h-reason -->
-          <div data-content="auto" class="tab-content tab-visible">
+        <div class="grid border border-t-0 border-border-subtle bg-bg-secondary p-6 [&>*]:col-start-1 [&>*]:row-start-1 sm:p-10">
+          <div id="panel-reason" data-content="reason" role="tabpanel" aria-labelledby="tab-reason" aria-hidden="false" class="tab-content tab-visible">
             <div class="max-w-3xl">
-              <p class="text-text-primary font-semibold text-lg">One command. The agent reasons for you.</p>
-              <p class="mt-4 text-base text-text-secondary leading-relaxed">
-                Type <code class="text-accent-blue">/h-reason</code> and describe your problem.
-                The agent follows a structured operating system of thought: frames the problem before solving it,
-                generates genuinely distinct alternatives, compares them fairly on declared dimensions,
-                and records the decision with full rationale, rollback plan, and expiry date.
+              <p class="text-lg font-semibold text-text-primary">Start with the question that is actually current.</p>
+              <p class="mt-4 text-base leading-relaxed text-text-secondary">
+                Call <code class="text-accent-blue">/h-reason</code> when a concern deserves a deliberate,
+                source-supported reasoning pass. Haft retrieves the relevant versioned FPF material,
+                applies the smallest useful method, and keeps alternatives live when the evidence is insufficient.
               </p>
-              <p class="mt-4 text-base text-text-secondary leading-relaxed">
-                The agent auto-selects the right depth — tactical for quick reversible choices,
-                standard for architectural decisions, deep for irreversible cross-team calls.
-                You stay in the loop for every choice that matters.
+              <p class="mt-4 text-base leading-relaxed text-text-secondary">
+                A reversible exchange can stay in conversation. It becomes a durable project record only
+                when handoff, replay, authority, automation, or later verification needs an addressable result.
               </p>
-              <div class="mt-6 font-mono text-sm text-text-muted">
+              <div class="mt-7 overflow-x-auto border-l-2 border-accent-orange bg-bg-primary px-4 py-3 font-mono text-sm text-text-muted">
                 <span class="text-accent-green">$</span> /h-reason "How should we handle cross-service transaction failures?"
               </div>
             </div>
           </div>
 
-          <!-- Five modes -->
-          <div data-content="full" class="tab-content">
-            <div class="max-w-3xl">
-              <p class="text-text-primary font-semibold text-lg">Five modes. Each a slash command. Full control.</p>
-              <p class="mt-4 text-base text-text-secondary leading-relaxed">
-                The decision cycle maps to five cognitive modes — Understand, Explore, Choose, Execute, Verify.
-                Drive each phase manually for maximum rigor: define dimensions before seeing options,
-                enforce parity across variants, attach evidence with congruence levels.
-              </p>
-              <div class="mt-8 space-y-4">
-                <div class="flex items-start gap-4">
-                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">1</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-frame</code>
-                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Understand</strong> — define signal, constraints, optimization targets, acceptance criteria</span>
-                </div>
-                <div class="flex items-start gap-4">
-                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">2</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-explore</code>
-                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Explore</strong> — generate genuinely distinct alternatives with weakest link per variant</span>
-                </div>
-                <div class="flex items-start gap-4">
-                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">3</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-compare</code>
-                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Choose</strong> — fair comparison, same inputs, same scope, parity enforced</span>
-                </div>
-                <div class="flex items-start gap-4">
-                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">4</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-decide</code>
-                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Execute</strong> — decision contract with invariants, rollback plan, and claims</span>
-                </div>
-                <div class="flex items-start gap-4">
-                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">5</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-verify</code>
-                  <span class="text-base text-text-secondary"><strong class="text-text-primary">Verify</strong> — check claims against reality, refresh or supersede stale decisions</span>
-                </div>
+          <div id="panel-capabilities" data-content="capabilities" role="tabpanel" aria-labelledby="tab-capabilities" aria-hidden="true" class="tab-content">
+            <div class="max-w-4xl">
+              <p class="text-lg font-semibold text-text-primary">Pick the capability directly. No ceremony required.</p>
+              <div class="mt-7 grid gap-x-10 gap-y-5 md:grid-cols-2">
+                <div class="capability-row"><code>/h-frame</code><span>Clarify the real problem and acceptance basis.</span></div>
+                <div class="capability-row"><code>/h-diagnose</code><span>Test rival causes of an observed failure.</span></div>
+                <div class="capability-row"><code>/h-explore</code><span>Generate genuinely distinct approaches.</span></div>
+                <div class="capability-row"><code>/h-compare</code><span>Compare existing options under explicit parity.</span></div>
+                <div class="capability-row"><code>/h-verify</code><span>Measure whether a recorded claim still holds.</span></div>
+                <div class="capability-row"><code>/h-status</code><span>Read current project memory, drift, and readiness.</span></div>
+                <div class="capability-row"><code>/h-spec</code><span>Manage typed specification carriers and gates.</span></div>
+                <div class="capability-row"><code>/h-note</code><span>Save an explicitly requested non-binding fact.</span></div>
               </div>
             </div>
           </div>
 
-          <!-- Quick cycle -->
-          <div data-content="tactical" class="tab-content">
-            <div class="max-w-3xl">
-              <p class="text-text-primary font-semibold text-lg">Reversible decision? Three steps.</p>
-              <p class="mt-4 text-base text-text-secondary leading-relaxed">
-                For choices with blast radius under 2 weeks — library picks, API design, caching strategy.
-                Skip characterization and formal comparison. Frame, explore, decide.
+          <div id="panel-authority" data-content="authority" role="tabpanel" aria-labelledby="tab-authority" aria-hidden="true" class="tab-content">
+            <div class="max-w-4xl">
+              <p class="text-lg font-semibold text-text-primary">The agent can prepare. The human principal binds.</p>
+              <p class="mt-4 max-w-3xl text-base leading-relaxed text-text-secondary">
+                Binding actions fail closed without explicit operator invocation. The MCP kernel validates
+                required fields and authority boundaries server-side, so a persuasive prompt is not an approval receipt.
               </p>
-              <div class="mt-8 space-y-4">
-                <div class="flex items-start gap-4">
-                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">1</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-frame</code>
-                  <span class="text-base text-text-secondary">What's broken, what constraints, what does solved look like</span>
-                </div>
-                <div class="flex items-start gap-4">
-                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">2</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-explore</code>
-                  <span class="text-base text-text-secondary">2-3 alternatives with tradeoffs</span>
-                </div>
-                <div class="flex items-start gap-4">
-                  <span class="shrink-0 w-6 text-right font-mono text-sm text-text-muted">3</span>
-                  <code class="shrink-0 w-28 text-accent-blue text-base">/h-decide</code>
-                  <span class="text-base text-text-secondary">Pick one, record why, set expiry</span>
-                </div>
+              <div class="mt-8 divide-y divide-border-subtle border-y border-border-subtle">
+                <div class="authority-row"><code>/h-decide</code><span>Record a human-approved DecisionRecord.</span><strong>Manual</strong></div>
+                <div class="authority-row"><code>/h-commission</code><span>Grant bounded authority for execution work.</span><strong>Manual</strong></div>
               </div>
             </div>
           </div>
 
-          <!-- Micro-note -->
-          <div data-content="note" class="tab-content">
-            <div class="max-w-3xl">
-              <p class="text-text-primary font-semibold text-lg">Capture what matters before it's forgotten.</p>
-              <p class="mt-4 text-base text-text-secondary leading-relaxed">
-                You discover the auth token has a hard 4KB limit that breaks with more than 12 roles.
-                You realize the retry logic silently swallows timeout errors.
-                You pick JSON over Protobuf because the client SDK doesn't support binary yet.
-                These things never make it into docs — but they shape every decision downstream.
-              </p>
-              <p class="mt-4 text-base text-text-secondary leading-relaxed">
-                You don't need to call <code class="text-accent-blue">/h-note</code> yourself — the agent
-                captures micro-decisions automatically when it notices them in conversation.
-                You said "let's go with gRPC" — it's recorded with rationale before you move on.
-                No rationale — no record. Conflicts with active decisions are flagged.
-                Auto-expires in 90 days so your knowledge base doesn't rot.
-              </p>
-              <div class="mt-6 font-mono text-sm text-text-muted">
-                <span class="text-accent-green">$</span> /h-note "Auth token hard limit 4KB — breaks at 12+ roles, must split claims before RBAC expansion"
+          <div id="panel-graph" data-content="graph" role="tabpanel" aria-labelledby="tab-graph" aria-hidden="true" class="tab-content">
+            <div class="max-w-4xl">
+              <p class="text-lg font-semibold text-text-primary">Three surfaces. One project-owned artifact graph.</p>
+              <div class="mt-8 grid gap-px bg-border-subtle sm:grid-cols-3">
+                <div class="surface-cell"><span>01</span><strong>Skills</strong><p>Procedures inside the coding agent you already use.</p></div>
+                <div class="surface-cell"><span>02</span><strong>CLI</strong><p>Manual inspection and lifecycle access from the terminal.</p></div>
+                <div class="surface-cell"><span>03</span><strong>MCP</strong><p>Programmatic retrieval and kernel-enforced gates.</p></div>
               </div>
+              <p class="mt-6 text-sm leading-relaxed text-text-muted">
+                Markdown carriers live in <code class="text-text-secondary">.haft/</code>;
+                structured graph state and indexes stay in the local project database.
+              </p>
             </div>
           </div>
-
         </div>
       </div>
     </section>
 
     <!-- FPF Foundation -->
-    <section class="border-t border-border-subtle py-20">
+    <section class="fpf-section border-t border-border-subtle py-20 sm:py-24">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div>
-          <h2 class="text-2xl font-bold text-text-primary sm:text-3xl">
-            Built on First Principles Framework
-          </h2>
-          <p class="mt-6 text-base text-text-secondary leading-relaxed">
-            haft is built on top of
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,0.75fr)_minmax(26rem,1.25fr)] lg:gap-16">
+          <div>
+            <p class="section-kicker">Foundation</p>
+            <h2 class="mt-3 text-3xl font-bold text-text-primary sm:text-4xl">
+              Source first. No shadow methodology.
+            </h2>
+            <p class="mt-6 max-w-xl text-base leading-relaxed text-text-secondary">
+              Haft is built on
             <a
               href="https://github.com/ailev/FPF"
               target="_blank"
@@ -320,19 +300,24 @@ const rouletteWords = [
               rel="noopener noreferrer"
               class="text-text-primary underline decoration-accent-orange/50 underline-offset-4 hover:decoration-accent-orange transition-colors"
             >Anatoly Levenchuk</a>
-            — a rigorous, transdisciplinary architecture for thinking.
-          </p>
-          <a
-            href="https://github.com/ailev/FPF"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-8 inline-flex items-center gap-2 rounded-md border border-border-subtle px-5 py-3 text-sm font-semibold text-text-primary transition-all hover:border-accent-orange/50 hover:bg-bg-secondary"
-          >
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
-            </svg>
-            Read the FPF specification
-          </a>
+              — a rigorous transdisciplinary architecture for thinking. Haft pins
+              and retrieves that source instead of replacing it with a simplified catalog.
+            </p>
+            <a
+              href="https://github.com/ailev/FPF"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-8 inline-flex min-h-[44px] items-center gap-2 border-b border-accent-orange/50 text-sm font-semibold text-text-primary transition-colors hover:border-accent-orange hover:text-amber-300"
+            >
+              Read the FPF specification <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div class="divide-y divide-border-subtle border-y border-border-subtle">
+            <div class="principle-row"><span>01</span><div><strong>Retrieval is not application.</strong><p>A relevant source candidate is not yet a selected pattern, recommendation, or performed work.</p></div></div>
+            <div class="principle-row"><span>02</span><div><strong>Records must earn their cost.</strong><p>Reasoning stays conversational until a real receiving use needs replay, authority, or verification.</p></div></div>
+            <div class="principle-row"><span>03</span><div><strong>Authority remains human.</strong><p>Plans, generated text, and tool schemas do not silently become binding decisions or execution permission.</p></div></div>
+          </div>
         </div>
       </div>
     </section>
@@ -349,11 +334,10 @@ const rouletteWords = [
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              SDD frameworks give you a structure for writing specs. haft gives your AI agent
-              an operating system for thinking — problem framing, fair comparison, evidence tracking,
-              and decision lifecycle management. It's not a document format. It's a reasoning process
-              that produces artifacts with computed trust scores, expiry dates, and rollback plans.
-              You can use both — SDD for specs, haft for the decisions behind them.
+              SDD frameworks structure specifications. Haft brings source-supported reasoning,
+              project memory, evidence freshness, and explicit human authority gates to the work
+              around those specifications. The two surfaces complement each other: specs describe
+              the system; Haft preserves and checks the reasoning later work must rely on.
             </div>
           </details>
 
@@ -377,8 +361,8 @@ const rouletteWords = [
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
               Yes. Run <code class="text-accent-blue">haft init</code> and then <code class="text-accent-blue">/h-onboard</code> —
-              the agent will scan your codebase and surface existing architectural patterns worth documenting.
-              You don't need to retroactively document everything. Start with your next decision.
+              the agent bootstraps the typed project and software-system carriers from repository evidence.
+              You do not need to reconstruct every historical decision before using Haft for the next current concern.
             </div>
           </details>
 
@@ -388,10 +372,10 @@ const rouletteWords = [
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              haft stores everything in a local SQLite database with git-tracked markdown projections.
-              The MCP server works with Claude Code, Cursor, Gemini CLI, Codex CLI, Codex App, OpenCode, and Air.
+              Haft stores structured graph state in a local SQLite database with git-tracked markdown carriers.
+              It supports Claude Code, Codex, Pi, Hermes, Zed, Antigravity, Cursor, Gemini CLI, and OpenCode.
               Switch tools, your decisions stay. The knowledge is in your repo, not in a chat thread.
-              Just make sure you initialized haft for the correct tool — default is Claude Code.
+              Initialize Haft for the host you use; Claude Code is the default.
             </div>
           </details>
 
@@ -401,10 +385,10 @@ const rouletteWords = [
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              Use <code class="text-accent-blue">/h-note</code> for micro-decisions and <code class="text-accent-blue">/h-reason</code>
-              which auto-selects tactical mode for small choices. The overhead is one command.
-              The value is remembering why you chose X in 3 months when everything breaks.
-              Small projects become big projects. Decisions made early matter the most.
+              A small reversible exchange can stay in conversation. Use
+              <code class="text-accent-blue">/h-note</code> when a fact must survive the session, or
+              <code class="text-accent-blue">/h-reason</code> when the question deserves a deliberate source-supported pass.
+              Haft does not force a full artifact lifecycle onto every choice.
             </div>
           </details>
 
@@ -428,9 +412,9 @@ const rouletteWords = [
               <span class="shrink-0 ml-4 text-text-muted group-open:rotate-180 transition-transform">&#8593;</span>
             </summary>
             <div class="px-6 pb-6 text-base text-text-secondary leading-relaxed">
-              If you're building something you'll maintain for more than a week — yes.
-              Vibe coding is fast until you hit a decision you made 2 months ago and can't remember why.
-              <code class="text-accent-blue">/h-reason</code> takes 30 seconds and saves you hours of archaeology later.
+              Yes, when the result must remain understandable after the chat is gone.
+              Keep reversible exploration lightweight; use <code class="text-accent-blue">/h-reason</code>
+              or a narrower capability when a decision, assumption, or handoff will matter later.
             </div>
           </details>
         </div>
@@ -477,11 +461,252 @@ const rouletteWords = [
 <style is:global>
   @import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
 
+  .haft-hero {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    min-height: calc(100svh - 4rem);
+    place-items: center;
+    overflow: hidden;
+    padding-block: clamp(2.5rem, 7svh, 5rem);
+  }
+
+  .hero-dither,
+  .hero-dither-fallback,
+  .hero-contrast {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-dither {
+    z-index: 0;
+    background: #0a0a0a;
+  }
+
+  .hero-dither-fallback {
+    background:
+      radial-gradient(circle at 24% 28%, rgba(255, 68, 68, 0.3), transparent 34%),
+      radial-gradient(circle at 72% 58%, rgba(255, 135, 0, 0.34), transparent 42%),
+      radial-gradient(circle at 54% 12%, rgba(255, 204, 0, 0.16), transparent 28%),
+      #0a0a0a;
+  }
+
+  .hero-contrast {
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(10, 10, 10, 0.38) 0%,
+        rgba(10, 10, 10, 0.58) 52%,
+        rgba(10, 10, 10, 0.94) 100%
+      ),
+      radial-gradient(
+        ellipse 58% 62% at center,
+        rgba(10, 10, 10, 0.12) 0%,
+        rgba(10, 10, 10, 0.72) 78%
+      );
+  }
+
+  .hero-shell {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+  }
+
+  .hero-kicker {
+    max-width: 20rem;
+    margin-block-end: 1.25rem;
+    color: rgba(255, 221, 102, 0.82);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    line-height: 1.8;
+    text-wrap: balance;
+    text-transform: uppercase;
+  }
+
+  .hero-promise {
+    text-wrap: balance;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.78);
+  }
+
+  .hero-install {
+    min-width: 0;
+    width: 100%;
+    background: rgba(10, 10, 10, 0.78);
+    box-shadow: 0 18px 70px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(12px);
+  }
+
+  .hero-scroll-cue {
+    position: absolute;
+    z-index: 2;
+    inset-block-end: 1rem;
+    inset-inline-start: 50%;
+    display: none;
+    min-height: 44px;
+    transform: translateX(-50%);
+    align-items: center;
+    gap: 0.6rem;
+    color: rgba(232, 232, 232, 0.52);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 150ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .hero-scroll-cue:hover,
+  .hero-scroll-cue:focus-visible {
+    color: #ffcc00;
+  }
+
+  .compatibility-strip {
+    background: #0d0d0d;
+  }
+
+  #problem {
+    scroll-margin-top: 4rem;
+  }
+
+  .section-kicker {
+    color: #ff8700;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .pain-row {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 0.55rem 1rem;
+    padding-block: 1.5rem;
+  }
+
+  .pain-row + .pain-row {
+    border-block-start: 1px solid #222222;
+  }
+
+  .pain-row > span {
+    grid-row: 1 / 3;
+    color: #ff8700;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+  }
+
+  .pain-row h3 {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .pain-row p {
+    min-width: 0;
+    color: #a0a0a0;
+    line-height: 1.7;
+  }
+
+  .capability-row {
+    display: grid;
+    grid-template-columns: minmax(7rem, auto) minmax(0, 1fr);
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .capability-row code,
+  .authority-row code {
+    color: #ff8700;
+    font-size: 0.85rem;
+  }
+
+  .capability-row span {
+    color: #a0a0a0;
+    line-height: 1.55;
+  }
+
+  .authority-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem 1rem;
+    padding-block: 1.25rem;
+  }
+
+  .authority-row span {
+    grid-column: 1 / -1;
+    color: #a0a0a0;
+  }
+
+  .authority-row strong {
+    color: #ffcc00;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .surface-cell {
+    min-width: 0;
+    padding: 1.5rem;
+    background: #111111;
+  }
+
+  .surface-cell > span {
+    color: #ff8700;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+  }
+
+  .surface-cell > strong {
+    display: block;
+    margin-block-start: 1.5rem;
+    color: #e8e8e8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+  }
+
+  .surface-cell > p {
+    margin-block-start: 0.75rem;
+    color: #888888;
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .fpf-section {
+    background: #0d0d0d;
+  }
+
+  .principle-row {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 1.5rem;
+  }
+
+  .principle-row > span {
+    color: #ff8700;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+  }
+
+  .principle-row strong {
+    color: #e8e8e8;
+  }
+
+  .principle-row p {
+    margin-block-start: 0.45rem;
+    color: #888888;
+    line-height: 1.65;
+  }
+
   .scramble-hero {
     font-family: 'Jersey 10', cursive;
     font-weight: 400;
-    filter: drop-shadow(0 0 0.5px rgba(255, 135, 0, 0.6)) drop-shadow(0 0 1px rgba(255, 68, 68, 0.3));
-    font-size: 1.5rem;
+    filter: drop-shadow(0 0 1px rgba(255, 135, 0, 0.72)) drop-shadow(0 0 18px rgba(255, 68, 68, 0.22));
+    font-size: clamp(1.3rem, 7vw, 1.8rem);
     line-height: 1.4;
     min-height: 2.5rem;
     display: flex;
@@ -494,14 +719,49 @@ const rouletteWords = [
   }
   @media (min-width: 640px) {
     .scramble-hero {
-      font-size: 2.5rem;
+      font-size: clamp(2rem, 5vw, 2.5rem);
       min-height: 3.5rem;
     }
   }
   @media (min-width: 1024px) {
     .scramble-hero {
-      font-size: 3.25rem;
+      font-size: clamp(2.5rem, 4.1vw, 3.25rem);
       min-height: 4.5rem;
+    }
+  }
+
+  @media (min-width: 768px) and (min-height: 720px) {
+    .hero-scroll-cue {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .pain-row {
+      grid-template-columns: 3rem minmax(14rem, 0.75fr) minmax(0, 1.25fr);
+      gap: 2rem;
+      align-items: start;
+      padding-block: 1.75rem;
+    }
+
+    .pain-row > span {
+      grid-row: auto;
+    }
+
+    .authority-row {
+      grid-template-columns: 9rem minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .authority-row span {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-height: 700px) {
+    .haft-hero {
+      padding-block: 2rem;
     }
   }
 
@@ -542,41 +802,116 @@ const rouletteWords = [
     color: #e8e8e8;
     background: #111111;
   }
+
+  .tab-btn:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 2px solid #ffcc00;
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gradient-text,
+    .gradient-text-glow {
+      animation: none !important;
+      background-position: 50% 50%;
+    }
+
+    .tab-content,
+    .hero-scroll-cue {
+      transition: none;
+    }
+  }
 </style>
 
 <script>
-  // Tabs — CSS grid overlay, all panels stacked, visibility toggles
-  document.querySelectorAll('.tab-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const tab = (btn as HTMLElement).dataset.tab;
-      document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('tab-active'));
-      btn.classList.add('tab-active');
-      document.querySelectorAll('.tab-content').forEach((c) => c.classList.remove('tab-visible'));
-      document.querySelector(`[data-content="${tab}"]`)?.classList.add('tab-visible');
+  const tabButtons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+  );
+  const tabPanels = Array.from(
+    document.querySelectorAll<HTMLElement>('[role="tabpanel"]'),
+  );
+
+  const activateTab = (activeButton: HTMLButtonElement) => {
+    const activeTab = activeButton.dataset.tab;
+
+    tabButtons.forEach((button) => {
+      const isActive = button === activeButton;
+      button.classList.toggle('tab-active', isActive);
+      button.setAttribute('aria-selected', String(isActive));
+      button.tabIndex = isActive ? 0 : -1;
+    });
+
+    tabPanels.forEach((panel) => {
+      const isActive = panel.dataset.content === activeTab;
+      panel.classList.toggle('tab-visible', isActive);
+      panel.setAttribute('aria-hidden', String(!isActive));
+    });
+  };
+
+  const tabIndexForKey = (key: string, currentIndex: number) => {
+    const lastIndex = tabButtons.length - 1;
+    const indexByKey: Record<string, number> = {
+      ArrowLeft: currentIndex === 0 ? lastIndex : currentIndex - 1,
+      ArrowRight: currentIndex === lastIndex ? 0 : currentIndex + 1,
+      Home: 0,
+      End: lastIndex,
+    };
+    return indexByKey[key];
+  };
+
+  tabButtons.forEach((button, currentIndex) => {
+    button.addEventListener('click', () => activateTab(button));
+    button.addEventListener('keydown', (event) => {
+      const nextIndex = tabIndexForKey(event.key, currentIndex);
+      if (nextIndex === undefined) return;
+
+      event.preventDefault();
+      const nextButton = tabButtons[nextIndex];
+      activateTab(nextButton);
+      nextButton.focus();
     });
   });
 
-  // Copy install command
-  const copyBtn = document.getElementById('copy-btn');
-  const installCmd = 'curl -fsSL https://quint.codes/install.sh | bash';
-  copyBtn?.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(installCmd);
-      copyBtn.textContent = 'Copied!';
-      setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
-    } catch (err) {
-      console.error('Failed to copy:', err);
+  const copyButton = document.querySelector<HTMLButtonElement>('#copy-btn');
+  const installCommand = 'curl -fsSL https://haft.tools/install.sh | bash';
+  const setCopyLabel = (label: string) => {
+    if (!copyButton) return;
+    copyButton.textContent = label;
+  };
+
+  copyButton?.addEventListener('click', async () => {
+    if (!navigator.clipboard) {
+      setCopyLabel('Copy manually');
+      return;
     }
+
+    try {
+      await navigator.clipboard.writeText(installCommand);
+    } catch {
+      setCopyLabel('Copy manually');
+      return;
+    }
+
+    setCopyLabel('Copied');
+    window.setTimeout(() => setCopyLabel('Copy'), 2000);
   });
 
-  // Text scramble effect — each character resolves independently
+  interface ScrambleItem {
+    from: string;
+    to: string;
+    start: number;
+    end: number;
+    char?: string;
+  }
+
   class TextScramble {
     el: HTMLElement;
-    chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789@#$%&<>[]{}!?=+*^~';
-    queue: { from: string; to: string; start: number; end: number; char?: string }[] = [];
+    chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789@#$%[]{}!?=+*^~';
+    queue: ScrambleItem[] = [];
     frame = 0;
-    frameRequest = 0;
-    resolvePromise: (() => void) | null = null;
+    frameRequest?: number;
+    resolvePromise?: () => void;
 
     constructor(el: HTMLElement) {
       this.el = el;
@@ -585,21 +920,21 @@ const rouletteWords = [
     setText(newText: string): Promise<void> {
       const oldText = this.el.innerText;
       const length = Math.max(oldText.length, newText.length);
-      this.queue = [];
+      const indices = Array.from({ length }, (_, index) => index);
 
-      for (let i = 0; i < length; i++) {
-        const from = oldText[i] || '';
-        const to = newText[i] || '';
-        // Each char gets a random start delay and resolve time
-        // Characters that are disappearing (to='') resolve faster
+      this.queue = indices.map((index) => {
+        const from = oldText[index] || '';
+        const to = newText[index] || '';
         const start = Math.floor(Math.random() * 25);
         const end = to
           ? start + Math.floor(Math.random() * 30) + 12
           : start + Math.floor(Math.random() * 8) + 4;
-        this.queue.push({ from, to, start, end });
-      }
+        return { from, to, start, end };
+      });
 
-      cancelAnimationFrame(this.frameRequest);
+      if (this.frameRequest !== undefined) {
+        cancelAnimationFrame(this.frameRequest);
+      }
       this.frame = 0;
 
       return new Promise((resolve) => {
@@ -608,63 +943,55 @@ const rouletteWords = [
       });
     }
 
-    update() {
-      let output = '';
-      let complete = 0;
+    itemOutput(item: ScrambleItem) {
+      if (this.frame >= item.end) return item.to;
+      if (this.frame < item.start) return item.from;
 
-      for (let i = 0; i < this.queue.length; i++) {
-        const item = this.queue[i];
-        const { from, to, start, end } = item;
-
-        if (this.frame >= end) {
-          // Resolved — show final character
-          complete++;
-          output += to;
-        } else if (this.frame >= start) {
-          // Scrambling — show random glyph
-          if (!item.char || Math.random() < 0.28) {
-            item.char = this.chars[Math.floor(Math.random() * this.chars.length)];
-          }
-          output += `<span class="glyph">${item.char}</span>`;
-        } else {
-          // Not started yet — show old character
-          output += from;
-        }
+      if (!item.char || Math.random() < 0.28) {
+        item.char = this.chars[Math.floor(Math.random() * this.chars.length)];
       }
+      return `<span class="glyph">${item.char}</span>`;
+    }
 
+    update() {
+      const output = this.queue
+        .map((item) => this.itemOutput(item))
+        .join('');
+      const completed = this.queue
+        .filter((item) => this.frame >= item.end)
+        .length;
       this.el.innerHTML = output;
 
-      if (complete === this.queue.length) {
-        this.resolvePromise?.();
+      if (completed === this.queue.length) {
+        const resolve = this.resolvePromise;
+        this.resolvePromise = undefined;
+        resolve?.();
         return;
       }
 
       this.frameRequest = requestAnimationFrame(() => {
-        this.frame++;
+        this.frame += 1;
         this.update();
       });
     }
   }
 
-  // Initialize scramble roulette
-  const heroEl = document.querySelector('.scramble-hero') as HTMLElement;
-  const textEl = document.querySelector('.scramble-text') as HTMLElement;
+  const heroElement = document.querySelector<HTMLElement>('.scramble-hero');
+  const textElement = document.querySelector<HTMLElement>('.scramble-text');
 
-  if (heroEl && textEl) {
-    const words: string[] = JSON.parse(heroEl.dataset.words || '[]');
-    if (words.length > 0) {
-      const fx = new TextScramble(textEl);
-      let counter = 0;
+  if (heroElement && textElement) {
+    const words: string[] = JSON.parse(heroElement.dataset.words || '[]');
+    const scramble = new TextScramble(textElement);
+    let counter = 0;
 
-      const next = () => {
-        counter = (counter + 1) % words.length;
-        fx.setText(words[counter]).then(() => {
-          setTimeout(next, 2200);
-        });
-      };
+    const nextWord = () => {
+      if (words.length === 0) return;
+      counter = (counter + 1) % words.length;
+      scramble
+        .setText(words[counter])
+        .then(() => window.setTimeout(nextWord, 2200));
+    };
 
-      // First word is already displayed — wait, then start cycling
-      setTimeout(next, 2800);
-    }
+    window.setTimeout(nextWord, 2800);
   }
 </script>

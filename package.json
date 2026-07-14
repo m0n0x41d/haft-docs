@@ -1,8 +1,8 @@
 {
-  "name": "qc-landing",
+  "name": "haft-docs",
   "type": "module",
   "version": "1.0.0",
-  "description": "Landing page for quint-code - structured reasoning for AI coding tools",
+  "description": "Documentation and landing site for haft",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -12,20 +12,27 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/m0n0x41d/qc-landing.git"
+    "url": "git+https://github.com/m0n0x41d/haft-docs.git"
   },
-  "keywords": ["astro", "landing-page", "quint-code"],
+  "keywords": [
+    "astro",
+    "landing-page",
+    "haft"
+  ],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/m0n0x41d/qc-landing/issues"
+    "url": "https://github.com/m0n0x41d/haft-docs/issues"
   },
-  "homepage": "https://github.com/m0n0x41d/qc-landing#readme",
+  "homepage": "https://haft.tools",
   "dependencies": {
     "@astrojs/tailwind": "^6.0.2",
+    "@astrojs/vue": "^5.1.4",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "astro": "^5.16.6",
-    "tailwindcss": "^3.4.19"
+    "ogl": "^1.0.11",
+    "tailwindcss": "^3.4.19",
+    "vue": "^3.5.39"
   }
 }
